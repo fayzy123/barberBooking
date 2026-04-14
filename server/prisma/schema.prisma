@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Admin {
+  id           String   @id
+  email        String   @unique
+  passwordHash String
+  role         String   @default("ADMIN")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime
+}
+
+model Booking {
+  id            String        @id
+  shopId        String
+  staffId       String
+  serviceId     String
+  ref           String        @unique
+  status        BookingStatus @default(BOOKED)
+  startTime     DateTime
+  endTime       DateTime
+  customerName  String
+  customerPhone String
+  cancelledAt   DateTime?
+  cancelReason  String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime
+  Service       Service       @relation(fields: [serviceId], references: [id])
+  Shop          Shop          @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  Staff         Staff         @relation(fields: [staffId], references: [id])
+
+  @@index([serviceId])
+  @@index([shopId])
+  @@index([staffId])
+  @@index([startTime])
+  @@index([status])
+}
+
+model Service {
+  id              String    @id
+  shopId          String
+  name            String
+  durationMinutes Int
+  active          Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime
+  Booking         Booking[]
+  Shop            Shop      @relation(fields: [shopId], references: [id], onDelete: Cascade)
+
+  @@index([shopId])
+}
+
+model Shop {
+  id        String    @id
+  name      String
+  timezone  String    @default("Europe/London")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime
+  Booking   Booking[]
+  Service   Service[]
+  Staff     Staff[]
+}
+
+model Staff {
+  id        String    @id
+  shopId    String
+  name      String
+  active    Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime
+  Booking   Booking[]
+  Shop      Shop      @relation(fields: [shopId], references: [id], onDelete: Cascade)
+
+  @@index([shopId])
+}
+
+enum BookingStatus {
+  BOOKED
+  CANCELLED
+}
