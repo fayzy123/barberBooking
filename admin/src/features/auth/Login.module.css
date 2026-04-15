@@ -1,0 +1,122 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.card {
+  background: var(--s1);
+  border: 1px solid var(--b1);
+  border-radius: var(--rad-lg);
+  padding: 56px 52px;
+  width: 100%;
+  max-width: 520px;
+  margin: 2rem auto;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.gem {
+  width: 32px;
+  height: 32px;
+  background: var(--gold-bg);
+  border: 1px solid var(--gold-lo);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.brandName {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+.brandSub {
+  font-size: 0.6875rem;
+  color: var(--t3);
+  margin-top: 1px;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 500;
+  color: var(--t1);
+  margin-bottom: 0.375rem;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: var(--t2);
+  margin-bottom: 1.5rem;
+}
+
+.field {
+  margin-bottom: 1rem;
+}
+
+.label {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--t2);
+  margin-bottom: 0.375rem;
+}
+
+.input {
+  width: 100%;
+  background: var(--s2);
+  border: 1px solid var(--b2);
+  border-radius: var(--rad);
+  padding: 0.75rem 0.875rem;
+  font-size: 0.875rem;
+  color: var(--t1);
+  outline: none;
+  transition: border 0.12s;
+}
+
+.input:focus {
+  border-color: var(--gold-lo);
+}
+
+.error {
+  font-size: 0.75rem;
+  color: var(--red);
+  margin-bottom: 0.875rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--red-bg);
+  border: 1px solid var(--red-bd);
+  border-radius: var(--rad);
+}
+
+.button {
+  width: 100%;
+  padding: 0.875rem;
+  background: var(--gold);
+  color: #0c0c0c;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--rad);
+  cursor: pointer;
+  transition: background 0.12s;
+  margin-top: 0.5rem;
+}
+
+.button:hover {
+  background: var(--gold-hi);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

@@ -1,0 +1,63 @@
+/* ─── DESIGN TOKENS ─── */
+:root {
+  --bg: #0c0c0c;
+  --s1: #111111;
+  --s2: #181818;
+  --s3: #202020;
+
+  --b1: #222222;
+  --b2: #2c2c2c;
+  --b3: #383838;
+
+  --t1: #e0e0e0;
+  --t2: #8a8a8a;
+  --t3: #505050;
+
+  --gold: #c9a84c;
+  --gold-hi: #ddb84e;
+  --gold-lo: #7a5f20;
+  --gold-bg: #130f04;
+  --gold-bd: #2a2008;
+
+  --red: #b05050;
+  --red-bg: #140808;
+  --red-bd: #2c1010;
+
+  --grn: #489060;
+  --grn-bg: #081410;
+  --grn-bd: #183020;
+
+  --blu: #4878b0;
+  --blu-bg: #080e18;
+  --blu-bd: #182038;
+
+  --rad: 7px;
+  --rad-lg: 9px;
+}
+
+/* ─── RESET ─── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ─── BASE ─── */
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--t1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  height: 100%;
+  background: var(--bg);
+}
