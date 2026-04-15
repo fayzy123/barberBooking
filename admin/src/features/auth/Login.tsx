@@ -10,7 +10,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -51,6 +50,9 @@ const Login = () => {
           Enter your login details to continue
         </div>
 
+        {/* Show error message if login failed */}
+        {error && <div className={styles.error}>{error}</div>}
+
         <form onSubmit={handleSubmit}>
           <div className={styles.field}>
             <label className={styles.label} htmlFor="email">
@@ -62,6 +64,7 @@ const Login = () => {
               type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              disabled={loading}
             />
           </div>
 
@@ -76,11 +79,12 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="password"
+              disabled={loading}
             />
           </div>
 
-          <button className={styles.button} type="submit">
-            Login
+          <button className={styles.button} type="submit" disabled={loading}>
+            {loading ? "Signing you in..." : "Sign In"}
           </button>
         </form>
       </div>

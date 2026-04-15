@@ -61,7 +61,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       value={{
         token,
         admin,
-        isAuthenticated: true,
+        // !! converts value to boolean
+        // — null becomes false, a real token becomes true
+        isAuthenticated: !!token,
         login,
         logout,
       }}
