@@ -1,14 +1,42 @@
 import { FormEvent, useState } from "react";
 import styles from "./Login.module.css";
 import BrandLogo from "../../shared/components/BrandLogo";
+import { useAuth } from "./AuthContext";
+import { loginAdmin } from "./auth.service";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (event: FormEvent) => {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    console.log("Submitted");
+    // Clear any previous errors
+    setError(null);
+    setLoading(true);
+
+    try {
+      // 1. Call the API with email and password
+      const data = await loginAdmin({ email, password });
+
+      // 2. Store the token and admin info in AuthContext
+      login(data);
+
+      // 3. Redirect to the bookings dashboard
+      navigate("/");
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error ? err.message : "Invalid Credentials";
+      setError(message);
+    } finally {
+      // 4. Set loading to false regardless of success/failure
+      setLoading(false);
+    }
   };
 
   return (
