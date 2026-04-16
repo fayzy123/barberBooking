@@ -7,7 +7,8 @@ export interface AuthRequest extends Request {
     admin?: {
         id: string,
         email: string,
-        role: string
+        role: string,
+        shopId: string
     }
 }
 
@@ -33,14 +34,16 @@ export function authenticate(
         const decoded = jwt.verify(token, JWT_SECRET) as {
             sub: string,
             email: string,
-            role: string
+            role: string,
+            shopId: string
         }
 
         // 5. Attach decoded admin info to request object
         req.admin = {
             id: decoded.sub,
             email: decoded.email,
-            role: decoded.role
+            role: decoded.role,
+            shopId: decoded.shopId
         }
         next()
     } catch {

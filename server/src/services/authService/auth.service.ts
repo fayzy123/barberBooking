@@ -30,6 +30,7 @@ export async function loginAdmin(input: LoginInput) {
             sub: admin.id,
             email: admin.email,
             role: admin.role,
+            shopId: admin.shopId,
             exp: Math.floor(Date.now() / 1000) + 60 * 60 * 8 // 8 hours 
         },
         JWT_SECRET
