@@ -6,6 +6,8 @@ dotenv.config({ path: path.resolve(__dirname, '../../.env') })
 import express from 'express'
 import cors from 'cors'
 import authRoutes from './api/routes/auth.routes'
+import bookingRoutes from './api/routes/booking.routes'
+import { authenticate } from './middleware/authenticate'
 
 const app = express()
 
@@ -20,5 +22,8 @@ app.get('/api/health', (req, res) => {
 
 // Admin Routes
 app.use('/api/admin/auth', authRoutes)
+
+// Booking Routes
+app.use('/api/admin/bookings', authenticate, bookingRoutes)
 
 export default app
