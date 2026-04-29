@@ -1,4 +1,5 @@
-import { RetrieveBooking } from "../../api/schemas/booking.schema";
+import { createId } from "@paralleldrive/cuid2";
+import { CreateBooking, RetrieveBooking } from "../../api/schemas/booking.schema";
 import { prisma } from "../../db/prisma";
 
 // Retrieve all booking endpoint
@@ -55,3 +56,48 @@ export async function getBookingById(id : string) {
 
     return booking
 }
+
+// Helper function: Generates a unique 8 character uppercase booking ref
+function generateRef() : string {
+    return Math.random().toString(36).substring(2, 10).toUpperCase()
+}
+
+// Create a new booking
+export async function postBooking(input : CreateBooking, shopId: string) {
+    const service = await prisma.service.findUnique({
+        where: { id: input.serviceId}
+    })
+
+    if (!service) {
+        throw new Error('Service not found')
+    }
+
+    const startTime = new Date(input.startTime)
+    // Converts minutes to milliseconds
+    const endTime = new Date(startTime.getTime() + service.durationMinutes * 60 * 1000)
+
+    // Generate unique id and ref
+    const id = createId()
+    const ref = generateRef()
+
+    return prisma.booking.create({ 
+        data: {
+            id,
+            ref, 
+            // ShopId comes from jwt via the controller, not from req body
+            shopId,
+            staffId: input.staffId,
+            serviceId: input.serviceId,
+            startTime,
+            endTime,
+            customerName: input.customerName,
+            customerPhone: input.customerPhone,
+            updatedAt: new Date()
+        },
+        include: {
+            Service: { select: { name: true, durationMinutes: true } },
+            Staff: { select: { name: true } }
+        }
+     })
+}
+

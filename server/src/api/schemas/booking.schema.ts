@@ -3,7 +3,6 @@ import { z } from 'zod';
 // Validate the booking POST request
 export const createBookingSchema = z.object({
     startTime: z.string().datetime(),
-    endTime: z.string().datetime(),
     customerName: z.string(),
     customerPhone: z.string().min(10).max(13).startsWith("+44").trim(),
     serviceId: z.string(),
