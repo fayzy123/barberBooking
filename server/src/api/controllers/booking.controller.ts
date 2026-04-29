@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getBookings } from "../../services/bookingService/booking.service";
+import { getBookingById, getBookings } from "../../services/bookingService/booking.service";
 import { bookingQuerySchema } from "../schemas/booking.schema";
 import { validateRequest } from "../../utils/validate";
 
@@ -16,5 +16,18 @@ export async function retrieveBookings(req: Request, res: Response) {
         // Catch any errors
         const message = error instanceof Error ? error.message : "Error";
         res.status(500).json({message})
+    }
+}
+
+export async function retrieveBookingById(req: Request, res: Response) {
+    const { id } = req.params
+
+    try {
+        const result = await getBookingById(id)
+        res.status(200).json(result)
+    } catch (error : unknown) {
+        const message = error instanceof Error ? error.message : "Error"
+        const status = message === 'Booking not found' ? 404 : 500
+        res.status(status).json({message})
     }
 }

@@ -1,7 +1,7 @@
 import { RetrieveBooking } from "../../api/schemas/booking.schema";
 import { prisma } from "../../db/prisma";
 
-
+// Retrieve all booking endpoint
 export async function getBookings(filters : RetrieveBooking) {
     // Build the where clause conditionally
     const where: any = {}
@@ -27,7 +27,6 @@ export async function getBookings(filters : RetrieveBooking) {
     }
 
     // 3. Query to return all booking with selected filters
-    
     // Include brings in related data
     // Select displays only columns that are required
     return prisma.booking.findMany({
@@ -38,4 +37,21 @@ export async function getBookings(filters : RetrieveBooking) {
         },
         orderBy: { startTime: 'asc'}
     })
+}
+
+// Retrieve bookings by ID
+export async function getBookingById(id : string) {
+    const booking = await prisma.booking.findUnique({
+        where: { id },
+        include: {
+            Service: { select: { name: true, durationMinutes: true } },
+            Staff: { select: { name: true } },
+        },
+    })
+
+    if (!booking) {
+        throw new Error("Booking not found")
+    }
+
+    return booking
 }
