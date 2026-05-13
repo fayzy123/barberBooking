@@ -101,3 +101,21 @@ export async function postBooking(input : CreateBooking, shopId: string) {
      })
 }
 
+// Cancel a booking
+export async function cancelBooking(id : string, cancelReason?: string) {
+    const booking = await getBookingById(id);
+
+    if (booking.cancelledAt) {
+        throw new Error("Booking has already been cancelled.")
+    }
+
+    return prisma.booking.update({ 
+        where: { id },
+        data: {
+            status: "CANCELLED",
+            cancelledAt: new Date(),
+            cancelReason, 
+            updatedAt: new Date(),
+        }
+     })
+}

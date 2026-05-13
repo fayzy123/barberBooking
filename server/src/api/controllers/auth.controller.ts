@@ -22,7 +22,7 @@ export async function login(req: Request, res: Response) {
     // 4. If validation passes, grab clean validated data
     const validatedData = validation.data;
 
-    // 5. Try to logn using the auth service
+    // 5. Try to login using the auth service
     try {
         const result = await loginAdmin(validatedData);
         // 6. login successful, send back token and admin info
