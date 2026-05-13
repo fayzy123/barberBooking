@@ -14,7 +14,7 @@ export async function retrieveAllStaff(req: AuthRequest, res: Response) {
         res.status(200).json(result)
     } catch (error : unknown) {
         const message = error instanceof Error ? error.message : "Error"
-        const status = message === "Not staff found for this shop" ? 404 : 500
+        const status = message === "No staff found for this shop" ? 404 : 500
         res.status(status).json({message})
     }
 }
