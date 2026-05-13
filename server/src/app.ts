@@ -7,6 +7,7 @@ import express from 'express'
 import cors from 'cors'
 import authRoutes from './api/routes/auth.routes'
 import bookingRoutes from './api/routes/booking.routes'
+import staffRoutes from './api/routes/staff.routes'
 import { authenticate } from './middleware/authenticate'
 
 const app = express()
@@ -25,5 +26,8 @@ app.use('/api/admin/auth', authRoutes)
 
 // Booking Routes
 app.use('/api/admin/bookings', authenticate, bookingRoutes)
+
+// Staff Routes
+app.use('/api/admin/staff', authenticate, staffRoutes)
 
 export default app
