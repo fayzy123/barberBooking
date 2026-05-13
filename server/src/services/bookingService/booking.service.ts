@@ -119,3 +119,27 @@ export async function cancelBooking(id : string, cancelReason?: string) {
         }
      })
 }
+
+// Reassign booking to new staff member
+export async function reassignBooking(id: string, staffId: string) {
+    const booking = await getBookingById(id);
+     if (booking.cancelledAt) {
+        throw new Error("Booking has already been cancelled.")
+    }
+    
+    const staff = await prisma.staff.findUnique({
+        where: { id: staffId}
+    })
+
+    if (!staff) {
+        throw new Error("Staff member not found")
+    }
+
+    return prisma.booking.update({ 
+        where: { id },
+        data: {
+            staffId,
+            updatedAt: new Date(),
+        }
+     })
+}
