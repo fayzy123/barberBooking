@@ -51,15 +51,17 @@
 .signOut {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  padding: 0.5625rem 0.625rem;
+  padding: 0.625rem 0.75rem;
   border-radius: 6px;
   font-size: 1rem;
   cursor: pointer;
   color: var(--t3);
   background: none;
-  border: 1px solid transparent;
-  transition: all 0.12s
+  border: 1px solid var(--b2);
+  transition: all 0.12s;
+  width: 100%;
 }
 
 .signOut:hover {
