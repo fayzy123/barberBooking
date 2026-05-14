@@ -5,11 +5,11 @@ const BrandLogo = () => {
     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
       <div
         style={{
-          width: "32px",
-          height: "32px",
+          width: "42px",
+          height: "42px",
           background: "var(--gold-bg)",
           border: "1px solid var(--gold-lo)",
-          borderRadius: "8px",
+          borderRadius: "10px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -17,8 +17,8 @@ const BrandLogo = () => {
         }}
       >
         <svg
-          width="14"
-          height="14"
+          width="20"
+          height="20"
           viewBox="0 0 24 24"
           fill="none"
           stroke="#c9a84c"
@@ -30,11 +30,13 @@ const BrandLogo = () => {
       </div>
       <div>
         <div
-          style={{ fontSize: "15px", fontWeight: 600, color: "var(--gold)" }}
+          style={{ fontSize: "1rem", fontWeight: 600, color: "var(--gold)" }}
         >
           {config.shopName}
         </div>
-        <div style={{ fontSize: "11px", color: "var(--t3)", marginTop: "1px" }}>
+        <div
+          style={{ fontSize: "0.75rem", color: "var(--t3)", marginTop: "1px" }}
+        >
           Admin panel
         </div>
       </div>

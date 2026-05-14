@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { LoginResponse } from "./auth.service";
+// Global state management for auth.
 
 // We need this to prevent prop drilling
 // (passing same data down through every level even if middle components dont need it)

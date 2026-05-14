@@ -1,0 +1,23 @@
+.layout {
+  display: flex;
+  height: 100vh;
+  height: 100dvh;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 210px;
+  flex-shrink: 0;
+  background: #080808;
+  border-right: 1px solid var(--b1);
+  height: 100%;
+}
+
+.right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
