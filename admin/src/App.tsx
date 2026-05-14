@@ -12,7 +12,12 @@ const router = createBrowserRouter([
     children: [
       {
         element: <AdminLayout />,
-        children: [{ index: true, element: <div>Bookings Page</div> }],
+        children: [
+          { index: true, element: <div>Bookings Page</div> },
+          { path: "bookings", element: <div>Bookings Page</div> },
+          { path: "staff", element: <div>Staff Page</div> },
+          { path: "shop", element: <div>Shop Page</div> },
+        ],
       },
     ],
   },
