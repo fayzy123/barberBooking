@@ -21,7 +21,7 @@
 }
 
 .highlightValue {
-    color: var(--gold);
+    color: var(--gold) !important;
 }
 
 .label {
@@ -30,6 +30,11 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
     font-weight: 500;
+}
+
+.meta {
+    font-size: 0.75rem;
+    color: var(--t3);
 }
 
 .metaGreen {

@@ -18,5 +18,11 @@ export function useBookingStats(bookings: Booking[]) {
       .filter((b) => b.startTime > now && b.status === "BOOKED")
       .sort((a, b) => a.startTime.localeCompare(b.startTime))[0] ?? null;
 
-    return { totalToday, confirmed, cancelled, nextAppointment, todayFormatted };
+      const nextAppointmentTime = nextAppointment ?   
+          new Date(nextAppointment.startTime).toLocaleTimeString("en-GB", {
+            hour: "2-digit",
+            minute: "2-digit",
+          }): null;
+
+    return { totalToday, confirmed, cancelled, nextAppointment, todayFormatted, nextAppointmentTime };
 }

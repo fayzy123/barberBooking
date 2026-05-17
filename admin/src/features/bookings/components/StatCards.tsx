@@ -6,6 +6,7 @@ interface StatCardsProps {
   confirmed: number;
   cancelled: number;
   nextAppointment: Booking | null;
+  nextAppointmentTime: string | null;
   today: string;
 }
 
@@ -14,6 +15,7 @@ const StatCards = ({
   confirmed,
   cancelled,
   nextAppointment,
+  nextAppointmentTime,
   today,
 }: StatCardsProps) => {
   return (
@@ -41,9 +43,9 @@ const StatCards = ({
       <article className={styles.card}>
         <span className={styles.label}>Next Appointment</span>
         <span className={styles.value}>
-          {nextAppointment ? nextAppointment.startTime : "None"}
+          {nextAppointment ? nextAppointmentTime : "None"}
         </span>
-        <span className={styles.label}>
+        <span className={styles.meta}>
           {nextAppointment ? nextAppointment.Staff.name : "None"}
         </span>
       </article>
