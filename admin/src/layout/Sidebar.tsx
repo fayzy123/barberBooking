@@ -34,10 +34,6 @@ const Sidebar = () => {
           Shop
         </div>
       </nav>
-
-      <footer className={styles.footer}>
-        <button className={styles.signOut}>Sign out</button>
-      </footer>
     </aside>
   );
 };

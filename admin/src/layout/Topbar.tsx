@@ -1,5 +1,6 @@
 import { getDatePill } from "../shared/utils/date";
 import styles from "./Topbar.module.css";
+import { useAuth } from "../features/auth/AuthContext";
 
 interface TopbarProp {
   title: string;
@@ -8,6 +9,8 @@ interface TopbarProp {
 }
 
 const Topbar = ({ title, subtitle, actions }: TopbarProp) => {
+  const { logout } = useAuth();
+
   return (
     <header className={styles.topbar}>
       <span className={styles.title}>{title}</span>
@@ -20,6 +23,9 @@ const Topbar = ({ title, subtitle, actions }: TopbarProp) => {
       <div className={styles.right}>
         {actions}
         <span className={styles.pill}>{getDatePill()}</span>
+        <button className={styles.signOut} onClick={logout}>
+          Sign out
+        </button>
       </div>
     </header>
   );
