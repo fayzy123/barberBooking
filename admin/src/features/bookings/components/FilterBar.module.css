@@ -1,0 +1,40 @@
+.container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 13px;
+}
+
+.label {
+    font-size: 0.75rem;
+    color: var(--t3);
+}
+
+.datePicker::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+.datePicker,
+.dropdown {
+    background: var(--s1);
+    border: 1px solid var(--b2);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    color: var(--t2);
+    outline: none;
+    cursor: pointer;
+    transition: border 0.12s;
+}
+
+.datePicker:hover,
+.dropdown:hover {
+    border-color: var(--gold-lo);
+    color: var(--t1);
+}
+
+.datePicker:focus,
+.dropdown:focus {
+    border-color: var(--gold-lo);
+    color: var(--t1);
+}
