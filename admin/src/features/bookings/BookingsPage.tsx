@@ -8,6 +8,7 @@ import styles from "./BookingsPage.module.css";
 import FilterBar from "./components/FilterBar";
 import { useStaff } from "../staff/hooks/useStaff";
 import { useFilteredBookings } from "./hooks/useFilteredBookings";
+import BookingsTable from "./components/BookingsTable";
 
 const BookingsPage = () => {
   const { bookings, loading, error } = useBookings();
@@ -52,6 +53,10 @@ const BookingsPage = () => {
         filters={filters}
         staff={staff}
         onFilterChange={handleFilterChange}
+      />
+      <BookingsTable
+        bookings={filteredBookings}
+        onSelectBooking={(bookings) => setSelectedBooking(bookings)}
       />
     </main>
   );

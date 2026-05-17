@@ -1,0 +1,80 @@
+.wrapper {
+    background: var(--s1);
+    border: 1px solid var(--b1);
+    border-radius: var(--rad-lg);
+    overflow: hidden;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.table thead tr {
+    background: #0a0a0a;
+    border-bottom: 1px solid var(--b1);
+}
+
+.table th {
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: var(--t3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.table td {
+    padding: 12px 14px;
+    font-size: 0.8rem;
+    color: var(--t2);
+    border-bottom: 1px solid var(--b1);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.table tbody tr {
+    cursor: pointer;
+}
+
+.table tbody tr:hover td {
+    background: var(--s2);
+}
+
+.primary {
+    color: var(--t1) !important;
+    font-weight: 500;
+}
+
+.badgeGreen {
+    background: var(--grn-bg);
+    color: var(--grn);
+    border: 1px solid var(--grn-bd);
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 500;
+}
+
+.badgeRed {
+    background: var(--red-bg);
+    color: var(--red);
+    border: 1px solid var(--red-bd);
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 500;
+}
+
+.ref {
+    font-family: 'SF Mono', monospace;
+    color: var(--gold) !important;
+    letter-spacing: 0.6px;
+}

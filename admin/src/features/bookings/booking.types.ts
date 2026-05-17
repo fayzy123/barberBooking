@@ -15,7 +15,7 @@ export interface Booking {
   updatedAt: string;
   Service: {
     name: string;
-    duraionMinutes: number;
+    durationMinutes: number;
   };
   Staff: {
     name: string;
