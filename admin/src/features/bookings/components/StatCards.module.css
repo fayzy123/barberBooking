@@ -1,0 +1,51 @@
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.card {
+    background: var(--s1);
+    border: 1px solid var(--b1);
+    border-top: 2px solid var(--b2);
+    border-radius: var(--rad-lg);
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.card.highlight {
+    border-top-color: var(--gold-lo);
+}
+
+.highlightValue {
+    color: var(--gold);
+}
+
+.label {
+    font-size: 0.78rem;
+    color: var(--t3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+.metaGreen {
+  font-size: 0.75rem;
+  color: var(--grn);
+}
+
+.metaRed {
+  font-size: 0.75rem;
+  color: var(--red);
+}
+
+.value {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--t1);
+    line-height: 1;
+    letter-spacing: -0.5px;
+}
