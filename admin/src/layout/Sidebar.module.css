@@ -10,6 +10,9 @@
 .brand {
   padding: 1.25rem 1rem;
   border-bottom: 1px solid var(--b1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .nav {
