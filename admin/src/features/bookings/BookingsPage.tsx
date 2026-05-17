@@ -5,6 +5,9 @@ import { useBookingStats } from "./hooks/useBookingStats";
 import { useBookings } from "./hooks/useBooking";
 import StatCards from "./components/StatCards";
 import styles from "./BookingsPage.module.css";
+import FilterBar from "./components/FilterBar";
+import { useStaff } from "../staff/hooks/useStaff";
+import { useFilteredBookings } from "./hooks/useFilteredBookings";
 
 const BookingsPage = () => {
   const { bookings, loading, error } = useBookings();
@@ -18,11 +21,18 @@ const BookingsPage = () => {
   } = useBookingStats(bookings);
   const { setTopbar } = useTopbar();
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+  const { staff } = useStaff();
   const [filters, setFilters] = useState<Filters>({
     date: "",
     status: "",
     staffId: "",
   });
+
+  const filteredBookings = useFilteredBookings(bookings, filters);
+
+  const handleFilterChange = (key: keyof Filters, value: string) => {
+    setFilters((prev) => ({ ...prev, [key]: value }));
+  };
 
   useEffect(() => {
     setTopbar({ title: "Bookings", subtitle: "Today's Appointments" });
@@ -37,6 +47,11 @@ const BookingsPage = () => {
         nextAppointment={nextAppointment}
         nextAppointmentTime={nextAppointmentTime}
         today={todayFormatted}
+      />
+      <FilterBar
+        filters={filters}
+        staff={staff}
+        onFilterChange={handleFilterChange}
       />
     </main>
   );
