@@ -5,6 +5,7 @@ import PrivateRoute from "./features/auth/PrivateRoute";
 import AdminLayout from "./layout/AdminLayout";
 import { useTopbar } from "./layout/TopBarContext";
 import { useEffect } from "react";
+import BookingsPage from "./features/bookings/BookingsPage";
 
 const BookingsPlaceholder = () => {
   const { setTopbar } = useTopbar();
@@ -45,8 +46,8 @@ const router = createBrowserRouter([
       {
         element: <AdminLayout />,
         children: [
-          { index: true, element: <BookingsPlaceholder /> },
-          { path: "bookings", element: <BookingsPlaceholder /> },
+          { index: true, element: <BookingsPage /> },
+          { path: "bookings", element: <BookingsPage /> },
           { path: "staff", element: <StaffPlaceholder /> },
           { path: "shop", element: <ShopPlaceholder /> },
         ],
