@@ -1,5 +1,6 @@
-import { useParams } from "react-router-dom";
-import styles from "./BookingDetailPage.module.css";
+import { useNavigate, useParams } from "react-router-dom";
+import pageStyles from "./BookingDetailPage.module.css";
+import btnStyles from "../../shared/utils/buttons.module.css";
 import { useTopbar } from "../../layout/TopBarContext";
 import { useEffect, useState } from "react";
 import { useBookingById } from "./hooks/useBookingById";
@@ -15,6 +16,7 @@ const BookingsDetailPage = () => {
 
   const { staff } = useStaff();
   const { service } = useServices();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     customerName: "",
@@ -30,6 +32,14 @@ const BookingsDetailPage = () => {
       subtitle: isCreateMode
         ? "Fill in the details below"
         : `Ref: ${booking?.ref ?? id}`,
+      actions: (
+        <button
+          className={btnStyles.btnGhost}
+          onClick={() => navigate("/bookings")}
+        >
+          Back
+        </button>
+      ),
     });
   }, [id, booking]);
 
@@ -49,47 +59,62 @@ const BookingsDetailPage = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <form>
-      <label htmlFor="name">Customer Name</label>
+    <form className={pageStyles.form}>
+      <label className={pageStyles.label} htmlFor="name">
+        Customer Name
+      </label>
       <input
         id="name"
         type="text"
+        className={pageStyles.input}
         value={formData.customerName}
+        readOnly={!isCreateMode}
         onChange={(e) =>
           setFormData((prev) => ({ ...prev, customerName: e.target.value }))
         }
       />
 
-      <label htmlFor="phone">Customer phone</label>
+      <label className={pageStyles.label} htmlFor="phone">
+        Customer phone
+      </label>
       <input
         id="phone"
         type="tel"
+        className={pageStyles.input}
         value={formData.customerPhone}
+        readOnly={!isCreateMode}
         onChange={(e) =>
           setFormData((prev) => ({ ...prev, customerPhone: e.target.value }))
         }
       />
 
-      <label htmlFor="service">Service</label>
+      <label className={pageStyles.label} htmlFor="service">
+        Service
+      </label>
       <select
         id="service"
         value={formData.serviceId}
+        disabled={!isCreateMode}
+        className={pageStyles.select}
         onChange={(e) =>
           setFormData((prev) => ({ ...prev, serviceId: e.target.value }))
         }
       >
         <option>Select a service</option>
         {service.map((s) => (
-          <option key={s.id} value={s.id}>
+          <option key={s.id} value={s.id} className={pageStyles.dropdown}>
             {s.name}
           </option>
         ))}
       </select>
 
-      <label htmlFor="staff">Staff</label>
+      <label className={pageStyles.label} htmlFor="staff">
+        Staff
+      </label>
       <select
         id="staff"
         value={formData.staffId}
+        className={pageStyles.select}
         onChange={(e) =>
           setFormData((prev) => ({ ...prev, staffId: e.target.value }))
         }
@@ -102,15 +127,35 @@ const BookingsDetailPage = () => {
         ))}
       </select>
 
-      <label htmlFor="startTime">Start Time</label>
+      <label className={pageStyles.label} htmlFor="startTime">
+        Start Time
+      </label>
       <input
         id="startTime"
         type="datetime-local"
         value={formData.startTime}
+        readOnly={!isCreateMode}
+        className={pageStyles.input}
         onChange={(e) =>
           setFormData((prev) => ({ ...prev, startTime: e.target.value }))
         }
       ></input>
+      <footer className={pageStyles.footer}>
+        {isCreateMode ? (
+          <button className={btnStyles.btnGold} type="submit">
+            Create Booking
+          </button>
+        ) : (
+          <>
+            <button className={btnStyles.btnBlue} type="button">
+              Reassign Staff
+            </button>
+            <button className={btnStyles.btnRed} type="button">
+              Cancel Booking
+            </button>
+          </>
+        )}
+      </footer>
     </form>
   );
 };

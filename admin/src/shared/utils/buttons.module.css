@@ -1,0 +1,80 @@
+.btnGold {
+  background: var(--gold);
+  color: #0c0c0c;
+  border: none;
+  padding: 7px 13px;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.12s;
+  white-space: nowrap;
+}
+
+.btnGold:hover {
+  background: var(--gold-hi);
+}
+
+.btnBlue {
+  background: transparent;
+  color: var(--blu);
+  border: 1px solid var(--blu-bd);
+  padding: 7px 13px;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.12s;
+  white-space: nowrap;
+}
+
+.btnBlue:hover {
+  background: var(--blu-bg);
+}
+
+.btnRed {
+  background: transparent;
+  color: var(--red);
+  border: 1px solid var(--red-bd);
+  padding: 7px 13px;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.12s;
+  white-space: nowrap;
+}
+
+.btnRed:hover {
+  background: var(--red-bg);
+}
+
+.btnGhost {
+  background: transparent;
+  color: var(--t2);
+  border: 1px solid var(--b2);
+  padding: 7px 13px;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.12s;
+  white-space: nowrap;
+}
+
+.btnGhost:hover {
+  background: var(--s2);
+  color: var(--t1);
+}

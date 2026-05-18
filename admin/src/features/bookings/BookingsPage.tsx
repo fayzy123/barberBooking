@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
 import { useTopbar } from "../../layout/TopBarContext";
-import { Booking, Filters } from "./booking.types";
+import { Filters } from "./booking.types";
 import { useBookingStats } from "./hooks/useBookingStats";
 import { useBookings } from "./hooks/useBooking";
 import StatCards from "./components/StatCards";
-import styles from "./BookingsPage.module.css";
+import pageStyles from "./BookingsPage.module.css";
+import btnStyles from "../../shared/utils/buttons.module.css";
 import FilterBar from "./components/FilterBar";
 import { useStaff } from "../staff/hooks/useStaff";
 import { useFilteredBookings } from "./hooks/useFilteredBookings";
 import BookingsTable from "./components/BookingsTable";
+import { useNavigate } from "react-router-dom";
 
 const BookingsPage = () => {
-  const { bookings, loading, error } = useBookings();
+  const { bookings } = useBookings();
   const {
     todayFormatted,
     totalToday,
@@ -21,8 +23,8 @@ const BookingsPage = () => {
     nextAppointmentTime,
   } = useBookingStats(bookings);
   const { setTopbar } = useTopbar();
-  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const { staff } = useStaff();
+  const navigate = useNavigate();
   const [filters, setFilters] = useState<Filters>({
     date: "",
     status: "",
@@ -36,11 +38,22 @@ const BookingsPage = () => {
   };
 
   useEffect(() => {
-    setTopbar({ title: "Bookings", subtitle: "Today's Appointments" });
+    setTopbar({
+      title: "Bookings",
+      subtitle: "Today's Appointments",
+      actions: (
+        <button
+          className={btnStyles.btnGold}
+          onClick={() => navigate("/bookings/new")}
+        >
+          + New Booking
+        </button>
+      ),
+    });
   }, []);
 
   return (
-    <main className={styles.content}>
+    <main className={pageStyles.content}>
       <StatCards
         totalToday={totalToday}
         confirmed={confirmed}

@@ -1,0 +1,44 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-width: 480px;
+    padding: 22px 28px;
+}
+
+.label {
+    font-size: 0.75rem;
+    color: var(--t3);
+    margin-top: 8px;
+}
+
+.input,
+.select {
+    background: var(--s1);
+    border: 1px solid var(--b2);
+    border-radius: 6px;
+    padding: 8px 11px;
+    font-size: 0.8rem;
+    color: var(--t1);
+    outline: none;
+    transition: border 0.12s;
+}
+
+.input:focus,
+.select:focus {
+    border-color: var(--gold-lo);
+}
+
+.input:read-only,
+.select:disabled {
+    cursor: not-allowed;
+    color: var(--t2);
+    border-color: var(--b1);
+    opacity: 0.5;
+}
+
+.footer {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+}
