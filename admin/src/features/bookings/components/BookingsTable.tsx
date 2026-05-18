@@ -1,12 +1,14 @@
+import { useNavigate } from "react-router-dom";
 import { Booking } from "../booking.types";
 import styles from "./BookingsTable.module.css";
 
 interface BookingsTableProps {
   bookings: Booking[];
-  onSelectBooking: (booking: Booking) => void;
 }
 
-const BookingsTable = ({ bookings, onSelectBooking }: BookingsTableProps) => {
+const BookingsTable = ({ bookings }: BookingsTableProps) => {
+  const navigate = useNavigate();
+
   return (
     <figure className={styles.wrapper}>
       <table className={styles.table}>
@@ -23,7 +25,7 @@ const BookingsTable = ({ bookings, onSelectBooking }: BookingsTableProps) => {
         </thead>
         <tbody>
           {bookings.map((b) => (
-            <tr key={b.id} onClick={() => onSelectBooking(b)}>
+            <tr key={b.id} onClick={() => navigate(`/bookings/${b.id}`)}>
               <td className={styles.primary}>
                 {new Date(b.startTime).toLocaleTimeString("en-GB", {
                   hour: "2-digit",

@@ -6,16 +6,7 @@ import AdminLayout from "./layout/AdminLayout";
 import { useTopbar } from "./layout/TopBarContext";
 import { useEffect } from "react";
 import BookingsPage from "./features/bookings/BookingsPage";
-
-const BookingsPlaceholder = () => {
-  const { setTopbar } = useTopbar();
-
-  useEffect(() => {
-    setTopbar({ title: "Bookings", subtitle: "Today's Appointments" });
-  }, []);
-
-  return <div>Bookings Page</div>;
-};
+import BookingsDetailPage from "./features/bookings/BookingsDetailPage";
 
 const StaffPlaceholder = () => {
   const { setTopbar } = useTopbar();
@@ -48,6 +39,8 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <BookingsPage /> },
           { path: "bookings", element: <BookingsPage /> },
+          { path: "bookings/new", element: <BookingsDetailPage /> },
+          { path: "bookings/:id", element: <BookingsDetailPage /> },
           { path: "staff", element: <StaffPlaceholder /> },
           { path: "shop", element: <ShopPlaceholder /> },
         ],

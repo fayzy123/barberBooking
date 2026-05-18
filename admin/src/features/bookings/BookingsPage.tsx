@@ -54,10 +54,7 @@ const BookingsPage = () => {
         staff={staff}
         onFilterChange={handleFilterChange}
       />
-      <BookingsTable
-        bookings={filteredBookings}
-        onSelectBooking={(bookings) => setSelectedBooking(bookings)}
-      />
+      <BookingsTable bookings={filteredBookings} />
     </main>
   );
 };
