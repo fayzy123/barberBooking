@@ -6,6 +6,7 @@ export function useBookingById(id : string) {
     const [booking, setBookings] = useState<Booking | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [trigger, setTrigger] = useState(0);
 
     useEffect(() => {
         if (!id) return;
@@ -21,8 +22,8 @@ export function useBookingById(id : string) {
             }
         };
         fetchBookingsById();
-    },[id]);
+    },[id, trigger]);
 
     
-    return { booking, loading, error };
+    return { booking, loading, error, refetch: () => setTrigger((t) => t + 1) };
 }

@@ -37,6 +37,11 @@
     opacity: 0.5;
 }
 
+.actionError {
+    font-size: 0.8rem;
+    color: var(--red);
+}
+
 .footer {
     display: flex;
     gap: 8px;

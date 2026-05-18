@@ -6,13 +6,15 @@ import { useEffect, useState } from "react";
 import { useBookingById } from "./hooks/useBookingById";
 import { useStaff } from "../staff/hooks/useStaff";
 import { useServices } from "../services/hooks/useServices";
+import { reassignBooking } from "./booking.service";
 
 const BookingsDetailPage = () => {
   const { id } = useParams();
   const isCreateMode = !id;
 
   const { setTopbar } = useTopbar();
-  const { booking, loading, error } = useBookingById(id ?? "");
+  const { booking, loading, error, refetch } = useBookingById(id ?? "");
+  const [actionError, setActionError] = useState<string | null>(null);
 
   const { staff } = useStaff();
   const { service } = useServices();
@@ -54,6 +56,15 @@ const BookingsDetailPage = () => {
       });
     }
   }, [booking]);
+
+  const handleReassign = async () => {
+    try {
+      await reassignBooking(id!, formData.staffId);
+      refetch();
+    } catch (err) {
+      setActionError("Failed to reassign booking. Please try again");
+    }
+  };
 
   if (loading) return <div>Loading.. </div>;
   if (error) return <div>{error}</div>;
@@ -115,9 +126,10 @@ const BookingsDetailPage = () => {
         id="staff"
         value={formData.staffId}
         className={pageStyles.select}
-        onChange={(e) =>
-          setFormData((prev) => ({ ...prev, staffId: e.target.value }))
-        }
+        onChange={(e) => {
+          setActionError(null);
+          setFormData((prev) => ({ ...prev, staffId: e.target.value }));
+        }}
       >
         <option> Select a staff member</option>
         {staff.map((s) => (
@@ -140,6 +152,7 @@ const BookingsDetailPage = () => {
           setFormData((prev) => ({ ...prev, startTime: e.target.value }))
         }
       ></input>
+      {actionError && <p className={pageStyles.actionError}>{actionError}</p>}
       <footer className={pageStyles.footer}>
         {isCreateMode ? (
           <button className={btnStyles.btnGold} type="submit">
@@ -147,7 +160,11 @@ const BookingsDetailPage = () => {
           </button>
         ) : (
           <>
-            <button className={btnStyles.btnBlue} type="button">
+            <button
+              className={btnStyles.btnBlue}
+              type="button"
+              onClick={handleReassign}
+            >
               Reassign Staff
             </button>
             <button className={btnStyles.btnRed} type="button">
