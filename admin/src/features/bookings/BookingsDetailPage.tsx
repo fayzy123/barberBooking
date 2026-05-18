@@ -2,11 +2,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import pageStyles from "./BookingDetailPage.module.css";
 import btnStyles from "../../shared/utils/buttons.module.css";
 import { useTopbar } from "../../layout/TopBarContext";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useBookingById } from "./hooks/useBookingById";
 import { useStaff } from "../staff/hooks/useStaff";
 import { useServices } from "../services/hooks/useServices";
-import { cancelBooking, reassignBooking } from "./booking.service";
+import {
+  cancelBooking,
+  createBooking,
+  reassignBooking,
+} from "./booking.service";
 
 // No proper error message for when user tried to reassign
 // staff on a cancelled booking.
@@ -81,12 +85,27 @@ const BookingsDetailPage = () => {
     }
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await createBooking({
+        ...formData,
+        startTime: new Date(formData.startTime).toISOString(),
+      });
+      navigate("/bookings");
+    } catch (err) {
+      setActionError(
+        "Failed to create booking, please ensure all fields are filled in correctly",
+      );
+    }
+  };
+
   if (loading) return <div>Loading.. </div>;
   if (error) return <div>{error}</div>;
 
   return (
     <>
-      <form className={pageStyles.form}>
+      <form className={pageStyles.form} onSubmit={handleSubmit}>
         <label className={pageStyles.label} htmlFor="name">
           Customer Name
         </label>
