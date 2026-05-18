@@ -74,7 +74,7 @@ const BookingsDetailPage = () => {
     try {
       await cancelBooking(id!, cancelReason);
       setShowCancelModal(false);
-      refetch();
+      navigate("/bookings");
     } catch (err) {
       setActionError("Failed to cancel booking. Please try again.");
       setShowCancelModal(false);
