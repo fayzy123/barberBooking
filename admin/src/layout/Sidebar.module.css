@@ -1,5 +1,5 @@
 .sidebar {
-  width: 265px;
+  width: 200px;
   height: 100%;
   background: #080808;
   border-right: 1px solid var(--b1);
@@ -8,7 +8,8 @@
 }
 
 .brand {
-  padding: 1.25rem 1rem;
+  height: 62px;
+  padding: 0 1rem;
   border-bottom: 1px solid var(--b1);
   display: flex;
   align-items: center;

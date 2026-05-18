@@ -67,10 +67,14 @@ const BookingsDetailPage = () => {
       await reassignBooking(id!, formData.staffId);
       refetch();
     } catch (err: any) {
-      setActionError(
-        err?.response?.data?.message ??
-          "Failed to reassign booking. Please try again",
-      );
+      const serverMessage = err?.response?.data?.message;
+      if (serverMessage === "Booking has already been cancelled.") {
+        setActionError(
+          "This booking is already cancelled. Please create a new booking instead.",
+        );
+      } else {
+        setActionError("Failed to reassign booking. Please try again.");
+      }
     }
   };
 

@@ -5,8 +5,8 @@ const BrandLogo = () => {
     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
       <div
         style={{
-          width: "42px",
-          height: "42px",
+          width: "34px",
+          height: "34px",
           background: "var(--gold-bg)",
           border: "1px solid var(--gold-lo)",
           borderRadius: "10px",
@@ -30,7 +30,7 @@ const BrandLogo = () => {
       </div>
       <div>
         <div
-          style={{ fontSize: "1rem", fontWeight: 600, color: "var(--gold)" }}
+          style={{ fontSize: "0.9rem", fontWeight: 600, color: "var(--gold)" }}
         >
           {config.shopName}
         </div>
