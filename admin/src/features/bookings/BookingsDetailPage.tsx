@@ -12,9 +12,6 @@ import {
   reassignBooking,
 } from "./booking.service";
 
-// No proper error message for when user tried to reassign
-// staff on a cancelled booking.
-
 const BookingsDetailPage = () => {
   const { id } = useParams();
   const isCreateMode = !id;
@@ -69,8 +66,11 @@ const BookingsDetailPage = () => {
     try {
       await reassignBooking(id!, formData.staffId);
       refetch();
-    } catch (err) {
-      setActionError("Failed to reassign booking. Please try again");
+    } catch (err: any) {
+      setActionError(
+        err?.response?.data?.message ??
+          "Failed to reassign booking. Please try again",
+      );
     }
   };
 
