@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 import path from 'path'
 // Load .env from root
-dotenv.config({ path: path.resolve(__dirname, '../../.env') })
+dotenv.config({ path: path.resolve(__dirname, '../.env') })
 
 import express from 'express'
 import cors from 'cors'

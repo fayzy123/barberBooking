@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 import path from 'path'
 
 // Load .env from root (go up 3 levels: src -> server -> root)
-dotenv.config({ path: path.join(__dirname, '../../../.env') })
+dotenv.config({ path: path.join(__dirname, '../../.env') })
 
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/prisma/client";
