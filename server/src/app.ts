@@ -13,6 +13,23 @@ import { authenticate } from './middleware/authenticate'
 
 const app = express()
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  process.env.ADMIN_URL, // Vercel URL to be added later
+].filter(Boolean) as string[]
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
+  credentials: true,
+}))
+
+
 // Middleware
 app.use(cors())
 app.use(express.json())
