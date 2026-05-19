@@ -15,7 +15,7 @@ const StaffPlaceholder = () => {
     setTopbar({ title: "Staff", subtitle: "Manage your team" });
   }, []);
 
-  return <div>Staff Page Coming Soon!</div>;
+  return <div>Staff Page: Check back for when this feature is rolled out!</div>;
 };
 
 const ShopPlaceholder = () => {
