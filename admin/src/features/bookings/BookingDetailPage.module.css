@@ -37,6 +37,15 @@
     opacity: 0.5;
 }
 
+.fieldError {
+  font-size: 0.75rem;
+  color: var(--red);
+}
+
+.inputError {
+  border-color: var(--red) !important;
+}
+
 .actionError {
     font-size: 0.8rem;
     color: var(--red);

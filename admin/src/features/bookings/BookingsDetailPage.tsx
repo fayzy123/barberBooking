@@ -11,6 +11,7 @@ import {
   createBooking,
   reassignBooking,
 } from "./booking.service";
+import { createBookingSchema } from "./booking.schema";
 
 const BookingsDetailPage = () => {
   const { id } = useParams();
@@ -21,6 +22,7 @@ const BookingsDetailPage = () => {
   const [actionError, setActionError] = useState<string | null>(null);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [cancelReason, setCancelReason] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const { staff } = useStaff();
   const { service } = useServices();
   const navigate = useNavigate();
@@ -91,6 +93,27 @@ const BookingsDetailPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("handleSubmit called", formData);
+
+    const result = createBookingSchema.safeParse({
+      ...formData,
+      startTime: formData.startTime
+        ? new Date(formData.startTime).toISOString()
+        : "",
+    });
+
+    if (!result.success) {
+      const errors: Record<string, string> = {};
+      result.error.issues.forEach((err) => {
+        if (err.path[0]) {
+          errors[err.path[0] as string] = err.message;
+        }
+      });
+      setFieldErrors(errors);
+      return;
+    }
+
+    setFieldErrors({});
     try {
       await createBooking({
         ...formData,
@@ -116,13 +139,16 @@ const BookingsDetailPage = () => {
         <input
           id="name"
           type="text"
-          className={pageStyles.input}
+          className={`${pageStyles.input} ${fieldErrors.customerName ? pageStyles.inputError : ""}`}
           value={formData.customerName}
           readOnly={!isCreateMode}
           onChange={(e) =>
             setFormData((prev) => ({ ...prev, customerName: e.target.value }))
           }
         />
+        {fieldErrors.customerName && (
+          <p className={pageStyles.fieldError}>{fieldErrors.customerName}</p>
+        )}
 
         <label className={pageStyles.label} htmlFor="phone">
           Customer phone
@@ -130,13 +156,16 @@ const BookingsDetailPage = () => {
         <input
           id="phone"
           type="tel"
-          className={pageStyles.input}
+          className={`${pageStyles.input} ${fieldErrors.customerPhone ? pageStyles.inputError : ""}`}
           value={formData.customerPhone}
           readOnly={!isCreateMode}
           onChange={(e) =>
             setFormData((prev) => ({ ...prev, customerPhone: e.target.value }))
           }
         />
+        {fieldErrors.customerPhone && (
+          <p className={pageStyles.fieldError}>{fieldErrors.customerPhone}</p>
+        )}
 
         <label className={pageStyles.label} htmlFor="service">
           Service
@@ -145,7 +174,7 @@ const BookingsDetailPage = () => {
           id="service"
           value={formData.serviceId}
           disabled={!isCreateMode}
-          className={pageStyles.select}
+          className={`${pageStyles.input} ${fieldErrors.serviceId ? pageStyles.inputError : ""}`}
           onChange={(e) =>
             setFormData((prev) => ({ ...prev, serviceId: e.target.value }))
           }
@@ -157,6 +186,9 @@ const BookingsDetailPage = () => {
             </option>
           ))}
         </select>
+        {fieldErrors.serviceId && (
+          <p className={pageStyles.fieldError}>{fieldErrors.serviceId}</p>
+        )}
 
         <label className={pageStyles.label} htmlFor="staff">
           Staff
@@ -164,7 +196,7 @@ const BookingsDetailPage = () => {
         <select
           id="staff"
           value={formData.staffId}
-          className={pageStyles.select}
+          className={`${pageStyles.input} ${fieldErrors.staffId ? pageStyles.inputError : ""}`}
           onChange={(e) => {
             setActionError(null);
             setFormData((prev) => ({ ...prev, staffId: e.target.value }));
@@ -177,6 +209,9 @@ const BookingsDetailPage = () => {
             </option>
           ))}
         </select>
+        {fieldErrors.staffId && (
+          <p className={pageStyles.fieldError}>{fieldErrors.staffId}</p>
+        )}
 
         <label className={pageStyles.label} htmlFor="startTime">
           Start Time
@@ -186,11 +221,14 @@ const BookingsDetailPage = () => {
           type="datetime-local"
           value={formData.startTime}
           readOnly={!isCreateMode}
-          className={pageStyles.input}
+          className={`${pageStyles.input} ${fieldErrors.startTime ? pageStyles.inputError : ""}`}
           onChange={(e) =>
             setFormData((prev) => ({ ...prev, startTime: e.target.value }))
           }
         ></input>
+        {fieldErrors.startTime && (
+          <p className={pageStyles.fieldError}>{fieldErrors.startTime}</p>
+        )}
         {actionError && <p className={pageStyles.actionError}>{actionError}</p>}
         <footer className={pageStyles.footer}>
           {isCreateMode ? (

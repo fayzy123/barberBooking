@@ -15,7 +15,7 @@ const StaffPlaceholder = () => {
     setTopbar({ title: "Staff", subtitle: "Manage your team" });
   }, []);
 
-  return <div>Staff Page</div>;
+  return <div>Staff Page Coming Soon!</div>;
 };
 
 const ShopPlaceholder = () => {
@@ -25,7 +25,7 @@ const ShopPlaceholder = () => {
     setTopbar({ title: "Shop Setting", subtitle: "Fayzy's Cuts" });
   }, []);
 
-  return <div>Shop Page</div>;
+  return <div>Shop Management Page Coming Soon!</div>;
 };
 
 const router = createBrowserRouter([
