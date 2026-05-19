@@ -51,11 +51,13 @@ Active development — Phase 3 (Admin Bookings) complete. Phase 4 (Staff Managem
 
 2. Create a `.env` file inside the `server/` folder using `.env.example` as a reference and fill in your values:
 
+```bash
 DATABASE_URL=your_postgresql_connection_string
 JWT_SECRET=your_jwt_secret
 JWT_EXPIRES_IN=12h
 PORT_SERVER=3002
 ADMIN_SEED_PASSWORD=your_admin_password
+```
 
 3. Run database migrations and seed data
 ```bash
