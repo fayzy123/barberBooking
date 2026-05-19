@@ -49,7 +49,7 @@ Active development — Phase 3 (Admin Bookings) complete. Phase 4 (Staff Managem
    npm install
 ```
 
-2. Create a `.env` file inside the `server/` folder using `.env.example` as a reference and fill in your values:
+2. Create a `.env` file inside the `server/` folder using and fill in with the following values:
 
 ```bash
 DATABASE_URL=your_postgresql_connection_string
