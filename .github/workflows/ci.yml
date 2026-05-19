@@ -1,0 +1,54 @@
+name: CI # Name of the pipeline shown on GitHub
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check-server:
+    name: Check Server
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: server
+        run: npm install --legacy-peer-deps
+
+      - name: Generate Prisma client
+        working-directory: server
+        run: npx prisma generate
+
+      - name: Type check
+        working-directory: server
+        run: npx tsc --noEmit
+
+  check-admin:
+    name: Check Admin
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: admin
+        run: npm install --legacy-peer-deps
+
+      - name: Type check
+        working-directory: admin
+        run: npx tsc --noEmit
+
+      - name: Build
+        working-directory: admin
+        run: npm run build

@@ -15,7 +15,7 @@ const app = express()
 
 const allowedOrigins = [
   'http://localhost:5173',
-  process.env.ADMIN_URL, // Vercel URL to be added later
+  process.env.ADMIN_URL,
 ].filter(Boolean) as string[]
 
 app.use(cors({
