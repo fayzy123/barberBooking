@@ -18,7 +18,7 @@ const BookingsDetailPage = () => {
   const isCreateMode = !id;
 
   const { setTopbar } = useTopbar();
-  const { booking, loading, error, refetch } = useBookingById(id ?? "");
+  const { booking, loading, error } = useBookingById(id ?? "");
   const [actionError, setActionError] = useState<string | null>(null);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [cancelReason, setCancelReason] = useState("");
@@ -67,7 +67,7 @@ const BookingsDetailPage = () => {
   const handleReassign = async () => {
     try {
       await reassignBooking(id!, formData.staffId);
-      refetch();
+      navigate("/bookings");
     } catch (err: any) {
       const serverMessage = err?.response?.data?.message;
       if (serverMessage === "Booking has already been cancelled.") {
@@ -196,7 +196,7 @@ const BookingsDetailPage = () => {
         <select
           id="staff"
           value={formData.staffId}
-          className={`${pageStyles.input} ${fieldErrors.staffId ? pageStyles.inputError : ""}`}
+          className={`${pageStyles.select} ${fieldErrors.staffId ? pageStyles.inputError : ""}`}
           onChange={(e) => {
             setActionError(null);
             setFormData((prev) => ({ ...prev, staffId: e.target.value }));

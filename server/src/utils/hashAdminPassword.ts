@@ -16,9 +16,17 @@ async function main() {
 
     const hash = await bcrypt.hash(NEW_PASSWORD, 12)
 
-    const updated = await prisma.admin.update({
+    const updated = await prisma.admin.upsert({
         where: {email: ADMIN_EMAIL },
-        data: { passwordHash: hash }
+        update: { passwordHash: hash },
+        create: {
+            id: 'admin_001',
+            email: ADMIN_EMAIL,
+            passwordHash: hash,
+            role: 'admin',
+            shopId: 'shop_001',
+            updatedAt: new Date()
+        }
     })
 
     console.log(`Password hashed and updated for ${updated.email}`)
