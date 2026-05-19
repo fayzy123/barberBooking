@@ -40,5 +40,41 @@ Active development — Phase 3 (Admin Bookings) complete. Phase 4 (Staff Managem
 
 ## Running locally
 
-Clone the repo and run `npm install` from the root. Create a `.env` file inside the `server/` folder using `.env.example` as a reference — you'll need a PostgreSQL connection string, a JWT secret, and an admin seed password. Then `cd server`, run `npx prisma migrate deploy` to set up the database schema, followed by `npx prisma db seed` to populate it with seed data. Start the API with `npm run dev` from the `server/` folder (runs on port 3002), then open a new terminal, `cd admin` and run `npm run dev` to start the admin panel (runs on port 5173). Log in with the email and password you set in your `.env`.
+**Prerequisites:** Node.js, PostgreSQL
+
+1. Clone the repo and install dependencies
+```bash
+   git clone https://github.com/fayzy123/barberBooking.git
+   cd barberBooking
+   npm install
 ```
+
+2. Create a `.env` file inside the `server/` folder using `.env.example` as a reference and fill in your values:
+
+DATABASE_URL=your_postgresql_connection_string
+JWT_SECRET=your_jwt_secret
+JWT_EXPIRES_IN=12h
+PORT_SERVER=3002
+ADMIN_SEED_PASSWORD=your_admin_password
+
+3. Run database migrations and seed data
+```bash
+   cd server
+   npx prisma migrate deploy
+   npx prisma db seed
+```
+
+4. Start the API server
+```bash
+   npm run dev
+```
+   Runs on `http://localhost:3002`
+
+5. Open a new terminal and start the admin panel
+```bash
+   cd admin
+   npm run dev
+```
+   Runs on `http://localhost:5173`
+
+6. Log in with the email and password you set in `ADMIN_SEED_PASSWORD`
