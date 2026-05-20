@@ -78,7 +78,7 @@ export async function reassignStaff(req: AuthRequest, res: Response) {
     const shopId = req.admin?.shopId
     if (!shopId) {
         res.status(401).json({ message: "Unauthorised" })
-        return
+        return;
     }
 
     const { id } = req.params
