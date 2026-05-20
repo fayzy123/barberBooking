@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createStaff, getStaffById, retrieveStaff, updateAvailability, updateStaff } from "../../services/staffService/staff.service";
+import { createStaff, getStaffById, retrieveStaff, updateAvailability, updateStaff } from "../services/staff.service";
 import { AuthRequest } from "../../middleware/authenticate";
 import { validateRequest } from "../../utils/validate";
 import { CreateStaff, createStaffSchema, updateAvailabilitySchema, UpdateStaff, UpdateStaffAvailability, updateStaffSchema } from "../schemas/staff.schema";

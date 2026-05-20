@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { AuthRequest } from "../../middleware/authenticate";
-import { retrieveServices } from "../../services/serviceService/barberService.service";
+import { retrieveServices } from "../services/barberService.service";
 
 export async function getAllServices(req: AuthRequest, res: Response) {
     const shopId = req.admin?.shopId

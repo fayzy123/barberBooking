@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getBookingById, getBookings, postBooking, cancelBooking as cancelBookingService, reassignBooking } from "../../services/bookingService/booking.service";
+import { getBookingById, getBookings, postBooking, cancelBooking as cancelBookingService, reassignBooking } from "../services/booking.service";
 import { bookingQuerySchema, CreateBooking, createBookingSchema } from "../schemas/booking.schema";
 import { validateRequest } from "../../utils/validate";
 import { AuthRequest } from "../../middleware/authenticate";

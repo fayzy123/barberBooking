@@ -1,4 +1,4 @@
-import { loginAdmin } from "../../services/authService/auth.service";
+import { loginAdmin } from "../services/auth.service";
 import { loginSchema } from "../schemas/auth.schema";
 import { Request, Response } from "express";
 
