@@ -1,10 +1,10 @@
-import { Staff } from "../../staff/hooks/useStaff";
+import { StaffSummary } from "../../staff/staff.types";
 import { Filters } from "../booking.types";
 import styles from "./FilterBar.module.css";
 
 interface FilterBarProps {
   filters: Filters;
-  staff: Staff[];
+  staff: StaffSummary[];
   onFilterChange: (key: keyof Filters, value: string) => void;
 }
 
