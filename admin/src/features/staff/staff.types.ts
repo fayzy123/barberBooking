@@ -7,6 +7,7 @@ export interface AvailabilitySlot {
 export interface StaffSummary {
     id: string;
     name: string;
+    active: boolean;
 }
 
 export interface Staff {
