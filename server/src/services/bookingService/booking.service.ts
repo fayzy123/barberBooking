@@ -1,6 +1,32 @@
 import { createId } from "@paralleldrive/cuid2";
 import { CreateBooking, RetrieveBooking } from "../../api/schemas/booking.schema";
 import { prisma } from "../../db/prisma";
+import { AvailabilitySlot } from "../../api/schemas/staff.types";
+
+function isStaffAvailable(availability: AvailabilitySlot[], startTime: Date, endTime: Date) {
+    const dayMap: Record<number, string> = {
+        0: 'sun', 1: 'mon', 2: 'tue', 3: 'wed',
+        4: 'thu', 5: 'fri', 6: 'sat'
+    }
+
+    const day = dayMap[startTime.getDay()];
+    const slot = availability.find(s => s.day === day);
+
+    if (!slot) return false;
+
+    // Convert slot times and booking times to minutes for easy comparison
+    const toMinutes = (time: string) => {
+        const [hours, mins] = time.split(':').map(Number)
+        return hours * 60 + mins;
+    }
+
+    const bookingStart = toMinutes(`${startTime.getHours()}:${startTime.getMinutes()}`);
+    const bookingEnd = toMinutes(`${endTime.getHours()}:${endTime.getMinutes()}`);
+    const slotStart = toMinutes(slot.start)
+    const slotEnd = toMinutes(slot.end)
+
+    return bookingStart >= slotStart && bookingEnd <= slotEnd
+}
 
 // Retrieve all booking endpoint
 export async function getBookings(filters : RetrieveBooking) {
@@ -80,11 +106,35 @@ export async function postBooking(input : CreateBooking, shopId: string) {
     const id = createId()
     const ref = generateRef()
 
+    // Check for overlapping bookings
+    const overlappingBooking = await prisma.booking.findFirst({
+        where: {
+            staffId: input.staffId,
+            status: "BOOKED",
+            AND: [
+                { startTime: { lt: endTime }},
+                { endTime: { gt: startTime }}
+            ]
+        }
+    })
+
+    if (overlappingBooking) {
+        throw new Error("Staff member already has a booking at this time")
+    }
+
+    // Check for availability
+    const staff = await prisma.staff.findUnique({ where: { id: input.staffId } })
+    if (!staff) throw new Error("Staff member not found");
+
+    const slots = staff.availability as unknown as AvailabilitySlot[]
+    if (!isStaffAvailable(slots, startTime, endTime)) {
+        throw new Error("Staff member is not available at this time")
+    }
+
     return prisma.booking.create({ 
         data: {
             id,
             ref, 
-            // ShopId comes from jwt via the controller, not from req body
             shopId,
             staffId: input.staffId,
             serviceId: input.serviceId,
