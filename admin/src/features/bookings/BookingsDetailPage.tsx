@@ -93,7 +93,6 @@ const BookingsDetailPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("handleSubmit called", formData);
 
     const result = createBookingSchema.safeParse({
       ...formData,

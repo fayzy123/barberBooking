@@ -7,7 +7,8 @@ import { useTopbar } from "./layout/TopBarContext";
 import { useEffect } from "react";
 import BookingsPage from "./features/bookings/BookingsPage";
 import BookingsDetailPage from "./features/bookings/BookingsDetailPage";
-import { StaffPage } from "./features/staff/StaffPage";
+import StaffPage from "./features/staff/StaffPage";
+import StaffDetailPage from "./features/staff/StaffDetailPage";
 
 const ShopPlaceholder = () => {
   const { setTopbar } = useTopbar();
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
           { path: "bookings/new", element: <BookingsDetailPage /> },
           { path: "bookings/:id", element: <BookingsDetailPage /> },
           { path: "staff", element: <StaffPage /> },
+          { path: "staff/:id", element: <StaffDetailPage /> },
           { path: "shop", element: <ShopPlaceholder /> },
         ],
       },

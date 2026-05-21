@@ -6,6 +6,7 @@ export function useStaff() {
     const [staff, setStaff] = useState<StaffSummary[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [trigger, setTrigger] = useState(0);
 
     useEffect(() => {
         const fetchStaff = async () => {
@@ -20,7 +21,9 @@ export function useStaff() {
             }
         };
         fetchStaff();
-    }, []);
+    }, [trigger]);
 
-    return { staff, loading, error }
+    const refetch = () => setTrigger(t => t + 1);
+
+    return { staff, loading, error, refetch }
 }
