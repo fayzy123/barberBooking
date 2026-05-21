@@ -137,15 +137,16 @@
     color: var(--red);
 }
 
+.modal textarea:focus {
+    border-color: var(--gold-lo);
+}
+
+
 .checkBoxRow {
     display: flex;
     align-items: center;
     gap: 8px;
     margin-top: 10px;
-}
-
-.modal textarea:focus {
-    border-color: var(--gold-lo);
 }
 
 .modal footer {

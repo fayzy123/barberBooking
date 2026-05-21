@@ -6,6 +6,7 @@ import { useStaff } from "./hooks/useStaff";
 import styles from "./StaffPage.module.css";
 import { createStaff } from "./staff.service";
 import { createStaffSchema } from "./staff.schema";
+import Toggle from "./components/Toggle";
 
 export const StaffPage = () => {
   const { staff, refetch } = useStaff();
@@ -37,7 +38,7 @@ export const StaffPage = () => {
 
     const result = createStaffSchema.safeParse({
       name: newName,
-      active: setNewActive,
+      active: newActive,
     });
 
     if (!result.success) {
@@ -103,12 +104,7 @@ export const StaffPage = () => {
               )}
               <span className={styles.checkBoxRow}>
                 <label htmlFor="active">Active: </label>
-                <input
-                  type="checkbox"
-                  id="active"
-                  checked={newActive}
-                  onChange={(e) => setNewActive(e.target.checked)}
-                />
+                <Toggle checked={newActive} onChange={setNewActive} />
               </span>
 
               {modalError && <p className={styles.modalError}>{modalError}</p>}
