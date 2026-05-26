@@ -1,5 +1,5 @@
 import api from "../../shared/utils/api";
-import { AvailabilitySlot } from "./staff.types";
+import { Shift } from "./staff.types";
 
 export async function createStaff(name: string, active: boolean) {
     const response = await api.post(`/staff/`, { name, active })
@@ -11,7 +11,7 @@ export async function updateStaff(id: string, name: string, active: boolean) {
     return response.data;
 }
 
-export async function updateAvailability(id: string, availability: AvailabilitySlot[]) {
-    const response = await api.patch(`/staff/${id}/availability`, { availability })
+export async function updateShifts(id: string, shifts: Shift[]) {
+    const response = await api.patch(`/staff/${id}/shifts`, { shifts })
     return response.data
 }

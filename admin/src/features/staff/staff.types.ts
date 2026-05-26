@@ -1,7 +1,11 @@
-export interface AvailabilitySlot {
-    day: string,
-    start: string,
-    end: string
+export interface Shift {
+    id: string;
+    shopId: string;
+    day: string;
+    startTime: string;
+    endTime: string;
+    breakStart: string | null;
+    active: boolean;
 }
 
 export interface StaffSummary {
@@ -15,7 +19,7 @@ export interface Staff {
     shopId: string;
     name: string;
     active: boolean;
-    availability: AvailabilitySlot[] | null;
+    shifts: Shift[] | null;
     createdAt: string;
     updatedAt: string;
 }
