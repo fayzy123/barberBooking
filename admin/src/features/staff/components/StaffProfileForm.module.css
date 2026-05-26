@@ -1,0 +1,72 @@
+.form {
+    background: var(--s1);
+    border: 1px solid var(--b1);
+    border-radius: var(--rad-lg);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.title {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--t3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.label {
+    font-size: 0.75rem;
+    color: var(--t2);
+}
+
+.input {
+    background: var(--bg);
+    border: 1px solid var(--b2);
+    border-radius: 6px;
+    padding: 8px 11px;
+    font-size: 0.8rem;
+    color: var(--t1);
+    outline: none;
+    transition: border 0.12s;
+    width: 100%;
+}
+
+.input:focus{
+    border-color: var(--gold-lo);
+}
+
+.divider {
+    border: none;
+    border-top: 1px solid var(--b1);
+    margin: 2px 0;
+}
+
+.toggleRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--t1);
+    cursor: pointer;
+}
+
+.error {
+    font-size: 0.75rem;
+    color: var(--red);
+}
+
+.success {
+    font-size: 0.75rem;
+    color: var(--grn);
+}
+
+.footer {
+    margin-top: 4px;
+}
+
+.saveBtn {
+    width: 100%;
+    justify-content: center;
+}

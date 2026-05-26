@@ -35,7 +35,7 @@ const StaffDetailPage = () => {
   return (
     <main className={styles.content}>
       <section className={styles.layout}>
-        <StaffProfileForm />
+        <StaffProfileForm staff={staff} />
         <AvailabilityGrid />
       </section>
     </main>
