@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import BookingsPage from "./features/bookings/BookingsPage";
 import BookingsDetailPage from "./features/bookings/BookingsDetailPage";
 import StaffPage from "./features/staff/StaffPage";
-import StaffDetailPage from "./features/staff/StaffDetailPage";
+import StaffDetailPage from "./features/staff/components/StaffDetailPage";
 
 const ShopPlaceholder = () => {
   const { setTopbar } = useTopbar();
