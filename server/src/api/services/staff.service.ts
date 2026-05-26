@@ -52,18 +52,3 @@ export async function updateStaff(id: string, input: UpdateStaff) {
     })
 }
 
-export async function updateAvailability(id: string, availability: UpdateStaffAvailability["availability"]) {
-    const staff = await getStaffById(id);
-
-    if (!staff) {
-        throw new Error("No staff member found")
-    }
-
-    return prisma.staff.update({
-        where: { id },
-        data: {
-            availability: availability as object[],
-            updatedAt: new Date()
-        }
-    })
-}

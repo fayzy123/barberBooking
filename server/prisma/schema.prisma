@@ -74,17 +74,33 @@ model Shop {
 }
 
 model Staff {
-  id           String    @id
-  shopId       String
-  name         String
-  active       Boolean   @default(true)
-  availability Json?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime
-  Booking      Booking[]
-  Shop         Shop      @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  id        String    @id
+  shopId    String
+  name      String
+  active    Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime
+  Booking   Booking[]
+  Shop      Shop      @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  shifts    Shift[]
 
   @@index([shopId])
+}
+
+model Shift {
+  id         String   @id
+  staffId    String
+  day        String
+  startTime  String
+  endTime    String
+  breakStart String?
+  active     Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime
+
+  Staff Staff @relation(fields: [staffId], references: [id], onDelete: Cascade)
+
+  @@index([staffId])
 }
 
 enum BookingStatus {
