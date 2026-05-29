@@ -92,10 +92,10 @@ describe('PATCH /api/staff/admin/staff/:id', () => {
     })
 })
 
-describe('PATCH /api/staff/admin/staff/:id/availability', () => {
+describe('PATCH /api/staff/admin/staff/:id/shifts', () => {
     it('should return 400 if no token is provided', async () => {
         const res = await request(app)
-            .patch('/api/admin/staff/staff_001/availability')
+            .patch('/api/admin/staff/staff_001/shifts')
             .send({ name: 'Bo'})
         
         expect(res.status).toBe(400)
@@ -103,27 +103,30 @@ describe('PATCH /api/staff/admin/staff/:id/availability', () => {
 
     it('should return 400 if body is invalid', async () => {
     const res = await request(app)
-        .patch('/api/admin/staff/staff_001/availability')
+        .patch('/api/admin/staff/staff_001/shifts')
         .set('Authorization', `Bearer ${validToken}`)
-        .send({ availability: [
-                { day: 'mon', start: '09:00', end: '17:00' },
-                { day: 'tue', start: '09:00' }
-            ]
-         })
+        .send({ name: 'Bo' })
+    
         expect(res.status).toBe(400)
     })
 
     it('should return 200 and an array if valid token provided', async () => {
         const res = await request(app)
-                    .patch('/api/admin/staff/staff_001/availability')
+                    .patch('/api/admin/staff/staff_001/shifts')
                     .set('Authorization', `Bearer ${validToken}`)
-                    .send({ availability: [
-                            { day: 'mon', start: '09:00', end: '17:00' },
-                            { day: 'tue', start: '09:00', end: '18:00' }
+                    .send({
+                        shifts: [
+                            { day: 'mon', startTime: '09:00', endTime: '17:00', breakStart: '12:00', active: true },
+                            { day: 'tue', startTime: '09:00', endTime: '17:00', breakStart: '12:00', active: true },
+                            { day: 'wed', startTime: '09:00', endTime: '17:00', breakStart: '12:00', active: true },
+                            { day: 'thu', startTime: '09:00', endTime: '17:00', breakStart: '12:00', active: true },
+                            { day: 'fri', startTime: '09:00', endTime: '17:00', breakStart: '12:00', active: true },
+                            { day: 'sat', startTime: '09:00', endTime: '17:00', active: false },
+                            { day: 'sun', startTime: '09:00', endTime: '17:00', active: false },
                         ]
                     })
 
         expect(res.status).toBe(200)
-        expect(res.body.name).toBe('Fayzy Khan')
+        expect(res.body.shifts).toBeDefined()
     })
 })

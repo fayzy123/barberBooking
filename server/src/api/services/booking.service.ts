@@ -1,6 +1,7 @@
 import { createId } from "@paralleldrive/cuid2";
 import { CreateBooking, RetrieveBooking } from "../../api/schemas/booking.schema";
 import { prisma } from "../../db/prisma";
+import { start } from "node:repl";
 
 
 // Retrieve all booking endpoint
@@ -97,18 +98,9 @@ export async function postBooking(input : CreateBooking, shopId: string) {
         throw new Error("Staff member already has a booking at this time")
     }
 
-    // Check for availability
-    // const staff = await prisma.staff.findUnique({ where: { id: input.staffId } })
-    // if (!staff) throw new Error("Staff member not found");
-
-
-    /** TODO Phase 4 — replace with shift-based availability check */
-
-    // const slots = staff.availability as unknown as AvailabilitySlot[]
-    // if (!isStaffAvailable(slots, startTime, endTime)) {
-    //     throw new Error("Staff member is not available at this time")
-    // }
-
+    // Check for availability against shift schedule
+    await checkStaffAvailibility(input.staffId, startTime, endTime)
+   
     return prisma.booking.create({ 
         data: {
             id,
@@ -170,4 +162,34 @@ export async function reassignBooking(id: string, staffId: string) {
             updatedAt: new Date(),
         }
      })
+}
+
+// Helper Function to convert into minutes
+function toMinutes(time: string): number {
+    const [hours, mins] = time.split(':').map(Number)
+    return hours * 60 + mins
+}
+
+// Helper function to check if staff is available
+async function checkStaffAvailibility(staffId: string, startTime: Date, endTime: Date) {
+    const dayMap: Record<number, string> = {
+        0: 'sun', 1: 'mon', 2: 'tue',
+        3: 'wed', 4: 'thu', 5: 'fri', 6: 'sat'
+    }
+
+    const staff = await prisma.staff.findUnique({ where: { id: staffId } })
+    if (!staff) throw new Error("Staff member not found")
+    if (!staff.active) throw new Error("Staff member is not available at this time")
+    
+    const shift = await prisma.shift.findFirst({
+        where: { staffId, day: dayMap[startTime.getDay()], active: true}
+    })
+
+    if (!shift) throw new Error("Staff member is not available at this time")
+    const bookingStart = toMinutes(`${startTime.getHours()}:${startTime.getMinutes()}`)
+    const bookingEnd = toMinutes(`${endTime.getHours()}:${endTime.getMinutes()}`)
+
+    if (bookingStart < toMinutes(shift.startTime) || bookingEnd > toMinutes(shift.endTime)) {
+        throw new Error("Staff member is not available at this time")
+    }
 }

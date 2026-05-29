@@ -1,5 +1,5 @@
 import { createId } from "@paralleldrive/cuid2";
-import { CreateStaff, UpdateStaff, UpdateStaffAvailability } from "../../api/schemas/staff.schema";
+import { CreateStaff, UpdateShifts, UpdateStaff } from "../../api/schemas/staff.schema";
 import { prisma } from "../../db/prisma";
 
 export async function retrieveStaff(shopId: string) {
@@ -49,6 +49,27 @@ export async function updateStaff(id: string, input: UpdateStaff) {
             active: input.active,
             updatedAt: new Date()
         }
+    })
+}
+
+export async function updateShifts(id: string, input: UpdateShifts) {
+    const staff = await getStaffById(id);
+
+    if (!staff) {
+        throw new Error("No staff member found")
+    }
+
+    await prisma.shift.deleteMany({
+        where: { staffId: id}
+    })
+
+    await prisma.shift.createMany({
+        data: input.shifts.map(s => ({ ...s, id: createId(), staffId: id, updatedAt: new Date() }))
+    })
+
+    return prisma.staff.findUnique({
+        where: { id },
+        include: { shifts: true }
     })
 }
 

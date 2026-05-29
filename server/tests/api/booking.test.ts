@@ -25,7 +25,7 @@ describe('POST /api/admin/bookings', () => {
         expect(res.status).toBe(400)
     })
 
-    it('should return 500 if booking outside staff availibility', async () => {
+    it('should return 500 when booking outside shift availability', async () => {
     const res = await request(app)
         .post('/api/admin/bookings')
         .set('Authorization', `Bearer ${validToken}`)

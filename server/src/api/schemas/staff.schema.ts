@@ -7,16 +7,18 @@ export const createStaffSchema = z.object({
 
 export const updateStaffSchema = createStaffSchema.partial ()
 
-export const updateAvailabilitySchema = z.object ({
-    availability: z.array(
-        z.object({
-            day: z.enum(["mon", "tue", "wed", "thu", "fri", "sat", "sun"]),
-            start: z.string(),
-            end: z.string()
-        })
-    )
+export const shiftsSchema = z.object ({
+    day: z.enum(["mon", "tue", "wed", "thu", "fri", "sat", "sun"]),
+    startTime: z.string().min(1, "Please select a time"),
+    endTime: z.string().min(1, "Please select an end time"),
+    breakStart: z.string().min(1, "Please select a break time").optional(),
+    active: z.boolean().default(true)
+})
+
+export const updateShiftsSchema = z.object({
+    shifts: z.array(shiftsSchema)
 })
 
 export type CreateStaff = z.infer<typeof createStaffSchema>
 export type UpdateStaff = z.infer<typeof updateStaffSchema>
-export type UpdateStaffAvailability = z.infer<typeof updateAvailabilitySchema>
+export type UpdateShifts = z.infer<typeof updateShiftsSchema>
