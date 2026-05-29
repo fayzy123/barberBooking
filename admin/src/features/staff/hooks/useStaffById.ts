@@ -6,6 +6,9 @@ export function useStaffById(id : string) {
     const [staff, setStaff] = useState<Staff | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [trigger, setTrigger] = useState(0);
+    
+    const refetch = () => setTrigger(t => t + 1);
 
     useEffect(() => {
         if (!id) return;
@@ -22,7 +25,7 @@ export function useStaffById(id : string) {
             }
         };
         fetchStaffById();
-    },[id]);
+    },[id, trigger]);
 
-    return { staff, loading, error };  
+    return { staff, loading, error, refetch };  
 }

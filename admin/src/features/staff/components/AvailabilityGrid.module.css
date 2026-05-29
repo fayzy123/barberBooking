@@ -1,0 +1,43 @@
+.wrapper {
+    background: var(--s1);
+    border: 1px solid var(--b1);
+    border-radius: var(--rad-lg);
+    overflow: hidden;
+}
+
+.wrapper table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.wrapper th,
+.wrapper td {
+    padding: 10px 14px;
+    text-align: center;
+    border-bottom: 1px solid var(--b1);
+    font-size: 0.8rem;
+    color: var(--t2);
+}
+
+.wrapper thead tr {
+    background: #0a0a0a;
+}
+
+.wrapper thead th {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--t3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.rowLabel {
+    text-align: left !important;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--t3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+

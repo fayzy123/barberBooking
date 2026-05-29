@@ -1,6 +1,6 @@
 export interface Shift {
     id: string;
-    shopId: string;
+    staffId: string;
     day: string;
     startTime: string;
     endTime: string;

@@ -36,8 +36,11 @@ const StaffDetailPage = () => {
     <main className={styles.content}>
       <section className={styles.layout}>
         <StaffProfileForm staff={staff} />
-        <AvailabilityGrid />
+        <AvailabilityGrid staff={staff} />
       </section>
+      <footer className={styles.footer}>
+        <button className={btnStyles.btnGold}>Save Schedule</button>
+      </footer>
     </main>
   );
 };
