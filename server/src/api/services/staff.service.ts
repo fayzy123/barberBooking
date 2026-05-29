@@ -13,6 +13,7 @@ export async function retrieveStaff(shopId: string) {
 export async function getStaffById(id: string) {
     const staff = await prisma.staff.findUnique({
         where: { id },
+        include: { shifts: true }
     })
 
     if (!staff) {
