@@ -11,7 +11,7 @@ export async function updateStaff(id: string, name: string, active: boolean) {
     return response.data;
 }
 
-export async function updateShifts(id: string, shifts: Shift[]) {
+export async function updateShifts(id: string, shifts: Omit<Shift, 'id' | 'staffId'>[]) {
     const response = await api.patch(`/staff/${id}/shifts`, { shifts })
     return response.data
 }

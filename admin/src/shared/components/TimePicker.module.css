@@ -1,0 +1,38 @@
+.picker {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    background: var(--s2);
+    border: 1px solid var(--b2);
+    border-radius: 6px;
+    padding: 4px 6px;
+}
+
+.select option {
+    background: var(--s2);
+    color: var(--t1);
+}
+
+.select {
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 0.75rem;
+    color: var(--t2);
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    min-width: 28px;
+    text-align: center;
+}
+
+
+.sep {
+    font-size: 0.75rem;
+    color: var(--t3);
+}
+
+.disabled {
+    opacity: 0.3;
+    pointer-events: none;
+}

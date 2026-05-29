@@ -78,3 +78,20 @@
   background: var(--s2);
   color: var(--t1);
 }
+
+.btnAddTime {
+    background: transparent;
+    color: var(--t3);
+    border: 1px dashed var(--b2);
+    border-radius: 4px;
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    cursor: pointer;
+    transition: all 0.12s;
+    white-space: nowrap;
+}
+
+.btnAddTime:hover {
+    border-color: var(--gold-lo);
+    color: var(--gold);
+}
