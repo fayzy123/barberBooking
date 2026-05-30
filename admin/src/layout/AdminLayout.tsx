@@ -14,6 +14,7 @@ const LayoutInner = () => {
           title={config.title}
           subtitle={config.subtitle}
           actions={config.actions}
+          backButton={config.backButton}
         />
         <Outlet />
       </div>

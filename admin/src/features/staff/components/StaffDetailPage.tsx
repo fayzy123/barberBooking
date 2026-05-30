@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTopbar } from "../../../layout/TopBarContext";
 import btnStyles from "../../../shared/utils/buttons.module.css";
@@ -16,27 +16,32 @@ const StaffDetailPage = () => {
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [staffActive, setStaffActive] = useState(staff?.active ?? true);
 
   const navigate = useNavigate();
+
+  const handleActiveDaysChange = useCallback((hasActiveDays: boolean) => {
+    setStaffActive(hasActiveDays);
+  }, []);
+
+  useEffect(() => {
+    if (staff) setStaffActive(staff.active);
+  }, [staff]);
 
   useEffect(() => {
     setTopbar({
       title: staff?.name ?? "Staff Member",
       subtitle: staff?.active ? "Active" : "Inactive",
-      actions: (
+      backButton: (
         <button
           className={btnStyles.btnGhost}
           onClick={() => navigate("/staff")}
         >
-          Back
+          ← Back
         </button>
       ),
     });
   }, [id, staff]);
-
-  if (loading) return <p>Loading..</p>;
-  if (error) return <p>{error}</p>;
-  if (!staff) return <p>Staff member not found</p>;
 
   const handleSave = async () => {
     const shifts = gridRef.current?.getShifts();
@@ -45,7 +50,7 @@ const StaffDetailPage = () => {
       setSaving(true);
       setSaveError(null);
       setSaveSuccess(false);
-      await updateShifts(staff.id, shifts);
+      await updateShifts(staff!.id, shifts);
       setSaveSuccess(true);
     } catch (err) {
       setSaveError("Failed to save schedule. Please try again.");
@@ -54,16 +59,26 @@ const StaffDetailPage = () => {
     }
   };
 
+  if (loading) return <p>Loading..</p>;
+  if (error) return <p>{error}</p>;
+  if (!staff) return <p>Staff member not found</p>;
+
   return (
     <main className={styles.content}>
       <section className={styles.layout}>
-        <StaffProfileForm staff={staff} />
+        <StaffProfileForm
+          staff={staff}
+          active={staffActive}
+          onActiveChange={setStaffActive}
+        />
 
         <article>
           <AvailabilityGrid
             ref={gridRef}
             staff={staff}
+            staffActive={staffActive}
             onShiftChange={() => setSaveSuccess(false)}
+            onActiveDaysChange={handleActiveDaysChange}
           />
           <p className={styles.hint}>
             Break duration is currently fixed at 1 hour from break start time.

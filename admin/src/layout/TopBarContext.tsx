@@ -4,6 +4,7 @@ interface TopbarConfig {
   title: string;
   subtitle?: string;
   actions?: React.ReactNode;
+  backButton?: React.ReactNode;
 }
 
 interface TopbarContextType {

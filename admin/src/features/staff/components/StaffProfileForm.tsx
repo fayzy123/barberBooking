@@ -8,11 +8,16 @@ import Toggle from "./Toggle";
 
 interface StaffProfileFormProps {
   staff: Staff;
+  active: boolean;
+  onActiveChange?: (active: boolean) => void;
 }
 
-const StaffProfileForm = ({ staff }: StaffProfileFormProps) => {
+const StaffProfileForm = ({
+  staff,
+  active,
+  onActiveChange,
+}: StaffProfileFormProps) => {
   const [name, setName] = useState(staff.name);
-  const [active, setActive] = useState(staff.active);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -64,7 +69,12 @@ const StaffProfileForm = ({ staff }: StaffProfileFormProps) => {
 
       <label className={styles.toggleRow}>
         Active
-        <Toggle checked={active} onChange={setActive} />
+        <Toggle
+          checked={active}
+          onChange={(val) => {
+            onActiveChange?.(val);
+          }}
+        />
       </label>
 
       {error && <p className={styles.error}>{error}</p>}

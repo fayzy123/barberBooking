@@ -6,13 +6,15 @@ interface TopbarProp {
   title: string;
   subtitle?: string;
   actions?: React.ReactNode;
+  backButton?: React.ReactNode;
 }
 
-const Topbar = ({ title, subtitle, actions }: TopbarProp) => {
+const Topbar = ({ title, subtitle, actions, backButton }: TopbarProp) => {
   const { logout } = useAuth();
 
   return (
     <header className={styles.topbar}>
+      {backButton}
       <span className={styles.title}>{title}</span>
       {subtitle && (
         <>

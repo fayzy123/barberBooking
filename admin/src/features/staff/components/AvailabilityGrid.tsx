@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Shift, Staff } from "../staff.types";
 import styles from "./AvailabilityGrid.module.css";
 import btnStyles from "../../../shared/utils/buttons.module.css";
@@ -8,7 +8,9 @@ import { forwardRef, useImperativeHandle } from "react";
 
 interface StaffAvailabilityGrid {
   staff: Staff;
+  staffActive: boolean;
   onShiftChange?: () => void;
+  onActiveDaysChange?: (hasActiveDays: boolean) => void;
 }
 
 export interface AvailabilityGridHandle {
@@ -29,7 +31,7 @@ const DAY_LABELS: Record<string, string> = {
 const AvailabilityGrid = forwardRef<
   AvailabilityGridHandle,
   StaffAvailabilityGrid
->(({ staff, onShiftChange }, ref) => {
+>(({ staff, staffActive, onShiftChange, onActiveDaysChange }, ref) => {
   const [shifts, setShifts] = useState<Omit<Shift, "id" | "staffId">[]>(
     DAYS.map((day) => {
       const existing = staff.shifts?.find((s) => s.day === day);
@@ -49,6 +51,22 @@ const AvailabilityGrid = forwardRef<
     getShifts: () => shifts,
   }));
 
+  useEffect(() => {
+    if (!staffActive) {
+      setShifts((prev) => prev.map((s) => ({ ...s, active: false })));
+    }
+  }, [staffActive]);
+
+  // Rule 3 & 4 — day toggles control master
+  const prevStaffActive = useRef(staffActive);
+  useEffect(() => {
+    const hasActiveDays = shifts.some((s) => s.active);
+    if (hasActiveDays !== prevStaffActive.current) {
+      prevStaffActive.current = hasActiveDays;
+      onActiveDaysChange?.(hasActiveDays);
+    }
+  }, [shifts]);
+
   const updateShifts = (
     updater: (
       prev: Omit<Shift, "id" | "staffId">[],
@@ -64,7 +82,7 @@ const AvailabilityGrid = forwardRef<
         <table>
           <thead>
             <tr>
-              <th></th>
+              <th>Shift Schedule</th>
               {DAYS.map((day) => (
                 <th key={day} className={styles.dayHeader}>
                   {DAY_LABELS[day]}
@@ -87,7 +105,6 @@ const AvailabilityGrid = forwardRef<
                           ),
                         )
                       }
-                      disabled={false}
                     />
                   ) : (
                     "-"
@@ -110,7 +127,6 @@ const AvailabilityGrid = forwardRef<
                           ),
                         )
                       }
-                      disabled={false}
                     />
                   ) : (
                     "-"
@@ -170,7 +186,7 @@ const AvailabilityGrid = forwardRef<
                       </button>
                     )
                   ) : (
-                    "—"
+                    "-"
                   )}
                 </td>
               ))}
@@ -182,6 +198,7 @@ const AvailabilityGrid = forwardRef<
                 <td key={shift.day}>
                   <Toggle
                     checked={shift.active}
+                    disabled={false}
                     onChange={(val) => {
                       updateShifts((prev) =>
                         prev.map((s) =>

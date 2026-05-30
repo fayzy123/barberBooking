@@ -41,12 +41,12 @@ const BookingsDetailPage = () => {
       subtitle: isCreateMode
         ? "Fill in the details below"
         : `Ref: ${booking?.ref ?? id}`,
-      actions: (
+      backButton: (
         <button
           className={btnStyles.btnGhost}
           onClick={() => navigate("/bookings")}
         >
-          Back
+          ← Back
         </button>
       ),
     });
