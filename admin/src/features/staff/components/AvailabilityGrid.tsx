@@ -1,10 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
+import TimePicker from "../../../shared/components/TimePicker";
+import btnStyles from "../../../shared/utils/buttons.module.css";
 import { Shift, Staff } from "../staff.types";
 import styles from "./AvailabilityGrid.module.css";
-import btnStyles from "../../../shared/utils/buttons.module.css";
 import Toggle from "./Toggle";
-import TimePicker from "../../../shared/components/TimePicker";
-import { forwardRef, useImperativeHandle } from "react";
 
 interface StaffAvailabilityGrid {
   staff: Staff;
@@ -51,14 +56,14 @@ const AvailabilityGrid = forwardRef<
     getShifts: () => shifts,
   }));
 
+  const prevStaffActive = useRef(staffActive);
+
   useEffect(() => {
     if (!staffActive) {
       setShifts((prev) => prev.map((s) => ({ ...s, active: false })));
     }
   }, [staffActive]);
 
-  // Rule 3 & 4 — day toggles control master
-  const prevStaffActive = useRef(staffActive);
   useEffect(() => {
     const hasActiveDays = shifts.some((s) => s.active);
     if (hasActiveDays !== prevStaffActive.current) {
@@ -198,7 +203,6 @@ const AvailabilityGrid = forwardRef<
                 <td key={shift.day}>
                   <Toggle
                     checked={shift.active}
-                    disabled={false}
                     onChange={(val) => {
                       updateShifts((prev) =>
                         prev.map((s) =>

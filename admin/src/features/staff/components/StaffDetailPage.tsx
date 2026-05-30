@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTopbar } from "../../../layout/TopBarContext";
 import btnStyles from "../../../shared/utils/buttons.module.css";
@@ -20,9 +20,9 @@ const StaffDetailPage = () => {
 
   const navigate = useNavigate();
 
-  const handleActiveDaysChange = useCallback((hasActiveDays: boolean) => {
+  const handleActiveDaysChange = (hasActiveDays: boolean) => {
     setStaffActive(hasActiveDays);
-  }, []);
+  };
 
   useEffect(() => {
     if (staff) setStaffActive(staff.active);
@@ -41,7 +41,7 @@ const StaffDetailPage = () => {
         </button>
       ),
     });
-  }, [id, staff]);
+  }, [id, staff, navigate]);
 
   const handleSave = async () => {
     const shifts = gridRef.current?.getShifts();
