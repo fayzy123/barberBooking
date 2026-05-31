@@ -17,7 +17,7 @@ const validToken = jwt.sign(
 )
 
 describe('GET /api/staff/admin/staff', () => {
-    it('should return 401 if no token is provided', async () => {
+    it('should return 400 if no token is provided', async () => {
         const res = await request(app)
             .get('/api/admin/staff')
         
