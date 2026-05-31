@@ -9,6 +9,7 @@ import authRoutes from './api/routes/auth.routes'
 import bookingRoutes from './api/routes/booking.routes'
 import staffRoutes from './api/routes/staff.routes'
 import serviceRoutes from './api/routes/barberService.routes'
+import shopRoutes from './api/routes/shop.routes'
 import { authenticate } from './middleware/authenticate'
 
 const app = express()
@@ -50,5 +51,8 @@ app.use('/api/admin/staff', authenticate, staffRoutes)
 
 // Barber Service Routes
 app.use('/api/admin/services', authenticate, serviceRoutes)
+
+// Shop Settings Routes
+app.use('/api/admin/shop', authenticate, shopRoutes)
 
 export default app

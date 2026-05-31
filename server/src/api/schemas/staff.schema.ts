@@ -5,7 +5,7 @@ export const createStaffSchema = z.object({
     active: z.boolean().default(true)
 })
 
-export const updateStaffSchema = createStaffSchema.partial ()
+export const updateStaffSchema = createStaffSchema.partial()
 
 export const shiftsSchema = z.object ({
     day: z.enum(["mon", "tue", "wed", "thu", "fri", "sat", "sun"]),
