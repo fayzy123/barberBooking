@@ -1,16 +1,12 @@
 import { useEffect, useState } from "react";
 import api from "../../../shared/utils/api";
-
-export interface Service {
-    id: string;
-    name: string;
-    durationMinutes: number;
-}
+import { Service } from "../service.types";
 
 export function useServices() {
     const [service, setService] = useState<Service[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+     const [trigger, setTrigger] = useState(0);
 
     useEffect(() => {
         const fetchServices = async () => {
@@ -25,7 +21,9 @@ export function useServices() {
             }
         };
         fetchServices();
-    }, [])
+    }, [trigger])
 
-    return { service, loading, error };
+    const refetch = () => setTrigger(t => t + 1);
+
+    return { service, loading, error, refetch };
 }
