@@ -3,22 +3,11 @@ import { AuthProvider } from "./features/auth/AuthContext";
 import Login from "./features/auth/Login";
 import PrivateRoute from "./features/auth/PrivateRoute";
 import AdminLayout from "./layout/AdminLayout";
-import { useTopbar } from "./layout/TopBarContext";
-import { useEffect } from "react";
 import BookingsPage from "./features/bookings/BookingsPage";
 import BookingsDetailPage from "./features/bookings/BookingsDetailPage";
 import StaffPage from "./features/staff/StaffPage";
 import StaffDetailPage from "./features/staff/components/StaffDetailPage";
-
-const ShopPlaceholder = () => {
-  const { setTopbar } = useTopbar();
-
-  useEffect(() => {
-    setTopbar({ title: "Shop Setting", subtitle: "Fayzy's Cuts" });
-  }, []);
-
-  return <div>Shop Management Page Coming Soon!</div>;
-};
+import ShopPage from "./features/shop/ShopPage";
 
 const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
@@ -35,7 +24,7 @@ const router = createBrowserRouter([
           { path: "bookings/:id", element: <BookingsDetailPage /> },
           { path: "staff", element: <StaffPage /> },
           { path: "staff/:id", element: <StaffDetailPage /> },
-          { path: "shop", element: <ShopPlaceholder /> },
+          { path: "shop", element: <ShopPage /> },
         ],
       },
     ],

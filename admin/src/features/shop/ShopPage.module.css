@@ -1,0 +1,186 @@
+.content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 22px 28px !important;
+    background: var(--bg);
+    min-height: 0;
+    height: 100%;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 13px;
+    align-items: start;
+    min-width: 0;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+
+.card {
+    background: var(--s1);
+    border: 1px solid var(--b1);
+    border-radius: var(--rad-lg);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+
+.card h3 {
+    font-size: 0.69rem;
+    font-weight: 500;
+    color: var(--t3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.cardHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.fieldGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--t2);
+    margin-bottom: 5px;
+}
+
+.hint {
+    font-size: 0.72rem;
+    color: var(--t3);
+    margin-top: 3px;
+}
+
+.input {
+    width: 100%;
+    background: var(--s2);
+    border: 1px solid var(--b2);
+    border-radius: 6px;
+    padding: 8px 11px;
+    font-size: 0.85rem;
+    color: var(--t1);
+    outline: none;
+    transition: border 0.12s;
+}
+
+.input:focus {
+    border-color: var(--gold-lo);
+}
+
+.input[readOnly] {
+    color: var(--t3);
+    cursor: not-allowed;
+}
+
+.inputSmall {
+    width: 76px;
+    background: var(--s2);
+    border: 1px solid var(--b2);
+    border-radius: 6px;
+    padding: 8px 11px;
+    font-size: 0.84rem;
+    color: var(--t1);
+    outline: none;
+    transition: border 0.12s;
+}
+
+.inputSmall:focus {
+    border-color: var(--gold-lo);
+}
+
+.timeRow {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.78rem;
+    color: var(--t3);
+}
+
+.serviceList {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    list-style: none;
+    padding: 0;
+}
+
+.serviceRow {
+    background: var(--s2);
+    border: 1px solid var(--b1);
+    border-radius: var(--rad);
+    padding: 10px 13px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.serviceRow:hover {
+    border-color: var(--b2);
+}
+
+.serviceName {
+    font-size: 0.84rem;
+    font-weight: 500;
+    color: var(--t1);
+}
+
+.serviceDuration {
+    font-size: 0.75rem;
+    color: var(--t3);
+}
+
+.serviceActions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+}
+
+.dotActive {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold-lo);
+    flex-shrink: 0;
+}
+
+.dotInactive {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--t3);
+    flex-shrink: 0;
+}
+
+.badgeActive {
+    background: var(--grn-bg);
+    color: var(--grn);
+    border: 1px solid var(--grn-bd);
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 500;
+}
+
+.badgeInactive {
+    background: var(--s2);
+    color: var(--t3);
+    border: 1px solid var(--b1);
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 500;
+}
