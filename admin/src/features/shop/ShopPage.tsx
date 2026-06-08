@@ -18,7 +18,7 @@ const ShopPage = () => {
   }, []);
 
   return (
-    <div className={styles.content}>
+    <main className={styles.content}>
       <div className={styles.column}>
         <form>
           <section className={styles.card}>
@@ -140,7 +140,7 @@ const ShopPage = () => {
           </ul>
         </section>
       </div>
-    </div>
+    </main>
   );
 };
 
