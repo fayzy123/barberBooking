@@ -1,14 +1,37 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTopbar } from "../../layout/TopBarContext";
 import { useShop } from "./hooks/useShop";
 import styles from "./ShopPage.module.css";
 import btnStyles from "../../shared/utils/buttons.module.css";
 import { useServices } from "../services/hooks/useServices";
+import { EditShop } from "./shop.schema";
 
 const ShopPage = () => {
   const { shop } = useShop();
+  console.log(shop);
   const { service } = useServices();
   const { setTopbar } = useTopbar();
+  const [formData, setFormData] = useState<EditShop>({
+    name: "",
+    openTime: "",
+    closeTime: "",
+    slotInterval: 0,
+    leadTime: 0,
+    bookAheadDays: 0,
+  });
+
+  useEffect(() => {
+    if (shop) {
+      setFormData({
+        name: shop.name,
+        openTime: shop.openTime,
+        closeTime: shop.closeTime,
+        slotInterval: shop.slotInterval,
+        leadTime: shop.leadTime,
+        bookAheadDays: shop.bookAheadDays,
+      });
+    }
+  }, [shop]);
 
   useEffect(() => {
     setTopbar({
@@ -27,7 +50,15 @@ const ShopPage = () => {
               <label htmlFor="name" className={styles.label}>
                 Shop Name
               </label>
-              <input id="name" type="text" className={styles.input} />
+              <input
+                id="name"
+                type="text"
+                value={formData.name}
+                className={styles.input}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, name: e.target.value }))
+                }
+              />
             </div>
             <div className={styles.fieldGroup}>
               <label htmlFor="timeZone" className={styles.label}>
@@ -36,6 +67,7 @@ const ShopPage = () => {
               <input
                 id="timeZone"
                 type="text"
+                value={shop?.timezone ?? "Europe/London"}
                 readOnly
                 className={styles.input}
               />
@@ -52,13 +84,27 @@ const ShopPage = () => {
                 <input
                   id="openTime"
                   type="time"
+                  value={formData.openTime}
                   className={styles.inputSmall}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      openTime: e.target.value,
+                    }))
+                  }
                 />
                 <span>to</span>
                 <input
                   id="closeTime"
                   type="time"
+                  value={formData.closeTime}
                   className={styles.inputSmall}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      closeTime: e.target.value,
+                    }))
+                  }
                 />
               </div>
             </div>
@@ -73,7 +119,14 @@ const ShopPage = () => {
               <input
                 id="slotInterval"
                 type="number"
+                value={formData.slotInterval}
                 className={styles.inputSmall}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    slotInterval: Number(e.target.value),
+                  }))
+                }
               />
               <p className={styles.hint}>How often start times appear</p>
             </div>
@@ -84,7 +137,14 @@ const ShopPage = () => {
               <input
                 id="leadTime"
                 type="number"
+                value={formData.leadTime}
                 className={styles.inputSmall}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    leadTime: Number(e.target.value),
+                  }))
+                }
               />
               <p className={styles.hint}>
                 Minimum notice before a customer can book
@@ -97,7 +157,14 @@ const ShopPage = () => {
               <input
                 id="bookAheadDays"
                 type="number"
+                value={formData.bookAheadDays}
                 className={styles.inputSmall}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    bookAheadDays: Number(e.target.value),
+                  }))
+                }
               />
               <p className={styles.hint}>How far ahead customer can book</p>
             </div>

@@ -92,7 +92,7 @@
 }
 
 .inputSmall {
-    width: 76px;
+    width: 100px;
     background: var(--s2);
     border: 1px solid var(--b2);
     border-radius: 6px;
