@@ -10,8 +10,8 @@ import ServiceModal from "../services/ServiceModal";
 import { Service } from "../services/service.types";
 
 const ShopPage = () => {
-  const { shop, refetch } = useShop();
-  const { service } = useServices();
+  const { shop, refetch: refetchShop } = useShop();
+  const { service, refetch: refetchServices } = useServices();
   const { setTopbar } = useTopbar();
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [saveError, setSaveError] = useState<string | null>(null);
@@ -64,7 +64,7 @@ const ShopPage = () => {
 
     try {
       await updateShop(formData);
-      refetch();
+      refetchServices();
       setSaveSuccess(true);
     } catch (err) {
       const message =
@@ -263,7 +263,14 @@ const ShopPage = () => {
             </div>
             <ul className={styles.serviceList}>
               {service.map((s) => (
-                <li key={s.id} className={styles.serviceRow}>
+                <li
+                  key={s.id}
+                  className={styles.serviceRow}
+                  onClick={() => {
+                    setSelectedService(s);
+                    setShowServiceModal(true);
+                  }}
+                >
                   <span
                     className={s.active ? styles.dotActive : styles.dotInactive}
                   ></span>
@@ -279,15 +286,6 @@ const ShopPage = () => {
                     >
                       {s.active ? "Active" : "Inactive"}
                     </span>
-                    <button
-                      className={btnStyles.btnGhost}
-                      onClick={() => {
-                        setSelectedService(s);
-                        setShowServiceModal(true);
-                      }}
-                    >
-                      Edit
-                    </button>
                   </div>
                 </li>
               ))}
@@ -300,8 +298,7 @@ const ShopPage = () => {
           service={selectedService ?? undefined}
           onClose={() => setShowServiceModal(false)}
           onSuccess={() => {
-            setShowServiceModal(false);
-            refetch();
+            refetchServices();
           }}
         />
       )}

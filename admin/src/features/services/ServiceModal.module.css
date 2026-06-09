@@ -37,6 +37,7 @@
     font-size: 1.2rem;
     font-weight: 500;
     color: var(--t1);
+    text-align: center;
 }
 
 .modal label {
@@ -64,8 +65,25 @@
     border-color: var(--gold-lo);
 }
 
+.toggleRow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .modal footer {
     display: flex;
     gap: 8px;
     justify-content: flex-end;
+}
+
+.fieldError {
+    font-size: 0.75rem;
+    color: var(--red);
+}
+
+.saveSuccess {
+    font-size: 0.75rem;
+    color: var(--grn);
+    text-align: center;
 }

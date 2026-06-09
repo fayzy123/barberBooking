@@ -144,7 +144,8 @@
 }
 
 .serviceRow:hover {
-    border-color: var(--b2);
+    border-color: var(--gold-lo);
+    cursor: pointer;
 }
 
 .serviceName {
