@@ -4,13 +4,16 @@ import { useShop } from "./hooks/useShop";
 import styles from "./ShopPage.module.css";
 import btnStyles from "../../shared/utils/buttons.module.css";
 import { useServices } from "../services/hooks/useServices";
-import { EditShop } from "./shop.schema";
+import { EditShop, editShopSettingSchema } from "./shop.schema";
+import { updateShop } from "./shop.service";
 
 const ShopPage = () => {
-  const { shop } = useShop();
-  console.log(shop);
+  const { shop, refetch } = useShop();
   const { service } = useServices();
   const { setTopbar } = useTopbar();
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [saveSuccess, setSaveSuccess] = useState(false);
   const [formData, setFormData] = useState<EditShop>({
     name: "",
     openTime: "",
@@ -40,10 +43,36 @@ const ShopPage = () => {
     });
   }, []);
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const result = editShopSettingSchema.safeParse(formData);
+
+    if (!result.success) {
+      const errors: Record<string, string> = {};
+      result.error.issues.forEach((err) => {
+        if (err.path[0]) errors[err.path[0] as string] = err.message;
+      });
+      setFieldErrors(errors);
+      return;
+    }
+    setFieldErrors({});
+
+    try {
+      await updateShop(formData);
+      refetch();
+      setSaveSuccess(true);
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Failed to save settings";
+      setSaveError(message);
+    }
+  };
+
   return (
     <main className={styles.content}>
       <div className={styles.column}>
-        <form>
+        <form onSubmit={handleSubmit}>
           <section className={styles.card}>
             <h3>General</h3>
             <div className={styles.fieldGroup}>
@@ -55,10 +84,14 @@ const ShopPage = () => {
                 type="text"
                 value={formData.name}
                 className={styles.input}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, name: e.target.value }))
-                }
+                onChange={(e) => {
+                  setSaveSuccess(false);
+                  setFormData((prev) => ({ ...prev, name: e.target.value }));
+                }}
               />
+              {fieldErrors.name && (
+                <p className={styles.fieldError}>{fieldErrors.name}</p>
+              )}
             </div>
             <div className={styles.fieldGroup}>
               <label htmlFor="timeZone" className={styles.label}>
@@ -86,26 +119,36 @@ const ShopPage = () => {
                   type="time"
                   value={formData.openTime}
                   className={styles.inputSmall}
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    setSaveSuccess(false);
                     setFormData((prev) => ({
                       ...prev,
                       openTime: e.target.value,
-                    }))
-                  }
+                    }));
+                  }}
                 />
+
+                {fieldErrors.openTime && (
+                  <p className={styles.fieldError}>{fieldErrors.openTime}</p>
+                )}
                 <span>to</span>
                 <input
                   id="closeTime"
                   type="time"
                   value={formData.closeTime}
                   className={styles.inputSmall}
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    setSaveSuccess(false);
                     setFormData((prev) => ({
                       ...prev,
                       closeTime: e.target.value,
-                    }))
-                  }
+                    }));
+                  }}
                 />
+
+                {fieldErrors.closeTime && (
+                  <p className={styles.fieldError}>{fieldErrors.closeTime}</p>
+                )}
               </div>
             </div>
           </section>
@@ -121,13 +164,18 @@ const ShopPage = () => {
                 type="number"
                 value={formData.slotInterval}
                 className={styles.inputSmall}
-                onChange={(e) =>
+                onChange={(e) => {
+                  setSaveSuccess(false);
                   setFormData((prev) => ({
                     ...prev,
                     slotInterval: Number(e.target.value),
-                  }))
-                }
+                  }));
+                }}
               />
+              {fieldErrors.slotInterval && (
+                <p className={styles.fieldError}>{fieldErrors.slotInterval}</p>
+              )}
+
               <p className={styles.hint}>How often start times appear</p>
             </div>
             <div className={styles.fieldGroup}>
@@ -139,13 +187,18 @@ const ShopPage = () => {
                 type="number"
                 value={formData.leadTime}
                 className={styles.inputSmall}
-                onChange={(e) =>
+                onChange={(e) => {
+                  setSaveSuccess(false);
                   setFormData((prev) => ({
                     ...prev,
                     leadTime: Number(e.target.value),
-                  }))
-                }
+                  }));
+                }}
               />
+              {fieldErrors.leadTime && (
+                <p className={styles.fieldError}>{fieldErrors.leadTime}</p>
+              )}
+
               <p className={styles.hint}>
                 Minimum notice before a customer can book
               </p>
@@ -159,17 +212,26 @@ const ShopPage = () => {
                 type="number"
                 value={formData.bookAheadDays}
                 className={styles.inputSmall}
-                onChange={(e) =>
+                onChange={(e) => {
+                  setSaveSuccess(false);
                   setFormData((prev) => ({
                     ...prev,
                     bookAheadDays: Number(e.target.value),
-                  }))
-                }
+                  }));
+                }}
               />
+              {fieldErrors.bookAheadDays && (
+                <p className={styles.fieldError}>{fieldErrors.bookAheadDays}</p>
+              )}
+
               <p className={styles.hint}>How far ahead customer can book</p>
             </div>
           </section>
 
+          {saveError && <p className={styles.saveError}>{saveError}</p>}
+          {saveSuccess && (
+            <p className={styles.saveSuccess}>Settings saved successfully!</p>
+          )}
           <button className={btnStyles.btnGold} type="submit">
             Save Settings
           </button>

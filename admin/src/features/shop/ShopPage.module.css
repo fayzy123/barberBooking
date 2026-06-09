@@ -70,9 +70,19 @@
     margin-top: 3px;
 }
 
+.fieldError {
+    font-size: 0.75rem;
+    color: var(--red);
+}
+
+.saveSuccess {
+    font-size: 0.75rem;
+    color: var(--grn);
+}
+
 .input {
     width: 100%;
-    background: var(--s2);
+    background: #0a0a0a;
     border: 1px solid var(--b2);
     border-radius: 6px;
     padding: 8px 11px;
@@ -93,7 +103,7 @@
 
 .inputSmall {
     width: 100px;
-    background: var(--s2);
+    background: #0a0a0a;
     border: 1px solid var(--b2);
     border-radius: 6px;
     padding: 8px 11px;
