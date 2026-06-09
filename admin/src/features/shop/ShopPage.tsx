@@ -6,6 +6,8 @@ import btnStyles from "../../shared/utils/buttons.module.css";
 import { useServices } from "../services/hooks/useServices";
 import { EditShop, editShopSettingSchema } from "./shop.schema";
 import { updateShop } from "./shop.service";
+import ServiceModal from "../services/ServiceModal";
+import { Service } from "../services/service.types";
 
 const ShopPage = () => {
   const { shop, refetch } = useShop();
@@ -14,6 +16,8 @@ const ShopPage = () => {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [showServiceModal, setShowServiceModal] = useState(false);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [formData, setFormData] = useState<EditShop>({
     name: "",
     openTime: "",
@@ -70,206 +74,238 @@ const ShopPage = () => {
   };
 
   return (
-    <main className={styles.content}>
-      <div className={styles.column}>
-        <form onSubmit={handleSubmit}>
-          <section className={styles.card}>
-            <h3>General</h3>
-            <div className={styles.fieldGroup}>
-              <label htmlFor="name" className={styles.label}>
-                Shop Name
-              </label>
-              <input
-                id="name"
-                type="text"
-                value={formData.name}
-                className={styles.input}
-                onChange={(e) => {
-                  setSaveSuccess(false);
-                  setFormData((prev) => ({ ...prev, name: e.target.value }));
-                }}
-              />
-              {fieldErrors.name && (
-                <p className={styles.fieldError}>{fieldErrors.name}</p>
-              )}
-            </div>
-            <div className={styles.fieldGroup}>
-              <label htmlFor="timeZone" className={styles.label}>
-                Timezone
-              </label>
-              <input
-                id="timeZone"
-                type="text"
-                value={shop?.timezone ?? "Europe/London"}
-                readOnly
-                className={styles.input}
-              />
-            </div>
-          </section>
-
-          <section className={styles.card}>
-            <h3>Opening Hours</h3>
-            <div className={styles.fieldGroup}>
-              <label htmlFor="openTime" className={styles.label}>
-                Shop Hours
-              </label>
-              <div className={styles.timeRow}>
+    <>
+      <main className={styles.content}>
+        <div className={styles.column}>
+          <form onSubmit={handleSubmit}>
+            <section className={styles.card}>
+              <h3>General</h3>
+              <div className={styles.fieldGroup}>
+                <label htmlFor="name" className={styles.label}>
+                  Shop Name
+                </label>
                 <input
-                  id="openTime"
-                  type="time"
-                  value={formData.openTime}
-                  className={styles.inputSmall}
+                  id="name"
+                  type="text"
+                  value={formData.name}
+                  className={styles.input}
                   onChange={(e) => {
                     setSaveSuccess(false);
-                    setFormData((prev) => ({
-                      ...prev,
-                      openTime: e.target.value,
-                    }));
+                    setFormData((prev) => ({ ...prev, name: e.target.value }));
                   }}
                 />
-
-                {fieldErrors.openTime && (
-                  <p className={styles.fieldError}>{fieldErrors.openTime}</p>
-                )}
-                <span>to</span>
-                <input
-                  id="closeTime"
-                  type="time"
-                  value={formData.closeTime}
-                  className={styles.inputSmall}
-                  onChange={(e) => {
-                    setSaveSuccess(false);
-                    setFormData((prev) => ({
-                      ...prev,
-                      closeTime: e.target.value,
-                    }));
-                  }}
-                />
-
-                {fieldErrors.closeTime && (
-                  <p className={styles.fieldError}>{fieldErrors.closeTime}</p>
+                {fieldErrors.name && (
+                  <p className={styles.fieldError}>{fieldErrors.name}</p>
                 )}
               </div>
-            </div>
-          </section>
+              <div className={styles.fieldGroup}>
+                <label htmlFor="timeZone" className={styles.label}>
+                  Timezone
+                </label>
+                <input
+                  id="timeZone"
+                  type="text"
+                  value={shop?.timezone ?? "Europe/London"}
+                  readOnly
+                  className={styles.input}
+                />
+              </div>
+            </section>
 
-          <section className={styles.card}>
-            <h3>Booking Rules</h3>
-            <div className={styles.fieldGroup}>
-              <label htmlFor="slotInterval" className={styles.label}>
-                Slot Interval
-              </label>
-              <input
-                id="slotInterval"
-                type="number"
-                value={formData.slotInterval}
-                className={styles.inputSmall}
-                onChange={(e) => {
-                  setSaveSuccess(false);
-                  setFormData((prev) => ({
-                    ...prev,
-                    slotInterval: Number(e.target.value),
-                  }));
-                }}
-              />
-              {fieldErrors.slotInterval && (
-                <p className={styles.fieldError}>{fieldErrors.slotInterval}</p>
-              )}
+            <section className={styles.card}>
+              <h3>Opening Hours</h3>
+              <div className={styles.fieldGroup}>
+                <label htmlFor="openTime" className={styles.label}>
+                  Shop Hours
+                </label>
+                <div className={styles.timeRow}>
+                  <input
+                    id="openTime"
+                    type="time"
+                    value={formData.openTime}
+                    className={styles.inputSmall}
+                    onChange={(e) => {
+                      setSaveSuccess(false);
+                      setFormData((prev) => ({
+                        ...prev,
+                        openTime: e.target.value,
+                      }));
+                    }}
+                  />
 
-              <p className={styles.hint}>How often start times appear</p>
-            </div>
-            <div className={styles.fieldGroup}>
-              <label htmlFor="leadTime" className={styles.label}>
-                Lead Time
-              </label>
-              <input
-                id="leadTime"
-                type="number"
-                value={formData.leadTime}
-                className={styles.inputSmall}
-                onChange={(e) => {
-                  setSaveSuccess(false);
-                  setFormData((prev) => ({
-                    ...prev,
-                    leadTime: Number(e.target.value),
-                  }));
-                }}
-              />
-              {fieldErrors.leadTime && (
-                <p className={styles.fieldError}>{fieldErrors.leadTime}</p>
-              )}
+                  {fieldErrors.openTime && (
+                    <p className={styles.fieldError}>{fieldErrors.openTime}</p>
+                  )}
+                  <span>to</span>
+                  <input
+                    id="closeTime"
+                    type="time"
+                    value={formData.closeTime}
+                    className={styles.inputSmall}
+                    onChange={(e) => {
+                      setSaveSuccess(false);
+                      setFormData((prev) => ({
+                        ...prev,
+                        closeTime: e.target.value,
+                      }));
+                    }}
+                  />
 
-              <p className={styles.hint}>
-                Minimum notice before a customer can book
-              </p>
-            </div>
-            <div className={styles.fieldGroup}>
-              <label htmlFor="bookAheadDays" className={styles.label}>
-                Book Ahead Limit
-              </label>
-              <input
-                id="bookAheadDays"
-                type="number"
-                value={formData.bookAheadDays}
-                className={styles.inputSmall}
-                onChange={(e) => {
-                  setSaveSuccess(false);
-                  setFormData((prev) => ({
-                    ...prev,
-                    bookAheadDays: Number(e.target.value),
-                  }));
-                }}
-              />
-              {fieldErrors.bookAheadDays && (
-                <p className={styles.fieldError}>{fieldErrors.bookAheadDays}</p>
-              )}
-
-              <p className={styles.hint}>How far ahead customer can book</p>
-            </div>
-          </section>
-
-          {saveError && <p className={styles.saveError}>{saveError}</p>}
-          {saveSuccess && (
-            <p className={styles.saveSuccess}>Settings saved successfully!</p>
-          )}
-          <button className={btnStyles.btnGold} type="submit">
-            Save Settings
-          </button>
-        </form>
-      </div>
-
-      <div className={styles.column}>
-        <section className={styles.card}>
-          <div className={styles.cardHeader}>
-            <h3>Services</h3>
-            <button className={btnStyles.btnGold}>+ Add Service</button>
-          </div>
-          <ul className={styles.serviceList}>
-            {service.map((s) => (
-              <li key={s.id} className={styles.serviceRow}>
-                <span
-                  className={s.active ? styles.dotActive : styles.dotInactive}
-                ></span>
-                <span className={styles.serviceName}>{s.name}</span>
-                <span className={styles.serviceDuration}>
-                  {s.durationMinutes} mins
-                </span>
-                <div className={styles.serviceActions}>
-                  <span
-                    className={
-                      s.active ? styles.badgeActive : styles.badgeInactive
-                    }
-                  >
-                    {s.active ? "Active" : "Inactive"}
-                  </span>
-                  <button className={btnStyles.btnGhost}>Edit</button>
+                  {fieldErrors.closeTime && (
+                    <p className={styles.fieldError}>{fieldErrors.closeTime}</p>
+                  )}
                 </div>
-              </li>
-            ))}
-          </ul>
-        </section>
-      </div>
-    </main>
+              </div>
+            </section>
+
+            <section className={styles.card}>
+              <h3>Booking Rules</h3>
+              <div className={styles.fieldGroup}>
+                <label htmlFor="slotInterval" className={styles.label}>
+                  Slot Interval
+                </label>
+                <input
+                  id="slotInterval"
+                  type="number"
+                  value={formData.slotInterval}
+                  className={styles.inputSmall}
+                  onChange={(e) => {
+                    setSaveSuccess(false);
+                    setFormData((prev) => ({
+                      ...prev,
+                      slotInterval: Number(e.target.value),
+                    }));
+                  }}
+                />
+                {fieldErrors.slotInterval && (
+                  <p className={styles.fieldError}>
+                    {fieldErrors.slotInterval}
+                  </p>
+                )}
+
+                <p className={styles.hint}>How often start times appear</p>
+              </div>
+              <div className={styles.fieldGroup}>
+                <label htmlFor="leadTime" className={styles.label}>
+                  Lead Time
+                </label>
+                <input
+                  id="leadTime"
+                  type="number"
+                  value={formData.leadTime}
+                  className={styles.inputSmall}
+                  onChange={(e) => {
+                    setSaveSuccess(false);
+                    setFormData((prev) => ({
+                      ...prev,
+                      leadTime: Number(e.target.value),
+                    }));
+                  }}
+                />
+                {fieldErrors.leadTime && (
+                  <p className={styles.fieldError}>{fieldErrors.leadTime}</p>
+                )}
+
+                <p className={styles.hint}>
+                  Minimum notice before a customer can book
+                </p>
+              </div>
+              <div className={styles.fieldGroup}>
+                <label htmlFor="bookAheadDays" className={styles.label}>
+                  Book Ahead Limit
+                </label>
+                <input
+                  id="bookAheadDays"
+                  type="number"
+                  value={formData.bookAheadDays}
+                  className={styles.inputSmall}
+                  onChange={(e) => {
+                    setSaveSuccess(false);
+                    setFormData((prev) => ({
+                      ...prev,
+                      bookAheadDays: Number(e.target.value),
+                    }));
+                  }}
+                />
+                {fieldErrors.bookAheadDays && (
+                  <p className={styles.fieldError}>
+                    {fieldErrors.bookAheadDays}
+                  </p>
+                )}
+
+                <p className={styles.hint}>How far ahead customer can book</p>
+              </div>
+            </section>
+
+            {saveError && <p className={styles.saveError}>{saveError}</p>}
+            {saveSuccess && (
+              <p className={styles.saveSuccess}>Settings saved successfully!</p>
+            )}
+            <button className={btnStyles.btnGold} type="submit">
+              Save Settings
+            </button>
+          </form>
+        </div>
+
+        <div className={styles.column}>
+          <section className={styles.card}>
+            <div className={styles.cardHeader}>
+              <h3>Services</h3>
+              <button
+                className={btnStyles.btnGold}
+                onClick={() => {
+                  setSelectedService(null);
+                  setShowServiceModal(true);
+                }}
+              >
+                + Add Service
+              </button>
+            </div>
+            <ul className={styles.serviceList}>
+              {service.map((s) => (
+                <li key={s.id} className={styles.serviceRow}>
+                  <span
+                    className={s.active ? styles.dotActive : styles.dotInactive}
+                  ></span>
+                  <span className={styles.serviceName}>{s.name}</span>
+                  <span className={styles.serviceDuration}>
+                    {s.durationMinutes} mins
+                  </span>
+                  <div className={styles.serviceActions}>
+                    <span
+                      className={
+                        s.active ? styles.badgeActive : styles.badgeInactive
+                      }
+                    >
+                      {s.active ? "Active" : "Inactive"}
+                    </span>
+                    <button
+                      className={btnStyles.btnGhost}
+                      onClick={() => {
+                        setSelectedService(s);
+                        setShowServiceModal(true);
+                      }}
+                    >
+                      Edit
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
+      </main>
+      {showServiceModal && (
+        <ServiceModal
+          service={selectedService ?? undefined}
+          onClose={() => setShowServiceModal(false)}
+          onSuccess={() => {
+            setShowServiceModal(false);
+            refetch();
+          }}
+        />
+      )}
+    </>
   );
 };
 
