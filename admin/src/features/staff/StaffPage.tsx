@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useTopbar } from "../../layout/TopBarContext";
 import btnStyles from "../../shared/utils/buttons.module.css";
-import { useNavigate } from "react-router-dom";
-import { useStaff } from "./hooks/useStaff";
-import styles from "./StaffPage.module.css";
-import { createStaff } from "./staff.service";
-import { createStaffSchema } from "./staff.schema";
 import Toggle from "./components/Toggle";
+import { useStaff } from "./hooks/useStaff";
+import { createStaffSchema } from "./staff.schema";
+import { createStaff } from "./staff.service";
+import styles from "./StaffPage.module.css";
+import badgeStyles from "../../shared/utils/badges.module.css";
 
 export const StaffPage = () => {
   const { staff, refetch } = useStaff();
@@ -78,7 +79,9 @@ export const StaffPage = () => {
               </div>
               <h3 className={styles.name}>{s.name}</h3>
               <span
-                className={s.active ? styles.badgeActive : styles.badgeInactive}
+                className={
+                  s.active ? badgeStyles.badgeActive : badgeStyles.badgeInactive
+                }
               >
                 {s.active ? "Active" : "Inactive"}
               </span>
