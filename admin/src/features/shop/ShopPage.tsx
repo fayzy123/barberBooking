@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { useTopbar } from "../../layout/TopBarContext";
-import { useShop } from "./hooks/useShop";
-import styles from "./ShopPage.module.css";
 import btnStyles from "../../shared/utils/buttons.module.css";
 import { useServices } from "../services/hooks/useServices";
+import { Service } from "../services/service.types";
+import ServiceModal from "../services/ServiceModal";
+import { useShop } from "./hooks/useShop";
 import { EditShop, editShopSettingSchema } from "./shop.schema";
 import { updateShop } from "./shop.service";
-import ServiceModal from "../services/ServiceModal";
-import { Service } from "../services/service.types";
+import styles from "./ShopPage.module.css";
+import badgeStyles from "../../shared/utils/badges.module.css";
 
 const ShopPage = () => {
   const { shop, refetch: refetchShop } = useShop();
@@ -281,7 +282,9 @@ const ShopPage = () => {
                   <div className={styles.serviceActions}>
                     <span
                       className={
-                        s.active ? styles.badgeActive : styles.badgeInactive
+                        s.active
+                          ? badgeStyles.badgeActive
+                          : badgeStyles.badgeInactive
                       }
                     >
                       {s.active ? "Active" : "Inactive"}
