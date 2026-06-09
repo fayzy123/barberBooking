@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import styles from "./Login.module.css";
 import BrandLogo from "../../shared/components/BrandLogo";
 import { useAuth } from "./AuthContext";
@@ -38,6 +38,13 @@ const Login = () => {
     }
   };
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("reason") === "session_expired") {
+      setError("Session Expired. Please sign in again.");
+    }
+  }, []);
+
   return (
     <div className={styles.container}>
       <div className={styles.card}>
@@ -50,7 +57,6 @@ const Login = () => {
           Enter your login details to continue
         </div>
 
-        {/* Show error message if login failed */}
         {error && <div className={styles.error}>{error}</div>}
 
         <form onSubmit={handleSubmit}>
