@@ -55,9 +55,9 @@ describe('PATCH /api/admin/shop', () => {
         const res = await request(app)
                     .patch('/api/admin/shop')
                     .set('Authorization', `Bearer ${validToken}`)
-                    .send({ name: "Fayzhan's BarberShop"})
+                    .send({ name: "Fayzy's Cuts"})
 
         expect(res.status).toBe(200)
-        expect(res.body.name).toBe("Fayzhan's BarberShop")
+        expect(res.body.name).toBe("Fayzy's Cuts")
     })
 })
