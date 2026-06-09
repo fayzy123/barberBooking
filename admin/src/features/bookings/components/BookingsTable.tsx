@@ -39,10 +39,12 @@ const BookingsTable = ({ bookings }: BookingsTableProps) => {
                   minute: "2-digit",
                 })}
               </td>
-              <td>{b.Service.durationMinutes} mins</td>
+              <td className={styles.primary}>
+                {b.Service.durationMinutes} mins
+              </td>
               <td className={styles.primary}>{b.customerName}</td>
-              <td>{b.Service.name}</td>
-              <td>{b.Staff.name}</td>
+              <td className={styles.primary}>{b.Service.name}</td>
+              <td className={styles.primary}>{b.Staff.name}</td>
               <td>
                 <span
                   className={
