@@ -25,7 +25,14 @@ const BookingsTable = ({ bookings }: BookingsTableProps) => {
         </thead>
         <tbody>
           {bookings.map((b) => (
-            <tr key={b.id} onClick={() => navigate(`/bookings/${b.id}`)}>
+            <tr
+              key={b.id}
+              onClick={() => {
+                if (b.status === "CANCELLED") return;
+                navigate(`/bookings/${b.id}`);
+              }}
+              className={b.status === "CANCELLED" ? styles.cancelledRow : ""}
+            >
               <td className={styles.primary}>
                 {new Date(b.startTime).toLocaleTimeString("en-GB", {
                   hour: "2-digit",

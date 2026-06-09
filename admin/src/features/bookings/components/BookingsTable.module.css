@@ -73,6 +73,19 @@
     font-weight: 500;
 }
 
+.cancelledRow {
+    opacity: 0.5;
+    cursor: not-allowed !important;
+}
+
+.cancelledRow td {
+    text-decoration: line-through;
+}
+
+.cancelledRow:hover td {
+    background: transparent !important;
+}
+
 .ref {
     font-family: 'SF Mono', monospace;
     color: var(--gold) !important;
