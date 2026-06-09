@@ -8,6 +8,7 @@ import BookingsDetailPage from "./features/bookings/BookingsDetailPage";
 import StaffPage from "./features/staff/StaffPage";
 import StaffDetailPage from "./features/staff/components/StaffDetailPage";
 import ShopPage from "./features/shop/ShopPage";
+import { ShopProvider } from "./features/shop/ShopContext";
 
 const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
@@ -34,7 +35,9 @@ const router = createBrowserRouter([
 export default function App() {
   return (
     <AuthProvider>
-      <RouterProvider router={router} />
+      <ShopProvider>
+        <RouterProvider router={router} />
+      </ShopProvider>
     </AuthProvider>
   );
 }

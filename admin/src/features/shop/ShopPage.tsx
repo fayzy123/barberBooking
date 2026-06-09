@@ -9,9 +9,11 @@ import { EditShop, editShopSettingSchema } from "./shop.schema";
 import { updateShop } from "./shop.service";
 import styles from "./ShopPage.module.css";
 import badgeStyles from "../../shared/utils/badges.module.css";
+import { useShopContext } from "./ShopContext";
 
 const ShopPage = () => {
   const { shop, refetch: refetchShop } = useShop();
+  const { setShopName } = useShopContext();
   const { service, refetch: refetchServices } = useServices();
   const { setTopbar } = useTopbar();
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -65,8 +67,10 @@ const ShopPage = () => {
 
     try {
       await updateShop(formData);
+      refetchShop();
       refetchServices();
       setSaveSuccess(true);
+      setShopName(formData.name);
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Failed to save settings";

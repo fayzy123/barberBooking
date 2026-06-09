@@ -1,6 +1,8 @@
-import config from "../utils/config";
+import { useShopContext } from "../../features/shop/ShopContext";
 
 const BrandLogo = () => {
+  const { shopName } = useShopContext();
+
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
       <div
@@ -32,7 +34,7 @@ const BrandLogo = () => {
         <div
           style={{ fontSize: "0.9rem", fontWeight: 600, color: "var(--gold)" }}
         >
-          {config.shopName}
+          {shopName}
         </div>
         <div
           style={{ fontSize: "0.75rem", color: "var(--t3)", marginTop: "1px" }}
