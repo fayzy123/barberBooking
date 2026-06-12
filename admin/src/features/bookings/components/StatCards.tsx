@@ -46,7 +46,7 @@ const StatCards = ({
           {nextAppointment ? nextAppointmentTime : "None"}
         </span>
         <span className={styles.meta}>
-          {nextAppointment ? nextAppointment.Staff.name : "None"}
+          {nextAppointment ? nextAppointment.Staff.firstName : "None"}
         </span>
       </article>
     </section>
