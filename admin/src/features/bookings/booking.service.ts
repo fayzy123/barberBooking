@@ -1,7 +1,8 @@
 import api from "../../shared/utils/api"
 
 interface CreateBookingInput {
-    customerName: string;
+    customerFirstName: string;
+    customerLastName: string;
     customerPhone: string;
     serviceId: string;
     staffId: string;

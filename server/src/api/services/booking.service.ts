@@ -1,8 +1,6 @@
 import { createId } from "@paralleldrive/cuid2";
 import { CreateBooking, RetrieveBooking } from "../../api/schemas/booking.schema";
 import { prisma } from "../../db/prisma";
-import { start } from "node:repl";
-
 
 // Retrieve all booking endpoint
 export async function getBookings(filters : RetrieveBooking) {
@@ -110,7 +108,8 @@ export async function postBooking(input : CreateBooking, shopId: string) {
             serviceId: input.serviceId,
             startTime,
             endTime,
-            customerName: input.customerName,
+            customerFirstName: input.customerFirstName,
+            customerLastName: input.customerLastName,
             customerPhone: input.customerPhone,
             updatedAt: new Date()
         },

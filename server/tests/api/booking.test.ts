@@ -30,7 +30,8 @@ describe('POST /api/admin/bookings', () => {
         .post('/api/admin/bookings')
         .set('Authorization', `Bearer ${validToken}`)
         .send({ 
-            customerName: 'Test Customer',
+            customerFirstName: 'Test',
+            customerLastName: 'Customer',
             customerPhone: '07712345678',
             serviceId: 'service_001',
             staffId: 'staff_001',
@@ -45,11 +46,12 @@ describe('POST /api/admin/bookings', () => {
         .post('/api/admin/bookings')
         .set('Authorization', `Bearer ${validToken}`)
         .send({ 
-            customerName: 'Test Customer',
+            customerFirstName: 'Test',
+            customerLastName: 'Customer',
             customerPhone: '07712345678',
             serviceId: 'service_001',
             staffId: 'staff_001',
-            startTime: '2026-05-19T09:00:00.000Z' // Fayzy already has a booking at 9am at this time 
+            startTime: '2026-06-30T10:00:00.000Z' // staff_001 already has a booking at this time
          })
     
         expect(res.status).toBe(500)

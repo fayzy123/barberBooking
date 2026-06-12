@@ -28,7 +28,8 @@ const BookingsDetailPage = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    customerName: "",
+    customerFirstName: "",
+    customerLastName: "",
     customerPhone: "",
     serviceId: "",
     staffId: "",
@@ -55,7 +56,8 @@ const BookingsDetailPage = () => {
   useEffect(() => {
     if (booking) {
       setFormData({
-        customerName: booking.customerName,
+        customerFirstName: booking.customerFirstName,
+        customerLastName: booking.customerLastName,
         customerPhone: booking.customerPhone,
         serviceId: booking.serviceId,
         staffId: booking.staffId,
@@ -132,21 +134,48 @@ const BookingsDetailPage = () => {
   return (
     <>
       <form className={pageStyles.form} onSubmit={handleSubmit}>
-        <label className={pageStyles.label} htmlFor="name">
-          Customer Name
+        <label className={pageStyles.label} htmlFor="customerFirstName">
+          Customer First Name
         </label>
         <input
-          id="name"
+          id="customerFirstName"
           type="text"
-          className={`${pageStyles.input} ${fieldErrors.customerName ? pageStyles.inputError : ""}`}
-          value={formData.customerName}
+          className={`${pageStyles.input} ${fieldErrors.customerFirstName ? pageStyles.inputError : ""}`}
+          value={formData.customerFirstName}
           readOnly={!isCreateMode}
           onChange={(e) =>
-            setFormData((prev) => ({ ...prev, customerName: e.target.value }))
+            setFormData((prev) => ({
+              ...prev,
+              customerFirstName: e.target.value,
+            }))
           }
         />
-        {fieldErrors.customerName && (
-          <p className={pageStyles.fieldError}>{fieldErrors.customerName}</p>
+        {fieldErrors.customerFirstName && (
+          <p className={pageStyles.fieldError}>
+            {fieldErrors.customerFirstName}
+          </p>
+        )}
+
+        <label className={pageStyles.label} htmlFor="customerLastName">
+          Customer Last Name
+        </label>
+        <input
+          id="customerLastName"
+          type="text"
+          className={`${pageStyles.input} ${fieldErrors.customerLastName ? pageStyles.inputError : ""}`}
+          value={formData.customerLastName}
+          readOnly={!isCreateMode}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              customerLastName: e.target.value,
+            }))
+          }
+        />
+        {fieldErrors.customerLastName && (
+          <p className={pageStyles.fieldError}>
+            {fieldErrors.customerLastName}
+          </p>
         )}
 
         <label className={pageStyles.label} htmlFor="phone">

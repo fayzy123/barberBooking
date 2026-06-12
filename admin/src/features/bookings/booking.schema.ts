@@ -1,7 +1,8 @@
 import { z } from 'zod';
 
 export const createBookingSchema = z.object ({
-    customerName: z.string().min(3, "Please enter a valid customer name"),
+    customerFirstName: z.string().min(3, "Please enter a valid customer first name with a minimum of 3 characters"),
+    customerLastName: z.string().min(3, "Please enter a valid customer last name with a minimum of 3 characters"),
     customerPhone: z.string()
                     .min(10, "Invalid Phone number")
                     .max(13, "Invalid Phone number")

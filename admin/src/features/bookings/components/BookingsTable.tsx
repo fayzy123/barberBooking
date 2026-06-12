@@ -42,7 +42,9 @@ const BookingsTable = ({ bookings }: BookingsTableProps) => {
               <td className={styles.primary}>
                 {b.Service.durationMinutes} mins
               </td>
-              <td className={styles.primary}>{b.customerName}</td>
+              <td className={styles.primary}>
+                {b.customerFirstName} {b.customerLastName}
+              </td>
               <td className={styles.primary}>{b.Service.name}</td>
               <td className={styles.primary}>
                 {b.Staff.firstName} {b.Staff.lastName}

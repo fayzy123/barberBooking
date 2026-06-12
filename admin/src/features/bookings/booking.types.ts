@@ -7,7 +7,8 @@ export interface Booking {
   status: "BOOKED" | "CANCELLED";
   startTime: string;
   endTime: string;
-  customerName: string;
+  customerFirstName: string;
+  customerLastName: string;
   customerPhone: string;
   cancelledAt: string | null;
   cancelReason: string | null;

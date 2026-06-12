@@ -22,23 +22,24 @@ model Admin {
 }
 
 model Booking {
-  id            String        @id
-  shopId        String
-  staffId       String
-  serviceId     String
-  ref           String        @unique
-  status        BookingStatus @default(BOOKED)
-  startTime     DateTime
-  endTime       DateTime
-  customerName  String
-  customerPhone String
-  cancelledAt   DateTime?
-  cancelReason  String?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime
-  Service       Service       @relation(fields: [serviceId], references: [id])
-  Shop          Shop          @relation(fields: [shopId], references: [id], onDelete: Cascade)
-  Staff         Staff         @relation(fields: [staffId], references: [id])
+  id                String        @id
+  shopId            String
+  staffId           String
+  serviceId         String
+  ref               String        @unique
+  status            BookingStatus @default(BOOKED)
+  startTime         DateTime
+  endTime           DateTime
+  customerFirstName String
+  customerLastName  String
+  customerPhone     String
+  cancelledAt       DateTime?
+  cancelReason      String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime
+  Service           Service       @relation(fields: [serviceId], references: [id])
+  Shop              Shop          @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  Staff             Staff         @relation(fields: [staffId], references: [id])
 
   @@index([serviceId])
   @@index([shopId])
