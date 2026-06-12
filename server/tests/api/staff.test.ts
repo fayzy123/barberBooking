@@ -96,7 +96,7 @@ describe('PATCH /api/staff/admin/staff/:id/shifts', () => {
     it('should return 400 if no token is provided', async () => {
         const res = await request(app)
             .patch('/api/admin/staff/staff_001/shifts')
-            .send({ name: 'Bo'})
+            .send({ firstName: 'Bo'})
         
         expect(res.status).toBe(400)
     })

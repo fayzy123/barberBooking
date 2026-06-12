@@ -34,7 +34,7 @@ describe('POST /api/admin/bookings', () => {
             customerPhone: '07712345678',
             serviceId: 'service_001',
             staffId: 'staff_001',
-            startTime: '2026-06-01T10:00:00.000Z' // sunday and Fayzy dont work sundays
+            startTime: '2026-09-06T10:00:00.000Z' // sunday and Fayzy dont work sundays
          })
     
         expect(res.status).toBe(500)

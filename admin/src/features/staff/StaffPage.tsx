@@ -82,8 +82,7 @@ export const StaffPage = () => {
                 {s.lastName.charAt(0).toUpperCase()}
               </div>
               <h3 className={styles.name}>
-                {s.firstName}
-                {s.lastName}
+                {s.firstName} {s.lastName}
               </h3>
               <span
                 className={
