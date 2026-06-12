@@ -17,7 +17,8 @@ const StaffProfileForm = ({
   active,
   onActiveChange,
 }: StaffProfileFormProps) => {
-  const [name, setName] = useState(staff.name);
+  const [firstName, setFirstName] = useState(staff.firstName);
+  const [lastName, setLastName] = useState(staff.lastName);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -26,7 +27,8 @@ const StaffProfileForm = ({
     e.preventDefault();
 
     const result = createStaffSchema.safeParse({
-      name: name,
+      firstName: firstName,
+      lastName: lastName,
       active: active,
     });
 
@@ -42,7 +44,7 @@ const StaffProfileForm = ({
     setFieldErrors({});
 
     try {
-      await updateStaff(staff.id, name, active);
+      await updateStaff(staff.id, firstName, lastName, active);
       setSuccess(true);
     } catch (err) {
       setError("Staff member could not be updated!");
@@ -52,18 +54,34 @@ const StaffProfileForm = ({
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <p className={styles.title}>Profile</p>
-      <label className={styles.label}>Full Name</label>
+
+      <label className={styles.label}>First Name</label>
       <input
         className={styles.input}
         type="text"
-        value={name}
+        value={firstName}
         onChange={(e) => {
-          setName(e.target.value);
+          setFirstName(e.target.value);
           setSuccess(false);
         }}
       ></input>
+      {fieldErrors.firstName && (
+        <p className={styles.error}>{fieldErrors.firstName}</p>
+      )}
 
-      {fieldErrors.name && <p className={styles.error}>{fieldErrors.name}</p>}
+      <label className={styles.label}>Last Name</label>
+      <input
+        className={styles.input}
+        type="text"
+        value={lastName}
+        onChange={(e) => {
+          setLastName(e.target.value);
+          setSuccess(false);
+        }}
+      ></input>
+      {fieldErrors.lastName && (
+        <p className={styles.error}>{fieldErrors.lastName}</p>
+      )}
 
       <hr className={styles.divider} />
 

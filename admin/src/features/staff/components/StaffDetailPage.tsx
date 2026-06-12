@@ -30,7 +30,9 @@ const StaffDetailPage = () => {
 
   useEffect(() => {
     setTopbar({
-      title: staff?.name ?? "Staff Member",
+      title:
+        `${staff?.firstName ?? ""} ${staff?.lastName ?? ""}`.trim() ||
+        "Staff Member",
       subtitle: staff?.active ? "Active" : "Inactive",
       backButton: (
         <button

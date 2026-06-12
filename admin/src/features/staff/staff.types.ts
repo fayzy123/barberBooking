@@ -10,14 +10,16 @@ export interface Shift {
 
 export interface StaffSummary {
     id: string;
-    name: string;
+    firstName: string;
+    lastName: string;
     active: boolean;
 }
 
 export interface Staff {
     id: string,
     shopId: string;
-    name: string;
+    firstName: string;
+    lastName: string;
     active: boolean;
     shifts: Shift[] | null;
     createdAt: string;

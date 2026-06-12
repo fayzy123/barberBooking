@@ -18,7 +18,8 @@ export interface Booking {
     durationMinutes: number;
   };
   Staff: {
-    name: string;
+    firstName: string;
+    lastName: string;
   };
 }
 

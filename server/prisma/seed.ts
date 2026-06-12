@@ -38,11 +38,11 @@ async function main() {
   }
 
   // 3. Staff
-  const staff = [
-    { id: 'staff_001', name: 'Fayzy' },
-    { id: 'staff_002', name: 'Marcus' },
-    { id: 'staff_003', name: 'Jordan' },
-  ];
+const staff = [
+    { id: 'staff_001', firstName: 'Fayzy', lastName: 'Khan' },
+    { id: 'staff_002', firstName: 'Marcus', lastName: 'Brown' },
+    { id: 'staff_003', firstName: 'Jordan', lastName: 'Charles' },
+];
 
   for (const member of staff) {
     await prisma.staff.upsert({

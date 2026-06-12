@@ -38,7 +38,7 @@ describe('POST /api/staff/admin/staff', () => {
     it('should return 400 if no token is provided', async () => {
         const res = await request(app)
             .post('/api/admin/staff')
-            .send({ name: 'Bo'})
+            .send({ firstName: 'Bo', lastName: "Da"})
         
         expect(res.status).toBe(400)
     })
@@ -47,7 +47,7 @@ describe('POST /api/staff/admin/staff', () => {
     const res = await request(app)
         .post('/api/admin/staff')
         .set('Authorization', `Bearer ${validToken}`)
-        .send({ name: 'Bo' })
+        .send({ firstName: 'Bo', lastName: "Da"})
     
         expect(res.status).toBe(400)
     })
@@ -56,10 +56,10 @@ describe('POST /api/staff/admin/staff', () => {
         const res = await request(app)
                     .post('/api/admin/staff')
                     .set('Authorization', `Bearer ${validToken}`)
-                    .send({ name: "Test Staff"})
+                    .send({ firstName: 'Test', lastName: "Staff"})
 
         expect(res.status).toBe(201)
-        expect(res.body.name).toBe('Test Staff')
+        expect(res.body.firstName).toBe('Test')
     })
 })
 
@@ -67,7 +67,7 @@ describe('PATCH /api/staff/admin/staff/:id', () => {
     it('should return 400 if no token is provided', async () => {
         const res = await request(app)
             .patch('/api/admin/staff/staff_001')
-            .send({ name: 'Bo'})
+            .send({ firstName: 'Bo', lastName: "Da"})
         
         expect(res.status).toBe(400)
     })
@@ -76,7 +76,7 @@ describe('PATCH /api/staff/admin/staff/:id', () => {
     const res = await request(app)
         .patch('/api/admin/staff/staff_001')
         .set('Authorization', `Bearer ${validToken}`)
-        .send({ name: 'Bo' })
+        .send({ firstName: 'Bo', lastName: "Da"})
     
         expect(res.status).toBe(400)
     })
@@ -85,10 +85,10 @@ describe('PATCH /api/staff/admin/staff/:id', () => {
         const res = await request(app)
                     .patch('/api/admin/staff/staff_001')
                     .set('Authorization', `Bearer ${validToken}`)
-                    .send({ name: "Fayzy Khan"})
+                    .send({ firstName: 'Fayzy', lastName: "Khan"})
 
         expect(res.status).toBe(200)
-        expect(res.body.name).toBe('Fayzy Khan')
+        expect(res.body.firstName).toBe('Fayzy')
     })
 })
 

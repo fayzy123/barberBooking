@@ -12,7 +12,8 @@ import badgeStyles from "../../shared/utils/badges.module.css";
 export const StaffPage = () => {
   const { staff, refetch } = useStaff();
   const [showModal, setShowModal] = useState(false);
-  const [newName, setNewName] = useState("");
+  const [newFirstName, setNewFirstName] = useState("");
+  const [newLastName, setNewLastName] = useState("");
   const [newActive, setNewActive] = useState(true);
   const [modalError, setModalError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -38,7 +39,8 @@ export const StaffPage = () => {
     e.preventDefault();
 
     const result = createStaffSchema.safeParse({
-      name: newName,
+      firstName: newFirstName,
+      lastName: newLastName,
       active: newActive,
     });
 
@@ -53,9 +55,10 @@ export const StaffPage = () => {
     setFieldErrors({});
 
     try {
-      await createStaff(newName, newActive);
+      await createStaff(newFirstName, newLastName, newActive);
       setShowModal(false);
-      setNewName("");
+      setNewFirstName("");
+      setNewLastName("");
       setNewActive(true);
       setModalError(null);
       refetch();
@@ -75,9 +78,13 @@ export const StaffPage = () => {
               onClick={() => navigate(`/staff/${s.id}`)}
             >
               <div className={styles.avatar}>
-                {s.name.charAt(0).toUpperCase()}
+                {s.firstName.charAt(0).toUpperCase()}
+                {s.lastName.charAt(0).toUpperCase()}
               </div>
-              <h3 className={styles.name}>{s.name}</h3>
+              <h3 className={styles.name}>
+                {s.firstName}
+                {s.lastName}
+              </h3>
               <span
                 className={
                   s.active ? badgeStyles.badgeActive : badgeStyles.badgeInactive
@@ -94,16 +101,33 @@ export const StaffPage = () => {
           <article className={styles.modal}>
             <form className={styles.form} onSubmit={handleSubmit}>
               <h3>Create a new staff member</h3>
-              <label htmlFor="name">Please enter name of staff member</label>
+
+              <label htmlFor="firstName">
+                Please enter name of staff member
+              </label>
               <input
                 type="text"
-                value={newName}
-                onChange={(e) => setNewName(e.target.value)}
-                placeholder="Enter staff name"
+                value={newFirstName}
+                onChange={(e) => setNewFirstName(e.target.value)}
+                placeholder="Enter staff firstname"
                 className={styles.input}
               />
-              {fieldErrors.name && (
-                <p className={styles.fieldError}>{fieldErrors.name}</p>
+              {fieldErrors.firstName && (
+                <p className={styles.fieldError}>{fieldErrors.firstName}</p>
+              )}
+
+              <label htmlFor="lastName">
+                Please enter name of staff member
+              </label>
+              <input
+                type="text"
+                value={newLastName}
+                onChange={(e) => setNewLastName(e.target.value)}
+                placeholder="Enter staff lastname"
+                className={styles.input}
+              />
+              {fieldErrors.lastName && (
+                <p className={styles.fieldError}>{fieldErrors.lastName}</p>
               )}
               <span className={styles.checkBoxRow}>
                 <label htmlFor="active">Active: </label>

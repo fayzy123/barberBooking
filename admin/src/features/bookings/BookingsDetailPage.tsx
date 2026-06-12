@@ -204,7 +204,7 @@ const BookingsDetailPage = () => {
           <option> Select a staff member</option>
           {staff.map((s) => (
             <option key={s.id} value={s.id}>
-              {s.name}
+              {s.firstName} {s.lastName}
             </option>
           ))}
         </select>

@@ -36,7 +36,7 @@ const FilterBar = ({ filters, staff, onFilterChange }: FilterBarProps) => {
         </option>
         {staff.map((s) => (
           <option className={styles.option} key={s.id} value={s.id}>
-            {s.name}
+            {s.firstName} {s.lastName}
           </option>
         ))}
       </select>

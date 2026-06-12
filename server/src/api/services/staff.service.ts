@@ -29,7 +29,8 @@ export async function createStaff(input: CreateStaff, shopId: string) {
         data: {
             id,
             shopId,
-            name: input.name,
+            firstName: input.firstName,
+            lastName: input.lastName,
             active: input.active,
             updatedAt: new Date()
         }
@@ -46,7 +47,8 @@ export async function updateStaff(id: string, input: UpdateStaff) {
     return prisma.staff.update({
         where: { id },
         data: {
-            name: input.name,
+            firstName: input.firstName,
+            lastName: input.lastName,
             active: input.active,
             updatedAt: new Date()
         }

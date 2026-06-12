@@ -36,7 +36,7 @@ export async function getBookings(filters : RetrieveBooking) {
         where,
         include: {
             Service: { select: { name: true, durationMinutes: true } },
-            Staff: { select: { name: true }}
+            Staff: { select: { firstName: true, lastName: true }}
         },
         orderBy: { startTime: 'asc'}
     })
@@ -48,7 +48,7 @@ export async function getBookingById(id : string) {
         where: { id },
         include: {
             Service: { select: { name: true, durationMinutes: true } },
-            Staff: { select: { name: true } },
+            Staff: { select: { firstName: true, lastName: true } },
         },
     })
 
@@ -116,7 +116,7 @@ export async function postBooking(input : CreateBooking, shopId: string) {
         },
         include: {
             Service: { select: { name: true, durationMinutes: true } },
-            Staff: { select: { name: true } }
+            Staff: { select: { firstName: true, lastName: true } }
         }
      })
 }

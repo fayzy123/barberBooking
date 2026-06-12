@@ -81,7 +81,8 @@ model Shop {
 model Staff {
   id        String    @id
   shopId    String
-  name      String
+  firstName String
+  lastName  String
   active    Boolean   @default(true)
   createdAt DateTime  @default(now())
   updatedAt DateTime
