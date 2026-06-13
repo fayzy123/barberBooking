@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getBookingById, getBookings, postBooking, cancelBooking as cancelBookingService, reassignBooking } from "../services/booking.service";
+import { getBookingById, getBookings, postBooking, cancelBooking as cancelBookingService, reassignBooking, fetchAvailableSlots } from "../services/booking.service";
 import { bookingQuerySchema, CreateBooking, createBookingSchema } from "../schemas/booking.schema";
 import { validateRequest } from "../../utils/validate";
 import { AuthRequest } from "../../middleware/authenticate";
@@ -91,5 +91,38 @@ export async function reassignStaff(req: AuthRequest, res: Response) {
         const message = error instanceof Error ? error.message : "Error"
         const status = message === 'Booking not found' ? 404 : 500
         res.status(status).json({message})
+    }
+}
+
+export async function getAvailableSlots(req: AuthRequest, res: Response) {
+     const shopId = req.admin?.shopId
+    if (!shopId) {
+        res.status(401).json({ message: "Unauthorised" })
+        return;
+    }
+
+    const { staffId, serviceId, date } = req.query as Record<string, string>
+
+    if (!staffId || !serviceId || !date) {
+        res.status(400).json({ message: "staffId, serviceId and date are required."})
+        return
+    }
+
+    try {
+        const result = await fetchAvailableSlots(shopId, staffId, serviceId, date)
+        res.status(200).json(result)
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : "Error"
+        const knownErrors = [
+            'STAFF_INACTIVE', 
+            'NO_SHIFT', 
+            'NO_SLOTS', 
+            'PAST_DATE',
+            'OUT_OF_RANGE',
+            'INVALID_REQUEST',
+            'SERVICE_INACTIVE'
+         ]
+        const status = knownErrors.includes(message) ? 400 : 500;
+        res.status(status).json({ error: message })
     }
 }

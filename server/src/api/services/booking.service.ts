@@ -163,7 +163,152 @@ export async function reassignBooking(id: string, staffId: string) {
      })
 }
 
-// Helper Function to convert into minutes
+// Fetch Available slots
+export async function fetchAvailableSlots(
+    shopId: string,
+    staffId: string,
+    serviceId: string,
+    date: string,
+) {
+    const [shop, staff, service] = await Promise.all([
+        prisma.shop.findFirst({where: {id: shopId}}),
+        prisma.staff.findUnique({where: {id: staffId}}),
+        prisma.service.findUnique({where: {id: serviceId}}),
+    ])
+
+    // Check all records exist
+    if (!shop || !staff || !service) {
+        throw new Error('INVALID_REQUEST')
+    }
+
+    if (!staff.active) {
+        throw new Error('STAFF_INACTIVE')
+    }
+
+    if (!service.active) {
+        throw new Error('SERVICE_INACTIVE')
+    }
+
+    // Check date is not in the past
+    const today = new Date();
+    today.setHours(0, 0, 0, 0)
+    const selectedDate = new Date(date);
+
+    if (selectedDate < today) {
+        throw new Error('PAST_DATE');
+    }
+
+    // Check date is within bookAheadDays
+    const maxDate = new Date(today);
+    maxDate.setDate(today.getDate() + shop.bookAheadDays)
+
+    if (selectedDate > maxDate) {
+        throw new Error('OUT_OF_RANGE')
+    }
+
+    // Get day of week from selected date
+    const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+    const daysOfWeek = days[selectedDate.getDay()]
+
+    // Find the shift for that day
+    const shift = await prisma.shift.findFirst({
+        where: {
+            staffId,
+            day: daysOfWeek,
+            active: true
+        }
+    })
+
+    if (!shift) {
+        throw new Error("NO_SHIFT")
+    }
+
+    // Fetch existing bookings for this staff on the selected date
+    const startOfDay = new Date(date);
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date(date);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const existingBookings = await prisma.booking.findMany({
+        where: {
+            staffId,
+            status: "BOOKED",
+            startTime: {
+                gte: startOfDay,
+                lte: endOfDay
+            }
+        }
+    })
+
+    const slots = generateSlots(
+        date, 
+        shift.startTime, 
+        shift.endTime, 
+        shop.slotInterval, 
+        shop.leadTime, 
+        service.durationMinutes, 
+        existingBookings,
+        shop.closeTime
+    )
+    
+    if (slots.length === 0) {
+        throw new Error('NO_SLOTS')
+    }
+
+    return { slots }
+}
+
+// Helper function to generate slots
+export function generateSlots(
+    date: string,
+    shiftStart: string,
+    shiftEnd: string,
+    slotInterval: number,
+    leadTime: number,
+    serviceDuration: number,
+    existingBookings: { startTime: Date; endTime: Date}[], 
+    shopCloseTime: string
+): string[] {
+
+    const slots: string[] = []
+    const now = new Date()
+    const isToday = new Date(date).toDateString() === now.toDateString()
+    const current = new Date(`${date}T${shiftStart}`)
+    const closeTime = new Date(`${date}T${shopCloseTime}`)
+    const shiftEndTime = new Date(`${date}T${shiftEnd}`)
+    const effectiveEndTime = shiftEndTime < closeTime ? shiftEndTime : closeTime;
+
+
+     while (current < effectiveEndTime) {
+        const slotEnd = new Date(current)
+        slotEnd.setMinutes(slotEnd.getMinutes() + serviceDuration)
+
+        // Slot must fit within the shift
+        if (slotEnd > effectiveEndTime) break
+
+        // Skip if too close to now
+        const minsFromNow = (current.getTime() - now.getTime()) / 60000;
+        if (isToday && minsFromNow < leadTime) {
+            current.setMinutes(current.getMinutes() + slotInterval)
+            continue
+        }
+
+        // Skip if overlaps existing booking
+        const isOverlapping = existingBookings.some(b =>
+            current < b.endTime && slotEnd > b.startTime
+        )
+
+        if (!isOverlapping) {
+            slots.push(current.toTimeString().slice(0, 5))
+        }
+
+        current.setMinutes(current.getMinutes() + slotInterval)
+     }
+     return slots;
+}
+
+// Helper function to convert into minutes
 function toMinutes(time: string): number {
     const [hours, mins] = time.split(':').map(Number)
     return hours * 60 + mins

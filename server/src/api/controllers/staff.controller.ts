@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createStaff, getStaffById, retrieveStaff, updateShifts, updateStaff } from "../services/staff.service";
+import { createStaff, deleteStaff, getStaffById, retrieveStaff, updateShifts, updateStaff } from "../services/staff.service";
 import { AuthRequest } from "../../middleware/authenticate";
 import { validateRequest } from "../../utils/validate";
 import { CreateStaff, createStaffSchema, UpdateShifts, updateShiftsSchema, UpdateStaff, updateStaffSchema } from "../schemas/staff.schema";
@@ -16,7 +16,7 @@ export async function retrieveAllStaff(req: AuthRequest, res: Response) {
         res.status(200).json(result)
     } catch (error : unknown) {
         const message = error instanceof Error ? error.message : "Error"
-        const status = message === "No staff found for this shop" ? 404 : 500
+        const status = message === "No staff members found for this shop" ? 404 : 500
         res.status(status).json({message})
     }
 }
@@ -29,7 +29,7 @@ export async function retrieveStaffById(req: Request, res: Response) {
         res.status(200).json(result)
     } catch (error : unknown) {
         const message = error instanceof Error ? error.message : "Error"
-        const status = message === "Staff member not found" ? 404 : 500
+        const status = message === "No staff member found" ? 404 : 500
         res.status(status).json({message})
     }
 }
@@ -69,7 +69,26 @@ export async function editStaff(req: AuthRequest, res: Response) {
         res.status(200).json(result);
     } catch (error) {
         const message = error instanceof Error ? error.message : "Error";
-        const status = message === "Staff not found!" ? 404 : 500
+        const status = message === "No staff member found" ? 404 : 500
+        res.status(status).json({ message })
+    }
+}
+
+export async function removeStaff(req: AuthRequest, res: Response) {
+    const shopId = req.admin?.shopId
+    if (!shopId) {
+        res.status(401).json({ message: "Unauthorised" })
+        return;
+    }
+
+    const { id } = req.params;
+
+    try {
+        await deleteStaff(id);
+        res.status(200).json({ message: "Staff member deleted successfully"});
+    } catch (error) {
+        const message = error instanceof Error ? error.message : "Error";
+        const status = message === "No staff member found" ? 404 : 500
         res.status(status).json({ message })
     }
 }
@@ -90,7 +109,7 @@ export async function editShift(req: AuthRequest, res: Response) {
         res.status(200).json(result);
     } catch (error) {
          const message = error instanceof Error ? error.message : "Error";
-        const status = message === "Staff not found!" ? 404 : 500
+        const status = message === "No staff member found" ? 404 : 500
         res.status(status).json({ message })
     }
 }

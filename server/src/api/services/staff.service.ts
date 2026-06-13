@@ -17,7 +17,7 @@ export async function getStaffById(id: string) {
     })
 
     if (!staff) {
-        throw new Error("Staff not found!")
+        throw new Error("No staff member found")
     }
 
     return staff;
@@ -73,6 +73,18 @@ export async function updateShifts(id: string, input: UpdateShifts) {
     return prisma.staff.findUnique({
         where: { id },
         include: { shifts: true }
+    })
+}
+
+export async function deleteStaff(id: string) {
+    const staff = await getStaffById(id);
+
+    if (!staff) {
+        throw new Error("No staff member found")
+    }
+
+    await prisma.staff.delete({
+        where: { id }
     })
 }
 

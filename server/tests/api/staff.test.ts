@@ -130,3 +130,42 @@ describe('PATCH /api/staff/admin/staff/:id/shifts', () => {
         expect(res.body.shifts).toBeDefined()
     })
 })
+
+describe('DELETE /api/admin/staff/:id', () => {
+    it('should return 400 if no token is provided', async () => {
+        const res = await request(app)
+            .delete('/api/admin/staff/staff_001')
+        
+        expect(res.status).toBe(400)
+    })
+
+    it('should return 404 if staff member not found', async () => {
+        const res = await request(app)
+            .delete('/api/admin/staff/invalid_id')
+            .set('Authorization', `Bearer ${validToken}`)
+        
+        expect(res.status).toBe(404)
+    })
+
+    it('should return 500 if staff member has active bookings', async () => {
+        const res = await request(app)
+            .delete('/api/admin/staff/staff_001')
+            .set('Authorization', `Bearer ${validToken}`)
+        
+        expect(res.status).toBe(500)
+    })
+
+    it('should return 200 and delete staff member successfully', async () => {
+        // First create a staff member to delete
+        const created = await request(app)
+            .post('/api/admin/staff')
+            .set('Authorization', `Bearer ${validToken}`)
+            .send({ firstName: 'Test', lastName: 'Delete' })
+
+        const res = await request(app)
+            .delete(`/api/admin/staff/${created.body.id}`)
+            .set('Authorization', `Bearer ${validToken}`)
+        
+        expect(res.status).toBe(200)
+    })
+})
