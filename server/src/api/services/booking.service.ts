@@ -1,5 +1,5 @@
 import { createId } from "@paralleldrive/cuid2";
-import { CreateBooking, RetrieveBooking } from "../../api/schemas/booking.schema";
+import { CreateBooking, RetrieveBooking, UpdateBooking } from "../../api/schemas/booking.schema";
 import { prisma } from "../../db/prisma";
 
 // Retrieve all booking endpoint
@@ -134,6 +134,37 @@ export async function reassignBooking(id: string, staffId: string) {
             updatedAt: new Date(),
         }
      })
+}
+
+// Update booking to enable full field editing
+export async function updateBooking(id: string, input: UpdateBooking) {
+    const booking = await getBookingById(id);
+    
+    if (booking.cancelledAt) {
+        throw new Error("Booking has already been cancelled.")
+    }
+
+    let newEndTime = booking.endTime
+
+    if (input.serviceId) {
+        const service = await prisma.service.findUnique({ where: { id: input.serviceId }})
+        if (!service) throw new Error("INVALID_REQUEST")
+
+        // Recalculate endTime based on existing startTime + new service duration
+        newEndTime = new Date(booking.startTime.getTime() + service.durationMinutes * 60 * 1000)
+
+        // Check for overlaps with new endTime
+        await validateBookingConstraints(booking.staffId, input.serviceId, booking.startTime, newEndTime, id)
+    }
+
+    return prisma.booking.update({
+        where: { id },
+        data: {
+            ...input,
+            endTime: newEndTime,
+            updatedAt: new Date()
+        }
+    })
 }
 
 // Fetch Available slots

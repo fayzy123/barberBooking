@@ -72,34 +72,68 @@ const staff = [
   });
 
   // 5. Bookings
-  // 5. Bookings
   const bookings = [
-    { id: 'booking_001', staffId: 'staff_001', serviceId: 'service_001', customerFirstName: 'James', customerLastName: 'Wilson', customerPhone: '07712345678', startTime: new Date('2026-06-01T09:00:00Z'), ref: 'A1B2C3D4', status: 'BOOKED' },
-    { id: 'booking_002', staffId: 'staff_002', serviceId: 'service_002', customerFirstName: 'Yusuf', customerLastName: 'Ahmed', customerPhone: '07723456789', startTime: new Date('2026-06-01T10:00:00Z'), ref: 'B2C3D4E5', status: 'CANCELLED', cancelReason: 'Customer requested cancellation', cancelledAt: new Date('2026-06-01T08:00:00Z') },
-    { id: 'booking_003', staffId: 'staff_003', serviceId: 'service_003', customerFirstName: 'Daniel', customerLastName: 'Brown', customerPhone: '07734567890', startTime: new Date('2026-06-02T09:00:00Z'), ref: 'C3D4E5F6', status: 'BOOKED' },
-    { id: 'booking_004', staffId: 'staff_001', serviceId: 'service_004', customerFirstName: 'Omar', customerLastName: 'Farooq', customerPhone: '07745678901', startTime: new Date('2026-06-02T11:00:00Z'), ref: 'D4E5F6G7', status: 'BOOKED' },
-    { id: 'booking_005', staffId: 'staff_002', serviceId: 'service_001', customerFirstName: 'Tariq', customerLastName: 'Hassan', customerPhone: '07756789012', startTime: new Date('2026-06-03T09:00:00Z'), ref: 'E5F6G7H8', status: 'CANCELLED', cancelReason: 'No show', cancelledAt: new Date('2026-06-03T10:00:00Z') },
-    { id: 'booking_006', staffId: 'staff_001', serviceId: 'service_003', customerFirstName: 'Ryan', customerLastName: 'Peters', customerPhone: '07767890123', startTime: new Date('2026-06-04T09:00:00Z'), ref: 'F6G7H8I9', status: 'BOOKED' },
-    { id: 'booking_007', staffId: 'staff_003', serviceId: 'service_002', customerFirstName: 'Liam', customerLastName: 'Carter', customerPhone: '07778901234', startTime: new Date('2026-06-05T10:00:00Z'), ref: 'G7H8I9J0', status: 'BOOKED' },
-    { id: 'booking_008', staffId: 'staff_002', serviceId: 'service_004', customerFirstName: 'Noah', customerLastName: 'Singh', customerPhone: '07789012345', startTime: new Date('2026-06-05T11:00:00Z'), ref: 'H8I9J0K1', status: 'CANCELLED', cancelReason: 'Staff unavailable', cancelledAt: new Date('2026-06-04T09:00:00Z') },
-    { id: 'booking_009', staffId: 'staff_001', serviceId: 'service_001', customerFirstName: 'Ethan', customerLastName: 'Clarke', customerPhone: '07790123456', startTime: new Date('2026-06-09T09:00:00Z'), ref: 'I9J0K1L2', status: 'BOOKED' },
-    { id: 'booking_010', staffId: 'staff_003', serviceId: 'service_003', customerFirstName: 'Harry', customerLastName: 'Evans', customerPhone: '07701234567', startTime: new Date('2026-06-09T10:00:00Z'), ref: 'J0K1L2M3', status: 'BOOKED' },
-    { id: 'booking_011', staffId: 'staff_001', serviceId: 'service_002', customerFirstName: 'Jack', customerLastName: 'Morris', customerPhone: '07712345670', startTime: new Date('2026-06-10T09:00:00Z'), ref: 'K1L2M3N4', status: 'BOOKED' },
-    { id: 'booking_012', staffId: 'staff_002', serviceId: 'service_003', customerFirstName: 'George', customerLastName: 'Baker', customerPhone: '07723456701', startTime: new Date('2026-06-10T10:00:00Z'), ref: 'L2M3N4O5', status: 'CANCELLED', cancelReason: 'Customer rescheduled', cancelledAt: new Date('2026-06-10T08:00:00Z') },
-    { id: 'booking_013', staffId: 'staff_003', serviceId: 'service_001', customerFirstName: 'Charlie', customerLastName: 'Hall', customerPhone: '07734567012', startTime: new Date('2026-06-11T09:00:00Z'), ref: 'M3N4O5P6', status: 'BOOKED' },
-    { id: 'booking_014', staffId: 'staff_001', serviceId: 'service_004', customerFirstName: 'Aiden', customerLastName: 'Scott', customerPhone: '07745670123', startTime: new Date('2026-06-11T11:00:00Z'), ref: 'N4O5P6Q7', status: 'BOOKED' },
-    { id: 'booking_015', staffId: 'staff_002', serviceId: 'service_001', customerFirstName: 'Mason', customerLastName: 'Turner', customerPhone: '07756701234', startTime: new Date('2026-06-12T09:00:00Z'), ref: 'O5P6Q7R8', status: 'BOOKED' },
-    { id: 'booking_016', staffId: 'staff_003', serviceId: 'service_002', customerFirstName: 'Logan', customerLastName: 'White', customerPhone: '07767012345', startTime: new Date('2026-06-12T10:00:00Z'), ref: 'P6Q7R8S9', status: 'BOOKED' },
-    { id: 'booking_017', staffId: 'staff_001', serviceId: 'service_001', customerFirstName: 'Lucas', customerLastName: 'Green', customerPhone: '07778123456', startTime: new Date('2026-06-16T09:00:00Z'), ref: 'Q7R8S9T0', status: 'BOOKED' },
-    { id: 'booking_018', staffId: 'staff_002', serviceId: 'service_003', customerFirstName: 'Oliver', customerLastName: 'King', customerPhone: '07789234567', startTime: new Date('2026-06-16T10:00:00Z'), ref: 'R8S9T0U1', status: 'CANCELLED', cancelReason: 'No show', cancelledAt: new Date('2026-06-16T11:00:00Z') },
-    { id: 'booking_019', staffId: 'staff_001', serviceId: 'service_002', customerFirstName: 'Sebastian', customerLastName: 'Adams', customerPhone: '07790345678', startTime: new Date('2026-06-17T10:00:00Z'), ref: 'S9T0U1V2', status: 'BOOKED' },
-    { id: 'booking_020', staffId: 'staff_003', serviceId: 'service_004', customerFirstName: 'Elijah', customerLastName: 'Lee', customerPhone: '07701456789', startTime: new Date('2026-06-18T11:00:00Z'), ref: 'T0U1V2W3', status: 'BOOKED' },
-    { id: 'booking_021', staffId: 'staff_002', serviceId: 'service_002', customerFirstName: 'Aaron', customerLastName: 'Khan', customerPhone: '07712356789', startTime: new Date('2026-06-19T09:00:00Z'), ref: 'U1V2W3X4', status: 'BOOKED' },
-    { id: 'booking_022', staffId: 'staff_001', serviceId: 'service_003', customerFirstName: 'Zain', customerLastName: 'Malik', customerPhone: '07723467890', startTime: new Date('2026-06-23T10:00:00Z'), ref: 'V2W3X4Y5', status: 'CANCELLED', cancelReason: 'Customer requested cancellation', cancelledAt: new Date('2026-06-22T09:00:00Z') },
-    { id: 'booking_023', staffId: 'staff_003', serviceId: 'service_001', customerFirstName: 'Kai', customerLastName: 'Robinson', customerPhone: '07734578901', startTime: new Date('2026-06-24T09:00:00Z'), ref: 'W3X4Y5Z6', status: 'BOOKED' },
-    { id: 'booking_024', staffId: 'staff_002', serviceId: 'service_004', customerFirstName: 'Tyler', customerLastName: 'Brooks', customerPhone: '07745689012', startTime: new Date('2026-06-25T11:00:00Z'), ref: 'X4Y5Z6A7', status: 'BOOKED' },
-    { id: 'booking_025', staffId: 'staff_001', serviceId: 'service_002', customerFirstName: 'Finn', customerLastName: 'Murphy', customerPhone: '07756790123', startTime: new Date('2026-06-30T10:00:00Z'), ref: 'Y5Z6A7B8', status: 'BOOKED' },
-  ];
+    // ── June 2 (Monday) ──────────────────────────────────────────
+    // staff_001 back to back: 09:00 haircut(15m) then 09:30 haircut+beard(30m)
+    { id: 'booking_001', staffId: 'staff_001', serviceId: 'service_001', customerFirstName: 'James', customerLastName: 'Wilson', customerPhone: '07712345678', startTime: new Date('2026-06-02T09:00:00.000Z'), ref: 'A1B2C3D4', status: 'BOOKED' },
+    { id: 'booking_002', staffId: 'staff_001', serviceId: 'service_002', customerFirstName: 'Yusuf', customerLastName: 'Ahmed', customerPhone: '07723456789', startTime: new Date('2026-06-02T09:30:00.000Z'), ref: 'B2C3D4E5', status: 'BOOKED' },
+    // staff_002 has booking at same time as booking_001 for reassign conflict test
+    { id: 'booking_003', staffId: 'staff_002', serviceId: 'service_001', customerFirstName: 'Daniel', customerLastName: 'Brown', customerPhone: '07734567890', startTime: new Date('2026-06-02T09:00:00.000Z'), ref: 'C3D4E5F6', status: 'BOOKED' },
+    // staff_002 back to back: 11:00 skin fade(45m) then 12:00 hot towel(60m)
+    { id: 'booking_004', staffId: 'staff_002', serviceId: 'service_003', customerFirstName: 'Omar', customerLastName: 'Farooq', customerPhone: '07745678901', startTime: new Date('2026-06-02T11:00:00.000Z'), ref: 'D4E5F6G7', status: 'BOOKED' },
+    { id: 'booking_005', staffId: 'staff_002', serviceId: 'service_004', customerFirstName: 'Tariq', customerLastName: 'Hassan', customerPhone: '07756789012', startTime: new Date('2026-06-02T12:00:00.000Z'), ref: 'E5F6G7H8', status: 'BOOKED' },
+
+    // ── June 3 (Tuesday) ─────────────────────────────────────────
+    // staff_001 has bookings at 09:00 and 09:15 (back to back with no gap)
+    { id: 'booking_006', staffId: 'staff_001', serviceId: 'service_001', customerFirstName: 'Ryan', customerLastName: 'Peters', customerPhone: '07767890123', startTime: new Date('2026-06-03T09:00:00.000Z'), ref: 'F6G7H8I9', status: 'BOOKED' },
+    { id: 'booking_007', staffId: 'staff_001', serviceId: 'service_002', customerFirstName: 'Liam', customerLastName: 'Carter', customerPhone: '07778901234', startTime: new Date('2026-06-03T09:15:00.000Z'), ref: 'G7H8I9J0', status: 'BOOKED' },
+    // staff_003 works Saturday - booking for overlap test
+    { id: 'booking_008', staffId: 'staff_002', serviceId: 'service_001', customerFirstName: 'Noah', customerLastName: 'Singh', customerPhone: '07789012345', startTime: new Date('2026-06-03T09:00:00.000Z'), ref: 'H8I9J0K1', status: 'CANCELLED', cancelReason: 'Customer requested cancellation', cancelledAt: new Date('2026-06-03T08:00:00.000Z') },
+
+    // ── June 4 (Wednesday) ───────────────────────────────────────
+    { id: 'booking_009', staffId: 'staff_001', serviceId: 'service_003', customerFirstName: 'Ethan', customerLastName: 'Clarke', customerPhone: '07790123456', startTime: new Date('2026-06-04T10:00:00.000Z'), ref: 'I9J0K1L2', status: 'BOOKED' },
+    { id: 'booking_010', staffId: 'staff_002', serviceId: 'service_002', customerFirstName: 'Harry', customerLastName: 'Evans', customerPhone: '07701234567', startTime: new Date('2026-06-04T10:00:00.000Z'), ref: 'J0K1L2M3', status: 'BOOKED' },
+
+    // ── June 5 (Thursday) ────────────────────────────────────────
+    { id: 'booking_011', staffId: 'staff_001', serviceId: 'service_002', customerFirstName: 'Jack', customerLastName: 'Morris', customerPhone: '07712345670', startTime: new Date('2026-06-05T09:00:00.000Z'), ref: 'K1L2M3N4', status: 'BOOKED' },
+    { id: 'booking_012', staffId: 'staff_001', serviceId: 'service_001', customerFirstName: 'George', customerLastName: 'Baker', customerPhone: '07723456701', startTime: new Date('2026-06-05T09:30:00.000Z'), ref: 'L2M3N4O5', status: 'BOOKED' },
+    { id: 'booking_013', staffId: 'staff_002', serviceId: 'service_003', customerFirstName: 'Charlie', customerLastName: 'Hall', customerPhone: '07734567012', startTime: new Date('2026-06-05T14:00:00.000Z'), ref: 'M3N4O5P6', status: 'CANCELLED', cancelReason: 'No show', cancelledAt: new Date('2026-06-05T15:00:00.000Z') },
+
+    // ── June 6 (Friday) ──────────────────────────────────────────
+    { id: 'booking_014', staffId: 'staff_001', serviceId: 'service_004', customerFirstName: 'Aiden', customerLastName: 'Scott', customerPhone: '07745670123', startTime: new Date('2026-06-06T10:00:00.000Z'), ref: 'N4O5P6Q7', status: 'BOOKED' },
+    { id: 'booking_015', staffId: 'staff_002', serviceId: 'service_001', customerFirstName: 'Mason', customerLastName: 'Turner', customerPhone: '07756701234', startTime: new Date('2026-06-06T10:00:00.000Z'), ref: 'O5P6Q7R8', status: 'BOOKED' },
+
+    // ── June 7 (Saturday) - only staff_003 works ─────────────────
+    { id: 'booking_016', staffId: 'staff_003', serviceId: 'service_001', customerFirstName: 'Logan', customerLastName: 'White', customerPhone: '07767012345', startTime: new Date('2026-06-07T10:00:00.000Z'), ref: 'P6Q7R8S9', status: 'BOOKED' },
+    { id: 'booking_017', staffId: 'staff_003', serviceId: 'service_002', customerFirstName: 'Lucas', customerLastName: 'Green', customerPhone: '07778123456', startTime: new Date('2026-06-07T11:00:00.000Z'), ref: 'Q7R8S9T0', status: 'BOOKED' },
+
+    // ── June 9 (Monday) ──────────────────────────────────────────
+    { id: 'booking_018', staffId: 'staff_001', serviceId: 'service_001', customerFirstName: 'Oliver', customerLastName: 'King', customerPhone: '07789234567', startTime: new Date('2026-06-09T09:00:00.000Z'), ref: 'R8S9T0U1', status: 'BOOKED' },
+    { id: 'booking_019', staffId: 'staff_002', serviceId: 'service_002', customerFirstName: 'Sebastian', customerLastName: 'Adams', customerPhone: '07790345678', startTime: new Date('2026-06-09T09:00:00.000Z'), ref: 'S9T0U1V2', status: 'BOOKED' },
+
+    // ── June 10 (Tuesday) ────────────────────────────────────────
+    { id: 'booking_020', staffId: 'staff_001', serviceId: 'service_003', customerFirstName: 'Elijah', customerLastName: 'Lee', customerPhone: '07701456789', startTime: new Date('2026-06-10T11:00:00.000Z'), ref: 'T0U1V2W3', status: 'BOOKED' },
+    { id: 'booking_021', staffId: 'staff_002', serviceId: 'service_001', customerFirstName: 'Aaron', customerLastName: 'Khan', customerPhone: '07712356789', startTime: new Date('2026-06-10T11:00:00.000Z'), ref: 'U1V2W3X4', status: 'BOOKED' },
+
+    // ── June 11 (Wednesday) ──────────────────────────────────────
+    { id: 'booking_022', staffId: 'staff_001', serviceId: 'service_002', customerFirstName: 'Zain', customerLastName: 'Malik', customerPhone: '07723467890', startTime: new Date('2026-06-11T09:00:00.000Z'), ref: 'V2W3X4Y5', status: 'BOOKED' },
+    { id: 'booking_023', staffId: 'staff_001', serviceId: 'service_001', customerFirstName: 'Kai', customerLastName: 'Robinson', customerPhone: '07734578901', startTime: new Date('2026-06-11T09:30:00.000Z'), ref: 'W3X4Y5Z6', status: 'BOOKED' },
+
+    // ── June 12 (Thursday) ───────────────────────────────────────
+    { id: 'booking_024', staffId: 'staff_002', serviceId: 'service_004', customerFirstName: 'Tyler', customerLastName: 'Brooks', customerPhone: '07745689012', startTime: new Date('2026-06-12T14:00:00.000Z'), ref: 'X4Y5Z6A7', status: 'BOOKED' },
+    { id: 'booking_025', staffId: 'staff_003', serviceId: 'service_001', customerFirstName: 'Finn', customerLastName: 'Murphy', customerPhone: '07756790123', startTime: new Date('2026-06-13T10:00:00.000Z'), ref: 'Y5Z6A7B8', status: 'BOOKED' },
+
+    // ── June 16 (Monday) - future bookings ───────────────────────
+    { id: 'booking_026', staffId: 'staff_001', serviceId: 'service_001', customerFirstName: 'Marcus', customerLastName: 'Reid', customerPhone: '07712341234', startTime: new Date('2026-06-16T09:00:00.000Z'), ref: 'Z6A7B8C9', status: 'BOOKED' },
+    { id: 'booking_027', staffId: 'staff_002', serviceId: 'service_002', customerFirstName: 'Nathan', customerLastName: 'Cole', customerPhone: '07723452345', startTime: new Date('2026-06-16T10:00:00.000Z'), ref: 'A7B8C9D0', status: 'BOOKED' },
+
+    // ── June 17 (Tuesday) ────────────────────────────────────────
+    { id: 'booking_028', staffId: 'staff_001', serviceId: 'service_002', customerFirstName: 'Dylan', customerLastName: 'Shaw', customerPhone: '07734563456', startTime: new Date('2026-06-17T10:00:00.000Z'), ref: 'B8C9D0E1', status: 'BOOKED' },
+    { id: 'booking_029', staffId: 'staff_002', serviceId: 'service_003', customerFirstName: 'Leo', customerLastName: 'Fox', customerPhone: '07745674567', startTime: new Date('2026-06-17T10:00:00.000Z'), ref: 'C9D0E1F2', status: 'BOOKED' },
+
+    // ── June 30 (Tuesday) ────────────────────────────────────────
+    { id: 'booking_030', staffId: 'staff_001', serviceId: 'service_001', customerFirstName: 'Adam', customerLastName: 'West', customerPhone: '07756785678', startTime: new Date('2026-06-30T09:00:00.000Z'), ref: 'D0E1F2G3', status: 'BOOKED' },
+]
 
   for (const booking of bookings) {
     const service = await prisma.service.findUnique({ where: { id: booking.serviceId } });

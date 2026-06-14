@@ -21,5 +21,19 @@ export const bookingQuerySchema = z.object({
     staffId: z.string().optional()
 })
 
+// Update Booking Schema
+export const updateBookingSchema = z.object({
+    customerFirstName: z.string().min(3).optional(),
+    customerLastName: z.string().min(3).optional(),
+    customerPhone: z.string()
+        .min(10)
+        .max(13)
+        .regex(/^(\+44|0)[0-9]{9,10}$/)
+        .trim()
+        .optional(),
+        serviceId: z.string().min(1).optional()
+})
+
 export type CreateBooking = z.infer<typeof createBookingSchema>
 export type RetrieveBooking = z.infer<typeof bookingQuerySchema>
+export type UpdateBooking = z.infer<typeof updateBookingSchema>

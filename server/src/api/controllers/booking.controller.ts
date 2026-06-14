@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { getBookingById, getBookings, postBooking, cancelBooking as cancelBookingService, reassignBooking, fetchAvailableSlots } from "../services/booking.service";
-import { bookingQuerySchema, CreateBooking, createBookingSchema } from "../schemas/booking.schema";
+import { getBookingById, getBookings, postBooking, cancelBooking as cancelBookingService, reassignBooking, fetchAvailableSlots, updateBooking } from "../services/booking.service";
+import { bookingQuerySchema, CreateBooking, createBookingSchema, UpdateBooking, updateBookingSchema } from "../schemas/booking.schema";
 import { validateRequest } from "../../utils/validate";
 import { AuthRequest } from "../../middleware/authenticate";
 
@@ -48,6 +48,28 @@ export async function createBooking(req: AuthRequest, res: Response) {
     try { 
         const result = await postBooking(input, shopId)
         res.status(201).json(result)
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : "Error"
+        const knownErrors = ['STAFF_INACTIVE', 'SERVICE_INACTIVE', 'NO_SHIFT', 'SLOT_TAKEN', 'INVALID_REQUEST']
+        const status = knownErrors.includes(message) ? 409 : 500
+        res.status(status).json({ error: message })
+    }
+}
+
+export async function editBooking(req: AuthRequest, res: Response) {
+    const shopId = req.admin?.shopId
+    if (!shopId) {
+        res.status(401).json({ message: "Unauthorised" })
+        return
+    }
+    
+    const { id } = req.params
+    const input = validateRequest<UpdateBooking>(updateBookingSchema, req.body, res)
+    if (!input) return
+
+    try {
+        const result = await updateBooking(id, input)
+        res.status(200).json(result)
     } catch (error: unknown) {
         const message = error instanceof Error ? error.message : "Error"
         const knownErrors = ['STAFF_INACTIVE', 'SERVICE_INACTIVE', 'NO_SHIFT', 'SLOT_TAKEN', 'INVALID_REQUEST']
