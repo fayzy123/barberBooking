@@ -1,47 +1,27 @@
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import pageStyles from "./BookingDetailPage.module.css";
-import btnStyles from "../../shared/utils/buttons.module.css";
 import { useTopbar } from "../../layout/TopBarContext";
-import React, { useEffect, useState } from "react";
-import { useBookingById } from "./hooks/useBookingById";
+import btnStyles from "../../shared/utils/buttons.module.css";
 import { useStaff } from "../staff/hooks/useStaff";
-import { useServices } from "../services/hooks/useServices";
-import {
-  cancelBooking,
-  createBooking,
-  reassignBooking,
-} from "./booking.service";
-import { createBookingSchema } from "./booking.schema";
+import { cancelBooking, reassignBooking } from "./booking.service";
+import pageStyles from "./BookingDetailPage.module.css";
+import { useBookingById } from "./hooks/useBookingById";
 
 const BookingsDetailPage = () => {
   const { id } = useParams();
-  const isCreateMode = !id;
-
   const { setTopbar } = useTopbar();
+  const [selectedStaffId, setSelectedStaffId] = useState("");
   const { booking, loading, error } = useBookingById(id ?? "");
   const [actionError, setActionError] = useState<string | null>(null);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [cancelReason, setCancelReason] = useState("");
-  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const { staff } = useStaff();
-  const { service } = useServices();
   const navigate = useNavigate();
-
-  const [formData, setFormData] = useState({
-    customerFirstName: "",
-    customerLastName: "",
-    customerPhone: "",
-    serviceId: "",
-    staffId: "",
-    startTime: "",
-  });
 
   useEffect(() => {
     setTopbar({
-      title: isCreateMode ? "Create Booking" : "Booking Detail",
-      subtitle: isCreateMode
-        ? "Fill in the details below"
-        : `Ref: ${booking?.ref ?? id}`,
+      title: "Booking Detail",
+      subtitle: `Ref: ${booking?.ref ?? id}`,
       backButton: (
         <button
           className={btnStyles.btnGhost}
@@ -53,22 +33,9 @@ const BookingsDetailPage = () => {
     });
   }, [id, booking]);
 
-  useEffect(() => {
-    if (booking) {
-      setFormData({
-        customerFirstName: booking.customerFirstName,
-        customerLastName: booking.customerLastName,
-        customerPhone: booking.customerPhone,
-        serviceId: booking.serviceId,
-        staffId: booking.staffId,
-        startTime: booking.startTime.slice(0, 16),
-      });
-    }
-  }, [booking]);
-
   const handleReassign = async () => {
     try {
-      await reassignBooking(id!, formData.staffId);
+      await reassignBooking(id!, selectedStaffId);
       navigate("/bookings");
     } catch (err: any) {
       const serverMessage = err?.response?.data?.message;
@@ -93,68 +60,22 @@ const BookingsDetailPage = () => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const result = createBookingSchema.safeParse({
-      ...formData,
-      startTime: formData.startTime
-        ? new Date(formData.startTime).toISOString()
-        : "",
-    });
-
-    if (!result.success) {
-      const errors: Record<string, string> = {};
-      result.error.issues.forEach((err) => {
-        if (err.path[0]) {
-          errors[err.path[0] as string] = err.message;
-        }
-      });
-      setFieldErrors(errors);
-      return;
-    }
-
-    setFieldErrors({});
-    try {
-      await createBooking({
-        ...formData,
-        startTime: new Date(formData.startTime).toISOString(),
-      });
-      navigate("/bookings");
-    } catch (err) {
-      setActionError(
-        "Failed to create booking, please ensure all fields are filled in correctly",
-      );
-    }
-  };
-
   if (loading) return <div>Loading.. </div>;
   if (error) return <div>{error}</div>;
 
   return (
     <>
-      <form className={pageStyles.form} onSubmit={handleSubmit}>
+      <form className={pageStyles.form}>
         <label className={pageStyles.label} htmlFor="customerFirstName">
           Customer First Name
         </label>
         <input
           id="customerFirstName"
           type="text"
-          className={`${pageStyles.input} ${fieldErrors.customerFirstName ? pageStyles.inputError : ""}`}
-          value={formData.customerFirstName}
-          readOnly={!isCreateMode}
-          onChange={(e) =>
-            setFormData((prev) => ({
-              ...prev,
-              customerFirstName: e.target.value,
-            }))
-          }
+          className={pageStyles.input}
+          value={booking?.customerFirstName ?? ""}
+          readOnly
         />
-        {fieldErrors.customerFirstName && (
-          <p className={pageStyles.fieldError}>
-            {fieldErrors.customerFirstName}
-          </p>
-        )}
 
         <label className={pageStyles.label} htmlFor="customerLastName">
           Customer Last Name
@@ -162,21 +83,10 @@ const BookingsDetailPage = () => {
         <input
           id="customerLastName"
           type="text"
-          className={`${pageStyles.input} ${fieldErrors.customerLastName ? pageStyles.inputError : ""}`}
-          value={formData.customerLastName}
-          readOnly={!isCreateMode}
-          onChange={(e) =>
-            setFormData((prev) => ({
-              ...prev,
-              customerLastName: e.target.value,
-            }))
-          }
+          className={pageStyles.input}
+          value={booking?.customerLastName ?? ""}
+          readOnly
         />
-        {fieldErrors.customerLastName && (
-          <p className={pageStyles.fieldError}>
-            {fieldErrors.customerLastName}
-          </p>
-        )}
 
         <label className={pageStyles.label} htmlFor="phone">
           Customer phone
@@ -184,62 +94,41 @@ const BookingsDetailPage = () => {
         <input
           id="phone"
           type="tel"
-          className={`${pageStyles.input} ${fieldErrors.customerPhone ? pageStyles.inputError : ""}`}
-          value={formData.customerPhone}
-          readOnly={!isCreateMode}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, customerPhone: e.target.value }))
-          }
+          className={pageStyles.input}
+          value={booking?.customerPhone ?? ""}
+          readOnly
         />
-        {fieldErrors.customerPhone && (
-          <p className={pageStyles.fieldError}>{fieldErrors.customerPhone}</p>
-        )}
 
         <label className={pageStyles.label} htmlFor="service">
           Service
         </label>
-        <select
+        <input
           id="service"
-          value={formData.serviceId}
-          disabled={!isCreateMode}
-          className={`${pageStyles.input} ${fieldErrors.serviceId ? pageStyles.inputError : ""}`}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, serviceId: e.target.value }))
-          }
-        >
-          <option>Select a service</option>
-          {service.map((s) => (
-            <option key={s.id} value={s.id} className={pageStyles.dropdown}>
-              {s.name}
-            </option>
-          ))}
-        </select>
-        {fieldErrors.serviceId && (
-          <p className={pageStyles.fieldError}>{fieldErrors.serviceId}</p>
-        )}
+          type="text"
+          className={pageStyles.input}
+          value={booking?.Service?.name ?? ""}
+          readOnly
+        />
 
         <label className={pageStyles.label} htmlFor="staff">
           Staff
         </label>
         <select
           id="staff"
-          value={formData.staffId}
-          className={`${pageStyles.select} ${fieldErrors.staffId ? pageStyles.inputError : ""}`}
+          value={selectedStaffId}
+          className={pageStyles.select}
           onChange={(e) => {
             setActionError(null);
-            setFormData((prev) => ({ ...prev, staffId: e.target.value }));
+            setSelectedStaffId(e.target.value);
           }}
         >
-          <option> Select a staff member</option>
+          <option>Select a staff member</option>
           {staff.map((s) => (
             <option key={s.id} value={s.id}>
               {s.firstName} {s.lastName}
             </option>
           ))}
         </select>
-        {fieldErrors.staffId && (
-          <p className={pageStyles.fieldError}>{fieldErrors.staffId}</p>
-        )}
 
         <label className={pageStyles.label} htmlFor="startTime">
           Start Time
@@ -247,40 +136,29 @@ const BookingsDetailPage = () => {
         <input
           id="startTime"
           type="datetime-local"
-          value={formData.startTime}
-          readOnly={!isCreateMode}
-          className={`${pageStyles.input} ${fieldErrors.startTime ? pageStyles.inputError : ""}`}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, startTime: e.target.value }))
-          }
-        ></input>
-        {fieldErrors.startTime && (
-          <p className={pageStyles.fieldError}>{fieldErrors.startTime}</p>
-        )}
+          value={booking?.startTime.slice(0, 16) ?? ""}
+          className={pageStyles.input}
+          readOnly
+        />
+
         {actionError && <p className={pageStyles.actionError}>{actionError}</p>}
         <footer className={pageStyles.footer}>
-          {isCreateMode ? (
-            <button className={btnStyles.btnGold} type="submit">
-              Create Booking
+          <>
+            <button
+              className={btnStyles.btnBlue}
+              type="button"
+              onClick={handleReassign}
+            >
+              Reassign Staff
             </button>
-          ) : (
-            <>
-              <button
-                className={btnStyles.btnBlue}
-                type="button"
-                onClick={handleReassign}
-              >
-                Reassign Staff
-              </button>
-              <button
-                className={btnStyles.btnRed}
-                type="button"
-                onClick={() => setShowCancelModal(true)}
-              >
-                Cancel Booking
-              </button>
-            </>
-          )}
+            <button
+              className={btnStyles.btnRed}
+              type="button"
+              onClick={() => setShowCancelModal(true)}
+            >
+              Cancel Booking
+            </button>
+          </>
         </footer>
       </form>
       {showCancelModal && (

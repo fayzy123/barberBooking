@@ -333,12 +333,6 @@ async function validateBookingConstraints(
 
     const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
     const dayOfWeek = days[startTime.getDay()]
-
-    console.log('startTime:', startTime)
-    console.log('getDay():', startTime.getDay())
-    console.log('dayOfWeek:', dayOfWeek)
-    
-
     const shift = await prisma.shift.findFirst({
         where: { staffId, day: dayOfWeek, active: true }
     })
