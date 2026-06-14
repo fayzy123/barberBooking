@@ -48,9 +48,11 @@ export async function createBooking(req: AuthRequest, res: Response) {
     try { 
         const result = await postBooking(input, shopId)
         res.status(201).json(result)
-    } catch (error : unknown) {
-        const message = error instanceof Error ? error.message : "Error";
-        res.status(500).json({ message })
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : "Error"
+        const knownErrors = ['STAFF_INACTIVE', 'SERVICE_INACTIVE', 'NO_SHIFT', 'SLOT_TAKEN', 'INVALID_REQUEST']
+        const status = knownErrors.includes(message) ? 409 : 500
+        res.status(status).json({ error: message })
     }
 }
 
@@ -87,10 +89,11 @@ export async function reassignStaff(req: AuthRequest, res: Response) {
     try {
         const result = await reassignBooking(id, staffId);
         res.status(200).json(result);
-    } catch (error : unknown) {
+    } catch (error: unknown) {
         const message = error instanceof Error ? error.message : "Error"
-        const status = message === 'Booking not found' ? 404 : 500
-        res.status(status).json({message})
+        const knownErrors = ['STAFF_INACTIVE', 'SERVICE_INACTIVE', 'NO_SHIFT', 'SLOT_TAKEN', 'INVALID_REQUEST']
+        const status = knownErrors.includes(message) ? 409 : 500
+        res.status(status).json({ error: message })
     }
 }
 

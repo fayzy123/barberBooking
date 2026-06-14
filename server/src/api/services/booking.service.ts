@@ -68,37 +68,16 @@ export async function postBooking(input : CreateBooking, shopId: string) {
         where: { id: input.serviceId}
     })
 
-    if (!service) {
-        throw new Error('Service not found')
-    }
-
     const startTime = new Date(input.startTime)
     // Converts minutes to milliseconds
-    const endTime = new Date(startTime.getTime() + service.durationMinutes * 60 * 1000)
+    const endTime = new Date(startTime.getTime() + service!.durationMinutes * 60 * 1000)
 
     // Generate unique id and ref
     const id = createId()
     const ref = generateRef()
 
-    // Check for overlapping bookings
-    const overlappingBooking = await prisma.booking.findFirst({
-        where: {
-            staffId: input.staffId,
-            status: "BOOKED",
-            AND: [
-                { startTime: { lt: endTime }},
-                { endTime: { gt: startTime }}
-            ]
-        }
-    })
+   await validateBookingConstraints(input.staffId, input.serviceId, startTime, endTime)
 
-    if (overlappingBooking) {
-        throw new Error("Staff member already has a booking at this time")
-    }
-
-    // Check for availability against shift schedule
-    await checkStaffAvailibility(input.staffId, startTime, endTime)
-   
     return prisma.booking.create({ 
         data: {
             id,
@@ -146,13 +125,7 @@ export async function reassignBooking(id: string, staffId: string) {
         throw new Error("Booking has already been cancelled.")
     }
     
-    const staff = await prisma.staff.findUnique({
-        where: { id: staffId}
-    })
-
-    if (!staff) {
-        throw new Error("Staff member not found")
-    }
+    await validateBookingConstraints(staffId, booking.serviceId, booking.startTime, booking.endTime, id)
 
     return prisma.booking.update({ 
         where: { id },
@@ -308,32 +281,50 @@ export function generateSlots(
      return slots;
 }
 
-// Helper function to convert into minutes
-function toMinutes(time: string): number {
-    const [hours, mins] = time.split(':').map(Number)
-    return hours * 60 + mins
-}
+// Helper function to validate booking contraints
+async function validateBookingConstraints(
+    staffId: string,
+    serviceId: string,
+    startTime: Date,
+    endTime: Date,
+    excludeBookingId?: string
+) {
+    const [staff, service] = await Promise.all([
+        prisma.staff.findUnique({ where: { id: staffId } }),
+        prisma.service.findUnique({ where: { id: serviceId } })
+    ])
 
-// Helper function to check if staff is available
-async function checkStaffAvailibility(staffId: string, startTime: Date, endTime: Date) {
-    const dayMap: Record<number, string> = {
-        0: 'sun', 1: 'mon', 2: 'tue',
-        3: 'wed', 4: 'thu', 5: 'fri', 6: 'sat'
-    }
+    if (!staff) throw new Error('INVALID_REQUEST')
+    if (!staff.active) throw new Error('STAFF_INACTIVE')
 
-    const staff = await prisma.staff.findUnique({ where: { id: staffId } })
-    if (!staff) throw new Error("Staff member not found")
-    if (!staff.active) throw new Error("Staff member is not available at this time")
+    if (!service) throw new Error('INVALID_REQUEST')
+    if (!service.active) throw new Error('SERVICE_INACTIVE')
+
+    const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+    const dayOfWeek = days[startTime.getDay()]
+
+    console.log('startTime:', startTime)
+    console.log('getDay():', startTime.getDay())
+    console.log('dayOfWeek:', dayOfWeek)
     
+
     const shift = await prisma.shift.findFirst({
-        where: { staffId, day: dayMap[startTime.getDay()], active: true}
+        where: { staffId, day: dayOfWeek, active: true }
     })
 
-    if (!shift) throw new Error("Staff member is not available at this time")
-    const bookingStart = toMinutes(`${startTime.getHours()}:${startTime.getMinutes()}`)
-    const bookingEnd = toMinutes(`${endTime.getHours()}:${endTime.getMinutes()}`)
+    if (!shift) throw new Error('NO_SHIFT')
 
-    if (bookingStart < toMinutes(shift.startTime) || bookingEnd > toMinutes(shift.endTime)) {
-        throw new Error("Staff member is not available at this time")
-    }
+    const overlappingBooking = await prisma.booking.findFirst({
+        where: {
+            staffId,
+            status: 'BOOKED',
+            ...(excludeBookingId && { id: { not: excludeBookingId } }),
+            AND: [
+                { startTime: { lt: endTime } },
+                { endTime: { gt: startTime } }
+            ]
+        }
+    })
+
+    if (overlappingBooking) throw new Error('SLOT_TAKEN')
 }
