@@ -1,4 +1,5 @@
 import api from "../../shared/utils/api"
+import { UpdateBooking } from "./booking.schema";
 
 interface CreateBookingInput {
     customerFirstName: string;
@@ -21,5 +22,10 @@ export async function reassignBooking(id: string, staffId: string) {
 
 export async function createBooking(data: CreateBookingInput) {
     const response = await api.post(`/bookings/`, data)
+    return response.data
+}
+
+export async function updateBooking(id: string, input: UpdateBooking) {
+    const response = await api.patch(`/bookings/${id}`, input)
     return response.data
 }

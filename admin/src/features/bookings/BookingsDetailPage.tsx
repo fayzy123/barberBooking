@@ -3,19 +3,32 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useTopbar } from "../../layout/TopBarContext";
 import btnStyles from "../../shared/utils/buttons.module.css";
 import { useStaff } from "../staff/hooks/useStaff";
-import { cancelBooking, reassignBooking } from "./booking.service";
+import {
+  cancelBooking,
+  reassignBooking,
+  updateBooking,
+} from "./booking.service";
 import pageStyles from "./BookingDetailPage.module.css";
 import { useBookingById } from "./hooks/useBookingById";
+import { useServices } from "../services/hooks/useServices";
+import { getBookingErrorMessage } from "../../shared/utils/bookingErrors";
 
 const BookingsDetailPage = () => {
   const { id } = useParams();
   const { setTopbar } = useTopbar();
-  const [selectedStaffId, setSelectedStaffId] = useState("");
   const { booking, loading, error } = useBookingById(id ?? "");
   const [actionError, setActionError] = useState<string | null>(null);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [cancelReason, setCancelReason] = useState("");
   const { staff } = useStaff();
+  const { service } = useServices();
+  const [formData, setFormData] = useState({
+    customerFirstName: "",
+    customerLastName: "",
+    customerPhone: "",
+    serviceId: "",
+    staffId: "",
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,21 +46,17 @@ const BookingsDetailPage = () => {
     });
   }, [id, booking]);
 
-  const handleReassign = async () => {
-    try {
-      await reassignBooking(id!, selectedStaffId);
-      navigate("/bookings");
-    } catch (err: any) {
-      const serverMessage = err?.response?.data?.message;
-      if (serverMessage === "Booking has already been cancelled.") {
-        setActionError(
-          "This booking is already cancelled. Please create a new booking instead.",
-        );
-      } else {
-        setActionError("Failed to reassign booking. Please try again.");
-      }
+  useEffect(() => {
+    if (booking) {
+      setFormData({
+        customerFirstName: booking.customerFirstName,
+        customerLastName: booking.customerLastName,
+        customerPhone: booking.customerPhone,
+        serviceId: booking.serviceId,
+        staffId: booking.staffId,
+      });
     }
-  };
+  }, [booking]);
 
   const handleCancel = async () => {
     try {
@@ -57,6 +66,32 @@ const BookingsDetailPage = () => {
     } catch (err) {
       setActionError("Failed to cancel booking. Please try again.");
       setShowCancelModal(false);
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      if (formData.staffId !== booking?.staffId) {
+        await reassignBooking(id!, formData.staffId);
+      } // If any other fields changed, update booking
+      if (
+        formData.customerFirstName !== booking?.customerFirstName ||
+        formData.customerLastName !== booking?.customerLastName ||
+        formData.customerPhone !== booking?.customerPhone ||
+        formData.serviceId !== booking?.serviceId
+      ) {
+        await updateBooking(id!, {
+          customerFirstName: formData.customerFirstName,
+          customerLastName: formData.customerLastName,
+          customerPhone: formData.customerPhone,
+          serviceId: formData.serviceId,
+        });
+      }
+
+      navigate("/bookings");
+    } catch (err: any) {
+      const errorCode = err?.response?.data?.error;
+      setActionError(getBookingErrorMessage(errorCode));
     }
   };
 
@@ -73,8 +108,13 @@ const BookingsDetailPage = () => {
           id="customerFirstName"
           type="text"
           className={pageStyles.input}
-          value={booking?.customerFirstName ?? ""}
-          readOnly
+          value={formData.customerFirstName}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              customerFirstName: e.target.value,
+            }))
+          }
         />
 
         <label className={pageStyles.label} htmlFor="customerLastName">
@@ -84,8 +124,13 @@ const BookingsDetailPage = () => {
           id="customerLastName"
           type="text"
           className={pageStyles.input}
-          value={booking?.customerLastName ?? ""}
-          readOnly
+          value={formData.customerLastName}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              customerLastName: e.target.value,
+            }))
+          }
         />
 
         <label className={pageStyles.label} htmlFor="phone">
@@ -95,31 +140,45 @@ const BookingsDetailPage = () => {
           id="phone"
           type="tel"
           className={pageStyles.input}
-          value={booking?.customerPhone ?? ""}
-          readOnly
+          value={formData.customerPhone}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              customerPhone: e.target.value,
+            }))
+          }
         />
 
         <label className={pageStyles.label} htmlFor="service">
           Service
         </label>
-        <input
+        <select
           id="service"
-          type="text"
-          className={pageStyles.input}
-          value={booking?.Service?.name ?? ""}
-          readOnly
-        />
+          value={formData.serviceId}
+          className={pageStyles.select}
+          onChange={(e) => {
+            setActionError(null);
+            setFormData((prev) => ({ ...prev, serviceId: e.target.value }));
+          }}
+        >
+          <option>Select a service</option>
+          {service.map((s) => (
+            <option key={s.id} value={s.id}>
+              {s.name}: {s.durationMinutes} minutes
+            </option>
+          ))}
+        </select>
 
         <label className={pageStyles.label} htmlFor="staff">
           Staff
         </label>
         <select
           id="staff"
-          value={selectedStaffId}
+          value={formData.staffId}
           className={pageStyles.select}
           onChange={(e) => {
             setActionError(null);
-            setSelectedStaffId(e.target.value);
+            setFormData((prev) => ({ ...prev, staffId: e.target.value }));
           }}
         >
           <option>Select a staff member</option>
@@ -145,11 +204,11 @@ const BookingsDetailPage = () => {
         <footer className={pageStyles.footer}>
           <>
             <button
-              className={btnStyles.btnBlue}
+              className={btnStyles.btnGold}
               type="button"
-              onClick={handleReassign}
+              onClick={handleSave}
             >
-              Reassign Staff
+              Save Changes
             </button>
             <button
               className={btnStyles.btnRed}

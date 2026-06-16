@@ -8,12 +8,14 @@ import { useStaff } from "../staff/hooks/useStaff";
 import { useAvailableSlots } from "./hooks/useAvailableSlots";
 import { createBookingSchema } from "./booking.schema";
 import { createBooking } from "./booking.service";
+import { useShop } from "../shop/hooks/useShop";
 
 const CreateBookingPage = () => {
   const { setTopbar } = useTopbar();
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const steps = ["Service", "Staff & Time", "Customer", "Confirm"];
+  const { shop } = useShop();
   const { service } = useServices();
   const { staff } = useStaff();
 
@@ -25,6 +27,7 @@ const CreateBookingPage = () => {
     selectedStaffId,
     selectedServiceId,
     selectedDate,
+    shop?.bookAheadDays ?? 30,
   );
   const [customerFirstName, setCustomerFirstName] = useState("");
   const [customerLastName, setCustomerLastName] = useState("");
@@ -60,7 +63,7 @@ const CreateBookingPage = () => {
     if (currentStep === 1 && !selectedServiceId) return;
     if (
       currentStep === 2 &&
-      (!selectedStaffId || !selectedDate || !selectedSlot)
+      (!selectedStaffId || !selectedDate || !selectedSlot || slotsError)
     )
       return;
     if (currentStep === 3) {
@@ -70,7 +73,7 @@ const CreateBookingPage = () => {
         customerPhone,
         serviceId: selectedServiceId,
         staffId: selectedStaffId,
-        startTime: `${selectedDate}T${selectedSlot}:00.000Z`,
+        startTime: `${selectedDate}T${selectedSlot}:00`,
       });
 
       if (!result.success) {
@@ -325,6 +328,9 @@ const CreateBookingPage = () => {
               <dd className={styles.confirmValue}>{customerPhone}</dd>
             </div>
           </dl>
+          {currentStep === 4 && submitError && (
+            <p className={styles.slotsError}>{submitError}</p>
+          )}
         </section>
       )}
       <footer className={styles.wizardFooter}>

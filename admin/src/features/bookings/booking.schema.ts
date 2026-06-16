@@ -13,4 +13,7 @@ export const createBookingSchema = z.object ({
     startTime: z.string().min(1, "Please select a time")
 })
 
+export const updateBookingSchema = createBookingSchema.omit({ startTime: true }).partial()
+
+export type UpdateBooking = z.infer<typeof updateBookingSchema>
 export type CreateBooking = z.infer<typeof createBookingSchema>
