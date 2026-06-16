@@ -16,6 +16,7 @@ const app = express()
 
 const allowedOrigins = [
   'http://localhost:5173',
+  'http://localhost:5175',
   process.env.ADMIN_URL,
 ].filter(Boolean) as string[]
 

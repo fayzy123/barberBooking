@@ -283,7 +283,6 @@ export function generateSlots(
     const closeTime = new Date(`${date}T${shopCloseTime}:00`)
     const effectiveEndTime = shiftEndTime < closeTime ? shiftEndTime : closeTime;
 
-
      while (current < effectiveEndTime) {
         const slotEnd = new Date(current)
         slotEnd.setMinutes(slotEnd.getMinutes() + serviceDuration)
