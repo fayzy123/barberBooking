@@ -278,9 +278,9 @@ export function generateSlots(
     const slots: string[] = []
     const now = new Date()
     const isToday = new Date(date).toDateString() === now.toDateString()
-    const current = new Date(`${date}T${shiftStart}`)
-    const closeTime = new Date(`${date}T${shopCloseTime}`)
-    const shiftEndTime = new Date(`${date}T${shiftEnd}`)
+    const current = new Date(`${date}T${shiftStart}:00`)
+    const shiftEndTime = new Date(`${date}T${shiftEnd}:00`)
+    const closeTime = new Date(`${date}T${shopCloseTime}:00`)
     const effectiveEndTime = shiftEndTime < closeTime ? shiftEndTime : closeTime;
 
 

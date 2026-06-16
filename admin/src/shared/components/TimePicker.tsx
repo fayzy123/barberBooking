@@ -1,26 +1,19 @@
+import { useShop } from "../../features/shop/hooks/useShop";
 import styles from "./TimePicker.module.css";
 
 interface TimePickerProps {
   value: string;
   onChange: (value: string) => void;
-  min?: string;
-  max?: string;
   disabled?: boolean;
 }
 
 const MINUTES = ["00", "15", "30", "45"];
 
-// TODO: Phase 5: fetch min/max from shop settings instead of hardcoded values
-const TimePicker = ({
-  value,
-  onChange,
-  min = "09",
-  max = "21",
-  disabled = false,
-}: TimePickerProps) => {
+const TimePicker = ({ value, onChange, disabled = false }: TimePickerProps) => {
+  const { shop } = useShop();
   const [hourStr, minuteStr] = value.split(":");
-  const minHour = parseInt(min);
-  const maxHour = parseInt(max);
+  const minHour = parseInt(shop?.openTime?.split(":")[0] ?? "00");
+  const maxHour = parseInt(shop?.closeTime?.split(":")[0] ?? "23");
 
   const hours = Array.from({ length: maxHour - minHour + 1 }, (_, i) =>
     String(minHour + i).padStart(2, "0"),

@@ -10,6 +10,7 @@ import btnStyles from "../../../shared/utils/buttons.module.css";
 import { Shift, Staff } from "../staff.types";
 import styles from "./AvailabilityGrid.module.css";
 import Toggle from "./Toggle";
+import { useShop } from "../../shop/hooks/useShop";
 
 interface StaffAvailabilityGrid {
   staff: Staff;
@@ -37,6 +38,7 @@ const AvailabilityGrid = forwardRef<
   AvailabilityGridHandle,
   StaffAvailabilityGrid
 >(({ staff, staffActive, onShiftChange, onActiveDaysChange }, ref) => {
+  const { shop } = useShop();
   const [shifts, setShifts] = useState<Omit<Shift, "id" | "staffId">[]>(
     DAYS.map((day) => {
       const existing = staff.shifts?.find((s) => s.day === day);
