@@ -83,8 +83,8 @@ const StaffDetailPage = () => {
             onActiveDaysChange={handleActiveDaysChange}
           />
           <p className={styles.hint}>
-            Break duration is currently fixed at 1 hour from break start time.
-            No bookings will be taken from 1 hour of break start time.
+            Break duration is defaulted to maximum of 60 minutes, you may select
+            the dropdown to adjust break length.
           </p>
           {saveError && <p className={styles.saveError}>{saveError}</p>}
           {saveSuccess && <p className={styles.saveSuccess}>Schedule Saved!</p>}

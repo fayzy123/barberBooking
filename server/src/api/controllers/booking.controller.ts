@@ -50,7 +50,7 @@ export async function createBooking(req: AuthRequest, res: Response) {
         res.status(201).json(result)
     } catch (error: unknown) {
         const message = error instanceof Error ? error.message : "Error"
-        const knownErrors = ['STAFF_INACTIVE', 'SERVICE_INACTIVE', 'NO_SHIFT', 'SLOT_TAKEN', 'INVALID_REQUEST']
+        const knownErrors = ['STAFF_INACTIVE', 'SERVICE_INACTIVE', 'NO_SHIFT', 'DURING_BREAK', 'SLOT_TAKEN', 'INVALID_REQUEST']
         const status = knownErrors.includes(message) ? 409 : 500
         res.status(status).json({ error: message })
     }
@@ -72,7 +72,7 @@ export async function editBooking(req: AuthRequest, res: Response) {
         res.status(200).json(result)
     } catch (error: unknown) {
         const message = error instanceof Error ? error.message : "Error"
-        const knownErrors = ['STAFF_INACTIVE', 'SERVICE_INACTIVE', 'NO_SHIFT', 'SLOT_TAKEN', 'INVALID_REQUEST']
+        const knownErrors = ['STAFF_INACTIVE', 'SERVICE_INACTIVE', 'NO_SHIFT', 'DURING_BREAK', 'SLOT_TAKEN', 'INVALID_REQUEST']
         const status = knownErrors.includes(message) ? 409 : 500
         res.status(status).json({ error: message })
     }
@@ -113,7 +113,7 @@ export async function reassignStaff(req: AuthRequest, res: Response) {
         res.status(200).json(result);
     } catch (error: unknown) {
         const message = error instanceof Error ? error.message : "Error"
-        const knownErrors = ['STAFF_INACTIVE', 'SERVICE_INACTIVE', 'NO_SHIFT', 'SLOT_TAKEN', 'INVALID_REQUEST']
+        const knownErrors = ['STAFF_INACTIVE', 'SERVICE_INACTIVE', 'NO_SHIFT', 'DURING_BREAK', 'SLOT_TAKEN', 'INVALID_REQUEST']
         const status = knownErrors.includes(message) ? 409 : 500
         res.status(status).json({ error: message })
     }

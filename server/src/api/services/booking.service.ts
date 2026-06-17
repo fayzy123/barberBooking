@@ -275,8 +275,8 @@ export function generateSlots(
     serviceDuration: number,
     existingBookings: { startTime: Date; endTime: Date}[],
     shopCloseTime: string,
-    breakStart?: string | null,
-    breakDuration?: number | null,
+    breakStart?: string | null | undefined,
+    breakDuration?: number | null | undefined,
 ): string[] {
 
     const slots: string[] = []
@@ -286,10 +286,6 @@ export function generateSlots(
     const shiftEndTime = new Date(`${date}T${shiftEnd}:00`)
     const closeTime = new Date(`${date}T${shopCloseTime}:00`)
     const effectiveEndTime = shiftEndTime < closeTime ? shiftEndTime : closeTime;
-    const breakStartTime = breakStart ? new Date(`${date}T${breakStart}`) : null
-    const breakEndTime = breakStart 
-    ? new Date(new Date(`${date}T${breakStart}`).getTime() + (breakDuration ?? 60) * 60 * 1000) 
-    : null
      
     while (current < effectiveEndTime) {
         const slotEnd = new Date(current)
@@ -310,8 +306,7 @@ export function generateSlots(
             current < b.endTime && slotEnd > b.startTime
         )
 
-        const isDuringBreak = breakStartTime && breakEndTime &&
-        current < breakEndTime && slotEnd > breakStartTime
+        const isDuringBreak = overlapsBreak(current, slotEnd, breakStart, breakDuration, date)
 
         if (!isOverlapping && !isDuringBreak) {
             slots.push(current.toTimeString().slice(0, 5))
@@ -348,6 +343,11 @@ async function validateBookingConstraints(
     })
 
     if (!shift) throw new Error('NO_SHIFT')
+    
+    const dateStr = startTime.toISOString().slice(0, 10)
+    if (overlapsBreak(startTime, endTime, shift.breakStart, shift.breakDuration, dateStr)) {
+        throw new Error('DURING_BREAK')
+    }
 
     const overlappingBooking = await prisma.booking.findFirst({
         where: {
@@ -362,4 +362,20 @@ async function validateBookingConstraints(
     })
 
     if (overlappingBooking) throw new Error('SLOT_TAKEN')
+}
+
+// Helper function to check if staff is on break
+function overlapsBreak(
+    windowStart: Date,
+    windowEnd: Date,
+    breakStart: string | null | undefined,
+    breakDuration: number | null | undefined,
+    dateStr: string
+): boolean {
+    if (!breakStart) return false
+
+    const breakStartTime = new Date(`${dateStr}T${breakStart}:00`)
+    const breakEndTime = new Date(breakStartTime.getTime() + (breakDuration ?? 60) * 60 * 1000)
+
+    return windowStart < breakEndTime && windowEnd > breakStartTime
 }

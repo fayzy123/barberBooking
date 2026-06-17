@@ -3,6 +3,7 @@ export function getBookingErrorMessage(error: string, bookAheadDays?: number): s
         STAFF_INACTIVE: "This staff member is currently unavailable to take any bookings",
         NO_SHIFT: "This staff member is off shift on the date selected, please choose another date or staff member",
         NO_SLOTS: "There are no available slots on this date, please choose another date or staff member",
+        DURING_BREAK: "This time overlaps the staff member's break. Please choose a different slot",
         PAST_DATE: "You selected a date in the past, please choose a future date",
         OUT_OF_RANGE: `Bookings can only be made up to ${bookAheadDays ?? 30} days in advance, please choose an earlier date`,
         INVALID_REQUEST: "An unknown error occurred, please try again or contact your system administrator",
