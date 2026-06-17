@@ -4,3 +4,11 @@
     padding: 22px 28px;
     background: var(--bg);
 }
+
+.pagination {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
