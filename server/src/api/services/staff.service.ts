@@ -83,6 +83,21 @@ export async function deleteStaff(id: string) {
         throw new Error("No staff member found")
     }
 
+     const existingBookings = await prisma.booking.findFirst({
+        where: { 
+            staffId: id,
+            status: 'BOOKED'
+        }
+    })
+
+    if (existingBookings) {
+        throw new Error("Cannot delete staff member with existing bookings, you need to cancel all of this staff members bookings first.")
+    }
+
+    await prisma.booking.deleteMany({
+        where: { staffId: id, status: 'CANCELLED'}
+    })
+
     await prisma.staff.delete({
         where: { id }
     })

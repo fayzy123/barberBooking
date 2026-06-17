@@ -14,6 +14,7 @@ const BookingsTable = ({ bookings }: BookingsTableProps) => {
       <table className={styles.table}>
         <thead>
           <tr>
+            <th>Date</th>
             <th>Time</th>
             <th>Duration</th>
             <th>Customer</th>
@@ -33,6 +34,13 @@ const BookingsTable = ({ bookings }: BookingsTableProps) => {
               }}
               className={b.status === "CANCELLED" ? styles.cancelledRow : ""}
             >
+              <td className={styles.primary}>
+                {new Date(b.startTime).toLocaleDateString("en-GB", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                })}
+              </td>
               <td className={styles.primary}>
                 {new Date(b.startTime).toLocaleTimeString("en-GB", {
                   hour: "2-digit",
