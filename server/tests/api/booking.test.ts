@@ -18,6 +18,39 @@ const validToken = jwt.sign(
 )
 
 beforeEach(async () => {
+    // Delete any bookings created during tests (non-seed bookings)
+    await prisma.booking.deleteMany({
+        where: {
+            id: { notIn: [
+                'booking_001', 'booking_002', 'booking_003', 'booking_004', 'booking_005',
+                'booking_006', 'booking_007', 'booking_008', 'booking_009', 'booking_010',
+                'booking_011', 'booking_012', 'booking_013', 'booking_014', 'booking_015',
+                'booking_016', 'booking_017', 'booking_018', 'booking_019', 'booking_020',
+                'booking_021', 'booking_022', 'booking_023', 'booking_024', 'booking_025',
+                'booking_026', 'booking_027', 'booking_028', 'booking_029', 'booking_030',
+            ]}
+        }
+    })
+    // Reset shifts for all staff
+    const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+    for (const staffId of ['staff_001', 'staff_002', 'staff_003']) {
+        await prisma.shift.deleteMany({ where: { staffId } })
+        await prisma.shift.createMany({
+            data: days.map(day => ({
+                id: `${staffId}_${day}`,
+                staffId,
+                day,
+                startTime: '09:00',
+                endTime: '17:00',
+                breakStart: null,
+                breakDuration: null,
+                active: day !== 'sun',
+                updatedAt: new Date()
+            }))
+        })
+    }
+
+    // Reset bookings
     await prisma.booking.update({
         where: { id: 'booking_001' },
         data: { 
@@ -94,7 +127,7 @@ describe('POST /api/admin/bookings', () => {
                 staffId: 'staff_001',
                 startTime: '2026-06-30T11:00:00.000Z' // staff_001 free here
             })
-
+        console.log(res.body)
         expect(res.status).toBe(201)
     })
 })
