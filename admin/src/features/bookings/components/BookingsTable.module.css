@@ -74,16 +74,16 @@
 }
 
 .cancelledRow {
-    opacity: 0.5;
     cursor: not-allowed !important;
 }
 
 .cancelledRow td {
+    color: var(--t3) !important;
     text-decoration: line-through;
 }
 
-.cancelledRow:hover td {
-    background: transparent !important;
+.cancelledRow .statusCell {
+    text-decoration: none;
 }
 
 .ref {

@@ -57,7 +57,7 @@ const BookingsTable = ({ bookings }: BookingsTableProps) => {
               <td className={styles.primary}>
                 {b.Staff.firstName} {b.Staff.lastName}
               </td>
-              <td>
+              <td className={styles.statusCell}>
                 <span
                   className={
                     b.status === "BOOKED" ? styles.badgeGreen : styles.badgeRed
