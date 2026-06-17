@@ -1,6 +1,7 @@
+import { LogOut } from "lucide-react";
+import { useAuth } from "../features/auth/AuthContext";
 import { getDatePill } from "../shared/utils/date";
 import styles from "./Topbar.module.css";
-import { useAuth } from "../features/auth/AuthContext";
 
 interface TopbarProp {
   title: string;
@@ -26,7 +27,7 @@ const Topbar = ({ title, subtitle, actions, backButton }: TopbarProp) => {
         {actions}
         <span className={styles.pill}>{getDatePill()}</span>
         <button className={styles.signOut} onClick={logout}>
-          Sign out
+          <LogOut size={15} />
         </button>
       </div>
     </header>

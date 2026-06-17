@@ -39,13 +39,13 @@
 }
 
 .btnRed {
-  background: var(--red);
-  color: black;
-  border: 1px solid var(--red);
+  background: transparent;
+  color: var(--red);
+  border: 1px solid var(--red-bd);
   padding: 7px 13px;
   border-radius: 6px;
   font-size: 0.8125rem;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -55,7 +55,7 @@
 }
 
 .btnRed:hover {
-  filter: brightness(1.1);
+  background: var(--red-bg);
 }
 
 .btnGhost {
