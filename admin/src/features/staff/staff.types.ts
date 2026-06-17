@@ -5,6 +5,7 @@ export interface Shift {
     startTime: string;
     endTime: string;
     breakStart: string | null;
+    breakDuration: number | null;
     active: boolean;
 }
 

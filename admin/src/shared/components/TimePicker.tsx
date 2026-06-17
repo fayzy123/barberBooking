@@ -5,15 +5,27 @@ interface TimePickerProps {
   value: string;
   onChange: (value: string) => void;
   disabled?: boolean;
+  min?: string;
+  max?: string;
 }
 
 const MINUTES = ["00", "15", "30", "45"];
 
-const TimePicker = ({ value, onChange, disabled = false }: TimePickerProps) => {
+const TimePicker = ({
+  value,
+  onChange,
+  disabled = false,
+  min,
+  max,
+}: TimePickerProps) => {
   const { shop } = useShop();
   const [hourStr, minuteStr] = value.split(":");
-  const minHour = parseInt(shop?.openTime?.split(":")[0] ?? "00");
-  const maxHour = parseInt(shop?.closeTime?.split(":")[0] ?? "23");
+  const minHour = parseInt(
+    min?.split(":")[0] ?? shop?.openTime?.split(":")[0] ?? "00",
+  );
+  const maxHour = parseInt(
+    max?.split(":")[0] ?? shop?.closeTime?.split(":")[0] ?? "23",
+  );
 
   const hours = Array.from({ length: maxHour - minHour + 1 }, (_, i) =>
     String(minHour + i).padStart(2, "0"),

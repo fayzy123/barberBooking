@@ -271,8 +271,10 @@ export function generateSlots(
     slotInterval: number,
     leadTime: number,
     serviceDuration: number,
-    existingBookings: { startTime: Date; endTime: Date}[], 
-    shopCloseTime: string
+    existingBookings: { startTime: Date; endTime: Date}[],
+    shopCloseTime: string,
+    breakStart?: string | null,
+    breakDuration?: number | null,
 ): string[] {
 
     const slots: string[] = []
@@ -282,8 +284,12 @@ export function generateSlots(
     const shiftEndTime = new Date(`${date}T${shiftEnd}:00`)
     const closeTime = new Date(`${date}T${shopCloseTime}:00`)
     const effectiveEndTime = shiftEndTime < closeTime ? shiftEndTime : closeTime;
-
-     while (current < effectiveEndTime) {
+    const breakStartTime = breakStart ? new Date(`${date}T${breakStart}`) : null
+    const breakEndTime = breakStart 
+    ? new Date(new Date(`${date}T${breakStart}`).getTime() + (breakDuration ?? 60) * 60 * 1000) 
+    : null
+     
+    while (current < effectiveEndTime) {
         const slotEnd = new Date(current)
         slotEnd.setMinutes(slotEnd.getMinutes() + serviceDuration)
 
@@ -297,12 +303,15 @@ export function generateSlots(
             continue
         }
 
-        // Skip if overlaps existing booking
+        // Skip if overlaps existing booking or staff is on break
         const isOverlapping = existingBookings.some(b =>
             current < b.endTime && slotEnd > b.startTime
         )
 
-        if (!isOverlapping) {
+        const isDuringBreak = breakStartTime && breakEndTime &&
+        current < breakEndTime && slotEnd > breakStartTime
+
+        if (!isOverlapping && !isDuringBreak) {
             slots.push(current.toTimeString().slice(0, 5))
         }
 

@@ -13,6 +13,7 @@ export const shiftsSchema = z.object ({
     startTime: z.string().min(1, "Please select a time"),
     endTime: z.string().min(1, "Please select an end time"),
     breakStart: z.string().min(1, "Please select a break time").nullable().optional(),
+    breakDuration: z.number().min(15, "Break must be at least 15 minutes").max(120, "Break cannot exceed 2 hours").nullable().optional(),
     active: z.boolean().default(true)
 })
 

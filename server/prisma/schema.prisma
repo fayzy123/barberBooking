@@ -95,15 +95,16 @@ model Staff {
 }
 
 model Shift {
-  id         String   @id
-  staffId    String
-  day        String
-  startTime  String
-  endTime    String
-  breakStart String?
-  active     Boolean  @default(true)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime
+  id            String   @id
+  staffId       String
+  day           String
+  startTime     String
+  endTime       String
+  breakStart    String?
+  breakDuration Int?
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime
 
   Staff Staff @relation(fields: [staffId], references: [id], onDelete: Cascade)
 

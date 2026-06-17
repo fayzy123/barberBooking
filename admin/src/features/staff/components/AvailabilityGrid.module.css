@@ -40,3 +40,30 @@
     letter-spacing: 0.5px;
     white-space: nowrap;
 }
+
+.breakCell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+}
+
+.breakDuration {
+    background: var(--s2);
+    border: 1px solid var(--b2);
+    border-radius: 6px;
+    padding: 4px 6px;
+    font-size: 0.75rem;
+    color: var(--t2);
+    cursor: pointer;
+    outline: none;
+}
+
+.breakDuration:focus {
+    border-color: var(--gold-lo);
+}
+
+.breakDuration option {
+    background: var(--s2);
+    color: var(--t1);
+}

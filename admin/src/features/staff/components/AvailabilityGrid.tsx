@@ -10,7 +10,6 @@ import btnStyles from "../../../shared/utils/buttons.module.css";
 import { Shift, Staff } from "../staff.types";
 import styles from "./AvailabilityGrid.module.css";
 import Toggle from "./Toggle";
-import { useShop } from "../../shop/hooks/useShop";
 
 interface StaffAvailabilityGrid {
   staff: Staff;
@@ -38,7 +37,6 @@ const AvailabilityGrid = forwardRef<
   AvailabilityGridHandle,
   StaffAvailabilityGrid
 >(({ staff, staffActive, onShiftChange, onActiveDaysChange }, ref) => {
-  const { shop } = useShop();
   const [shifts, setShifts] = useState<Omit<Shift, "id" | "staffId">[]>(
     DAYS.map((day) => {
       const existing = staff.shifts?.find((s) => s.day === day);
@@ -48,6 +46,7 @@ const AvailabilityGrid = forwardRef<
           startTime: "09:00",
           endTime: "17:00",
           breakStart: null,
+          breakDuration: null,
           active: false,
         }
       );
@@ -149,25 +148,54 @@ const AvailabilityGrid = forwardRef<
                   {shift.active ? (
                     shift.breakStart !== null ? (
                       <>
-                        <TimePicker
-                          value={shift.breakStart}
-                          onChange={(val) =>
-                            updateShifts((prev) =>
-                              prev.map((s) =>
-                                s.day === shift.day
-                                  ? { ...s, breakStart: val }
-                                  : s,
-                              ),
-                            )
-                          }
-                        />
+                        <span className={styles.breakCell}>
+                          <TimePicker
+                            value={shift.breakStart}
+                            min={shift.startTime}
+                            max={shift.endTime}
+                            onChange={(val) =>
+                              updateShifts((prev) =>
+                                prev.map((s) =>
+                                  s.day === shift.day
+                                    ? { ...s, breakStart: val }
+                                    : s,
+                                ),
+                              )
+                            }
+                          />
+                          <select
+                            className={styles.breakDuration}
+                            value={shift.breakDuration ?? 60}
+                            onChange={(e) =>
+                              updateShifts((prev) =>
+                                prev.map((s) =>
+                                  s.day === shift.day
+                                    ? {
+                                        ...s,
+                                        breakDuration: Number(e.target.value),
+                                      }
+                                    : s,
+                                ),
+                              )
+                            }
+                          >
+                            <option value={15}>15 min</option>
+                            <option value={30}>30 min</option>
+                            <option value={45}>45 min</option>
+                            <option value={60}>60 min</option>
+                          </select>
+                        </span>
                         <button
                           className={btnStyles.btnAddTime}
                           onClick={() =>
                             updateShifts((prev) =>
                               prev.map((s) =>
                                 s.day === shift.day
-                                  ? { ...s, breakStart: null }
+                                  ? {
+                                      ...s,
+                                      breakStart: null,
+                                      breakDuration: null,
+                                    }
                                   : s,
                               ),
                             )
@@ -183,7 +211,11 @@ const AvailabilityGrid = forwardRef<
                           updateShifts((prev) =>
                             prev.map((s) =>
                               s.day === shift.day
-                                ? { ...s, breakStart: "12:00" }
+                                ? {
+                                    ...s,
+                                    breakStart: "12:00",
+                                    breakDuration: 60,
+                                  }
                                 : s,
                             ),
                           )
