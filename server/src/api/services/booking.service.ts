@@ -253,7 +253,9 @@ export async function fetchAvailableSlots(
         shop.leadTime, 
         service.durationMinutes, 
         existingBookings,
-        shop.closeTime
+        shop.closeTime,
+        shift.breakStart,
+        shift.breakDuration
     )
     
     if (slots.length === 0) {
