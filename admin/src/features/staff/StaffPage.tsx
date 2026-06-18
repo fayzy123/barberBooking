@@ -23,7 +23,7 @@ export const StaffPage = () => {
   useEffect(() => {
     setTopbar({
       title: "Staff Management",
-      subtitle: "Manage your staff",
+      subtitle: "Manage Your Staff",
       actions: (
         <button
           className={btnStyles.btnGold}
@@ -108,7 +108,7 @@ export const StaffPage = () => {
                 type="text"
                 value={newFirstName}
                 onChange={(e) => setNewFirstName(e.target.value)}
-                placeholder="Enter staff firstname"
+                placeholder="Enter Staff Forename"
                 className={styles.input}
               />
               {fieldErrors.firstName && (
@@ -122,7 +122,7 @@ export const StaffPage = () => {
                 type="text"
                 value={newLastName}
                 onChange={(e) => setNewLastName(e.target.value)}
-                placeholder="Enter staff lastname"
+                placeholder="Enter Staff Lastname"
                 className={styles.input}
               />
               {fieldErrors.lastName && (

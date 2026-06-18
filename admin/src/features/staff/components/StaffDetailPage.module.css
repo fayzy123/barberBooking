@@ -12,13 +12,6 @@
     align-items: start;
 }
 
-.hint {
-    font-size: 0.8rem;
-    color: var(--t2);
-    margin-top: 6px;
-    text-align: center;
-}
-
 .saveError {
     font-size: 0.75rem;
     color: var(--red);

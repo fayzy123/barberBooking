@@ -239,7 +239,7 @@ const CreateBookingPage = () => {
           <fieldset className={styles.customerForm}>
             <p className={styles.sectionLabel}>CUSTOMER DETAILS</p>
             <label htmlFor="customerFirstName" className={styles.customerLabel}>
-              Customer firstname
+              Customer First Name
             </label>
             <input
               id="customerFirstName"
@@ -257,7 +257,7 @@ const CreateBookingPage = () => {
             )}
 
             <label htmlFor="customerLastName" className={styles.customerLabel}>
-              Customer lastname
+              Customer Last Name
             </label>
             <input
               id="customerLastName"

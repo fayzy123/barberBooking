@@ -128,7 +128,7 @@ const ShopPage = () => {
                     id="openTime"
                     type="time"
                     value={formData.openTime}
-                    className={styles.inputSmall}
+                    className={styles.timeInput}
                     onChange={(e) => {
                       setSaveSuccess(false);
                       setFormData((prev) => ({
@@ -146,7 +146,7 @@ const ShopPage = () => {
                     id="closeTime"
                     type="time"
                     value={formData.closeTime}
-                    className={styles.inputSmall}
+                    className={styles.timeInput}
                     onChange={(e) => {
                       setSaveSuccess(false);
                       setFormData((prev) => ({
@@ -167,12 +167,14 @@ const ShopPage = () => {
               <h3>Booking Rules</h3>
               <div className={styles.fieldGroup}>
                 <label htmlFor="slotInterval" className={styles.label}>
-                  Slot Interval
+                  Slot Interval (Minutes)
                 </label>
                 <input
                   id="slotInterval"
                   type="number"
-                  value={formData.slotInterval}
+                  value={
+                    formData.slotInterval === 0 ? "" : formData.slotInterval
+                  }
                   className={styles.inputSmall}
                   onChange={(e) => {
                     setSaveSuccess(false);
@@ -192,12 +194,12 @@ const ShopPage = () => {
               </div>
               <div className={styles.fieldGroup}>
                 <label htmlFor="leadTime" className={styles.label}>
-                  Lead Time
+                  Lead Time (Minutes)
                 </label>
                 <input
                   id="leadTime"
                   type="number"
-                  value={formData.leadTime}
+                  value={formData.leadTime === 0 ? "" : formData.leadTime}
                   className={styles.inputSmall}
                   onChange={(e) => {
                     setSaveSuccess(false);
@@ -217,12 +219,14 @@ const ShopPage = () => {
               </div>
               <div className={styles.fieldGroup}>
                 <label htmlFor="bookAheadDays" className={styles.label}>
-                  Book Ahead Limit
+                  Book Ahead Limit (Days)
                 </label>
                 <input
                   id="bookAheadDays"
                   type="number"
-                  value={formData.bookAheadDays}
+                  value={
+                    formData.bookAheadDays === 0 ? "" : formData.bookAheadDays
+                  }
                   className={styles.inputSmall}
                   onChange={(e) => {
                     setSaveSuccess(false);

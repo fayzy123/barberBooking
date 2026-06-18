@@ -87,10 +87,7 @@ const StaffDetailPage = () => {
             onShiftChange={() => setSaveSuccess(false)}
             onActiveDaysChange={handleActiveDaysChange}
           />
-          <p className={styles.hint}>
-            Break duration is defaulted to maximum of 60 minutes, you may select
-            the dropdown to adjust break length.
-          </p>
+
           {saveError && <p className={styles.saveError}>{saveError}</p>}
           {saveSuccess && <p className={styles.saveSuccess}>Schedule Saved!</p>}
         </article>
