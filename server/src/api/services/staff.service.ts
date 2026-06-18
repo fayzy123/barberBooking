@@ -62,6 +62,12 @@ export async function updateShifts(id: string, input: UpdateShifts) {
         throw new Error("No staff member found")
     }
 
+    const shop = await prisma.shop.findFirst({ where: { id: staff.shopId }})
+    if (!shop) throw new Error("No shop found")
+    
+    const invalidShift = input.shifts.find(s => s.active && s.endTime > shop.closeTime)
+    if (invalidShift) throw new Error("SHIFT_EXCEEDS_CLOSE")
+
     await prisma.shift.deleteMany({
         where: { staffId: id}
     })

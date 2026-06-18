@@ -108,8 +108,9 @@ export async function editShift(req: AuthRequest, res: Response) {
         const result = await updateShifts(id, input);
         res.status(200).json(result);
     } catch (error) {
-         const message = error instanceof Error ? error.message : "Error";
-        const status = message === "No staff member found" ? 404 : 500
+        const message = error instanceof Error ? error.message : "Error";
+        const knownErrors = ['SHIFT_EXCEEDS_CLOSE']
+        const status = message === "No staff member found" ? 404 : knownErrors.includes(message) ? 409 : 500
         res.status(status).json({ message })
     }
 }

@@ -54,8 +54,13 @@ const StaffDetailPage = () => {
       setSaveSuccess(false);
       await updateShifts(staff!.id, shifts);
       setSaveSuccess(true);
-    } catch (err) {
-      setSaveError("Failed to save schedule. Please try again.");
+    } catch (err: any) {
+      const message = err?.response?.data?.message;
+      if (message === "SHIFT_EXCEEDS_CLOSE") {
+        setSaveError("One or more shifts end after the shop's closing time.");
+      } else {
+        setSaveError("Failed to save schedule. Please try again.");
+      }
     } finally {
       setSaving(false);
     }
