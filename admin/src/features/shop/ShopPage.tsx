@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { useTopbar } from "../../layout/TopBarContext";
+import ErrorState from "../../shared/components/ErrorState";
+import LoadingState from "../../shared/components/LoadingState";
+import badgeStyles from "../../shared/utils/badges.module.css";
 import btnStyles from "../../shared/utils/buttons.module.css";
 import { useServices } from "../services/hooks/useServices";
 import { Service } from "../services/service.types";
@@ -7,12 +10,11 @@ import ServiceModal from "../services/ServiceModal";
 import { useShop } from "./hooks/useShop";
 import { EditShop, editShopSettingSchema } from "./shop.schema";
 import { updateShop } from "./shop.service";
-import styles from "./ShopPage.module.css";
-import badgeStyles from "../../shared/utils/badges.module.css";
 import { useShopContext } from "./ShopContext";
+import styles from "./ShopPage.module.css";
 
 const ShopPage = () => {
-  const { shop, refetch: refetchShop } = useShop();
+  const { shop, loading, error, refetch: refetchShop } = useShop();
   const { setShopName } = useShopContext();
   const { service, refetch: refetchServices } = useServices();
   const { setTopbar } = useTopbar();
@@ -77,6 +79,9 @@ const ShopPage = () => {
       setSaveError(message);
     }
   };
+
+  if (loading) return <LoadingState message="Loading shop settings..." />;
+  if (error) return <ErrorState message={error} />;
 
   return (
     <>

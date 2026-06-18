@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTopbar } from "../../layout/TopBarContext";
+import badgeStyles from "../../shared/utils/badges.module.css";
 import btnStyles from "../../shared/utils/buttons.module.css";
 import Toggle from "./components/Toggle";
 import { useStaff } from "./hooks/useStaff";
 import { createStaffSchema } from "./staff.schema";
 import { createStaff } from "./staff.service";
 import styles from "./StaffPage.module.css";
-import badgeStyles from "../../shared/utils/badges.module.css";
+import LoadingState from "../../shared/components/LoadingState";
+import ErrorState from "../../shared/components/ErrorState";
 
 export const StaffPage = () => {
-  const { staff, refetch } = useStaff();
+  const { staff, loading, error, refetch } = useStaff();
   const [showModal, setShowModal] = useState(false);
   const [newFirstName, setNewFirstName] = useState("");
   const [newLastName, setNewLastName] = useState("");
@@ -66,6 +68,9 @@ export const StaffPage = () => {
       setModalError("Failed to create staff member. Please try again");
     }
   };
+
+  if (loading) return <LoadingState message="Loading staff..." />;
+  if (error) return <ErrorState message={error} />;
 
   return (
     <>
