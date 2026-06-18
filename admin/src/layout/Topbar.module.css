@@ -46,7 +46,7 @@
 
 .signOut {
  padding: 8px 10px;
-  border-radius: 6px;
+  border-radius:20px;
   font-size: 0.75rem;
   cursor: pointer;
   color: var(--red);

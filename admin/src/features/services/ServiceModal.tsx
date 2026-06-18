@@ -16,7 +16,6 @@ const ServiceModal = ({ onClose, onSuccess, service }: ServiceModalProps) => {
   const isEditMode = !!service;
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [modalError, setModalError] = useState<string | null>(null);
-  const [saveSuccess, setSaveSuccess] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     durationMinutes: 0,
@@ -55,8 +54,8 @@ const ServiceModal = ({ onClose, onSuccess, service }: ServiceModalProps) => {
       } else {
         await createService(formData);
       }
-      setSaveSuccess(true);
       onSuccess();
+      onClose();
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Failed to save service";
@@ -76,7 +75,6 @@ const ServiceModal = ({ onClose, onSuccess, service }: ServiceModalProps) => {
             className={styles.input}
             value={formData.name}
             onChange={(e) => {
-              setSaveSuccess(false);
               setFormData((prev) => ({ ...prev, name: e.target.value }));
             }}
           ></input>
@@ -90,7 +88,6 @@ const ServiceModal = ({ onClose, onSuccess, service }: ServiceModalProps) => {
             className={styles.input}
             value={formData.durationMinutes}
             onChange={(e) => {
-              setSaveSuccess(false);
               setFormData((prev) => ({
                 ...prev,
                 durationMinutes: Number(e.target.value),
@@ -110,9 +107,7 @@ const ServiceModal = ({ onClose, onSuccess, service }: ServiceModalProps) => {
             />
           </div>
 
-          {saveSuccess && (
-            <p className={styles.saveSuccess}>Settings saved successfully!</p>
-          )}
+          {modalError && <p className={styles.fieldError}>{modalError}</p>}
 
           <footer>
             <button

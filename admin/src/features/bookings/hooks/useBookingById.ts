@@ -1,28 +1,7 @@
-import { useEffect, useState } from "react";
+import { useFetch } from "../../../shared/hooks/useFetch";
 import { Booking } from "../booking.types";
-import api from "../../../shared/utils/api";
 
 export function useBookingById(id : string) {
-    const [booking, setBookings] = useState<Booking | null>(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        if (!id) return;
-        const fetchBookingsById = async() => {
-            try {
-                setLoading(true);
-                const response = await api.get(`/bookings/${id}`)
-                setBookings(response.data);
-            } catch (err) {
-                setError("Failed to fetch bookings")
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchBookingsById();
-    },[id]);
-
-    
-    return { booking, loading, error };
+    const { data, loading, error, refetch } = useFetch<Booking>(id ? `/bookings/${id}`: '', "Failed to fetch booking")
+    return { booking: data, loading, error, refetch }
 }
