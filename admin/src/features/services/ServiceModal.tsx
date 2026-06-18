@@ -86,11 +86,14 @@ const ServiceModal = ({ onClose, onSuccess, service }: ServiceModalProps) => {
             id="durationMinutes"
             type="number"
             className={styles.input}
-            value={formData.durationMinutes}
+            value={
+              formData.durationMinutes === 0 ? "" : formData.durationMinutes
+            }
             onChange={(e) => {
               setFormData((prev) => ({
                 ...prev,
-                durationMinutes: Number(e.target.value),
+                durationMinutes:
+                  e.target.value === "" ? 0 : Number(e.target.value),
               }));
             }}
           ></input>
