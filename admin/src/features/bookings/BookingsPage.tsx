@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
-import { useTopbar } from "../../layout/TopBarContext";
-import { Filters } from "./booking.types";
-import { useBookingStats } from "./hooks/useBookingStats";
-import { useBookings } from "./hooks/useBooking";
-import StatCards from "./components/StatCards";
-import pageStyles from "./BookingsPage.module.css";
-import btnStyles from "../../shared/utils/buttons.module.css";
-import FilterBar from "./components/FilterBar";
-import { useStaff } from "../staff/hooks/useStaff";
-import { useFilteredBookings } from "./hooks/useFilteredBookings";
-import BookingsTable from "./components/BookingsTable";
 import { useNavigate } from "react-router-dom";
-import { fi } from "zod/v4/locales";
+import { useTopbar } from "../../layout/TopBarContext";
+import btnStyles from "../../shared/utils/buttons.module.css";
+import { useStaff } from "../staff/hooks/useStaff";
+import { Filters } from "./booking.types";
+import pageStyles from "./BookingsPage.module.css";
+import BookingsTable from "./components/BookingsTable";
+import FilterBar from "./components/FilterBar";
+import StatCards from "./components/StatCards";
+import { useBookings } from "./hooks/useBooking";
+import { useBookingStats } from "./hooks/useBookingStats";
+import { useFilteredBookings } from "./hooks/useFilteredBookings";
 
 const BookingsPage = () => {
-  const { bookings } = useBookings();
+  const { bookings, loading, error } = useBookings();
   const {
     todayFormatted,
     totalToday,
@@ -81,7 +80,11 @@ const BookingsPage = () => {
         staff={staff}
         onFilterChange={handleFilterChange}
       />
-      <BookingsTable bookings={paginatedBookings} />
+      <BookingsTable
+        bookings={paginatedBookings}
+        loading={loading}
+        error={error}
+      />
       <footer className={pageStyles.pagination}>
         <button
           className={btnStyles.btnGhost}

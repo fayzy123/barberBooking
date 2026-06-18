@@ -48,6 +48,14 @@
     background: var(--s2);
 }
 
+.loadingRow {
+    cursor: default !important;
+}
+
+.loadingRow:hover td {
+    background: transparent !important;
+}
+
 .primary {
     color: var(--t1) !important;
     font-weight: 500;

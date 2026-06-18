@@ -1,0 +1,29 @@
+.wrapper {
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--s2);
+    border: 1px solid var(--b1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 11px;
+    color: var(--t3);
+}
+
+.title {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--t2);
+    margin-bottom: 3px;
+}
+
+.message {
+    font-size: 0.75rem;
+    color: var(--t3);
+}
