@@ -6,7 +6,10 @@ import styles from "./StaffDetailPage.module.css";
 import { useStaffById } from "../hooks/useStaffById";
 import StaffProfileForm from "./StaffProfileForm";
 import AvailabilityGrid, { AvailabilityGridHandle } from "./AvailabilityGrid";
-import { updateShifts } from "../staff.service";
+import { updateShifts, updateStaff } from "../staff.service";
+import { createStaffSchema } from "../staff.schema";
+import LoadingState from "../../../shared/components/LoadingState";
+import ErrorState from "../../../shared/components/ErrorState";
 
 const StaffDetailPage = () => {
   const { id } = useParams();
@@ -16,16 +19,22 @@ const StaffDetailPage = () => {
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
-  const [staffActive, setStaffActive] = useState(staff?.active ?? true);
+  const [profileData, setProfileData] = useState({
+    firstName: "",
+    lastName: "",
+    active: true,
+  });
 
   const navigate = useNavigate();
 
-  const handleActiveDaysChange = (hasActiveDays: boolean) => {
-    setStaffActive(hasActiveDays);
-  };
-
   useEffect(() => {
-    if (staff) setStaffActive(staff.active);
+    if (staff) {
+      setProfileData({
+        firstName: staff.firstName,
+        lastName: staff.lastName,
+        active: staff.active,
+      });
+    }
   }, [staff]);
 
   useEffect(() => {
@@ -33,7 +42,7 @@ const StaffDetailPage = () => {
       title:
         `${staff?.firstName ?? ""} ${staff?.lastName ?? ""}`.trim() ||
         "Staff Member",
-      subtitle: staff?.active ? "Active" : "Inactive",
+      subtitle: profileData.active ? "Active" : "Inactive",
       backButton: (
         <button
           className={btnStyles.btnGhost}
@@ -43,31 +52,45 @@ const StaffDetailPage = () => {
         </button>
       ),
     });
-  }, [id, staff, navigate]);
+  }, [id, staff, profileData, navigate]);
 
   const handleSave = async () => {
     const shifts = gridRef.current?.getShifts();
     if (!shifts) return;
+
+    const result = createStaffSchema.safeParse(profileData);
+    if (!result.success) {
+      const errors: Record<string, string> = {};
+      result.error.issues.forEach((err) => {
+        if (err.path[0]) errors[err.path[0] as string] = err.message;
+      });
+      setSaveError(Object.values(errors)[0]);
+      return;
+    }
+
     try {
       setSaving(true);
       setSaveError(null);
       setSaveSuccess(false);
-      await updateShifts(staff!.id, shifts);
+      await Promise.all([
+        updateStaff(
+          staff!.id,
+          profileData.firstName,
+          profileData.lastName,
+          profileData.active,
+        ),
+        updateShifts(staff!.id, shifts),
+      ]);
       setSaveSuccess(true);
-    } catch (err: any) {
-      const message = err?.response?.data?.message;
-      if (message === "SHIFT_EXCEEDS_CLOSE") {
-        setSaveError("One or more shifts end after the shop's closing time.");
-      } else {
-        setSaveError("Failed to save schedule. Please try again.");
-      }
+    } catch (err) {
+      setSaveError("Failed to save changes. Please try again.");
     } finally {
       setSaving(false);
     }
   };
 
-  if (loading) return <p>Loading..</p>;
-  if (error) return <p>{error}</p>;
+  if (loading) return <LoadingState message="Loading staff member..." />;
+  if (error) return <ErrorState message={error} />;
   if (!staff) return <p>Staff member not found</p>;
 
   return (
@@ -75,21 +98,26 @@ const StaffDetailPage = () => {
       <section className={styles.layout}>
         <StaffProfileForm
           staff={staff}
-          active={staffActive}
-          onActiveChange={setStaffActive}
+          profileData={profileData}
+          onChange={(field, value) => {
+            setProfileData((prev) => ({ ...prev, [field]: value }));
+            setSaveSuccess(false);
+          }}
         />
 
         <article>
           <AvailabilityGrid
             ref={gridRef}
             staff={staff}
-            staffActive={staffActive}
+            staffActive={profileData.active}
             onShiftChange={() => setSaveSuccess(false)}
-            onActiveDaysChange={handleActiveDaysChange}
+            onActiveDaysChange={(hasActiveDays) =>
+              setProfileData((prev) => ({ ...prev, active: hasActiveDays }))
+            }
           />
 
           {saveError && <p className={styles.saveError}>{saveError}</p>}
-          {saveSuccess && <p className={styles.saveSuccess}>Schedule Saved!</p>}
+          {saveSuccess && <p className={styles.saveSuccess}>Changes Saved!</p>}
         </article>
       </section>
 
@@ -99,7 +127,7 @@ const StaffDetailPage = () => {
           onClick={handleSave}
           disabled={saving}
         >
-          {saving ? "Saving..." : "Save Schedule"}
+          {saving ? "Saving..." : "Save Changes"}
         </button>
       </footer>
     </main>

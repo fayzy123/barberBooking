@@ -107,13 +107,13 @@ export const StaffPage = () => {
               <h3>Create a new staff member</h3>
 
               <label htmlFor="firstName">
-                Please enter name of staff member
+                Please enter first name of staff member
               </label>
               <input
                 type="text"
                 value={newFirstName}
                 onChange={(e) => setNewFirstName(e.target.value)}
-                placeholder="Enter Staff Forename"
+                placeholder="First name"
                 className={styles.input}
               />
               {fieldErrors.firstName && (
@@ -121,13 +121,13 @@ export const StaffPage = () => {
               )}
 
               <label htmlFor="lastName">
-                Please enter name of staff member
+                Please enter last name of staff member
               </label>
               <input
                 type="text"
                 value={newLastName}
                 onChange={(e) => setNewLastName(e.target.value)}
-                placeholder="Enter Staff Lastname"
+                placeholder="Last name"
                 className={styles.input}
               />
               {fieldErrors.lastName && (

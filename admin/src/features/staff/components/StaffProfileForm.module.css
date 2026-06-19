@@ -57,18 +57,8 @@
     color: var(--red);
 }
 
-.success {
-    font-size: 0.75rem;
-    color: var(--grn);
-}
-
 .footer {
     margin-top: 4px;
-}
-
-.saveBtn {
-    width: 100%;
-    justify-content: center;
 }
 
 .overlay {
