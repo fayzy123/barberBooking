@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import Toggle from "../staff/components/Toggle";
-import { Service } from "./service.types";
 import btnStyles from "../../shared/utils/buttons.module.css";
+import Toggle from "../staff/components/Toggle";
 import styles from "./ServiceModal.module.css";
-import { createServiceSchema, updateServiceSchema } from "./service.schema";
 import { createService, updateService } from "./barberService.service";
+import { createServiceSchema, updateServiceSchema } from "./service.schema";
+import { Service } from "./service.types";
 
 interface ServiceModalProps {
   onClose: () => void;
@@ -81,7 +81,7 @@ const ServiceModal = ({ onClose, onSuccess, service }: ServiceModalProps) => {
           {fieldErrors.name && (
             <p className={styles.fieldError}>{fieldErrors.name}</p>
           )}
-          <label htmlFor="durationMinutes">Duration</label>
+          <label htmlFor="durationMinutes">Duration (Minutes)</label>
           <input
             id="durationMinutes"
             type="number"

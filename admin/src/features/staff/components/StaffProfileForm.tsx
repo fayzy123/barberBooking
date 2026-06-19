@@ -63,7 +63,7 @@ const StaffProfileForm = ({
       const message = err?.response?.data?.message;
       setDeleteError(
         message ??
-          "Failed to delete staff member, please ensure all of this staff members bookings are deleted and try again",
+          "Failed to delete staff member, please ensure all of this staff members bookings are cancelled and try again",
       );
     }
   };

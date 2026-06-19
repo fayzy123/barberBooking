@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { AuthRequest } from "../../middleware/authenticate";
-import { createService, retrieveServices, updateService } from "../services/barberService.service";
+import { createService, deleteService, retrieveServices, updateService } from "../services/barberService.service";
 import { validateRequest } from "../../utils/validate";
 import { CreateService, createServiceSchema, UpdateService, updateServiceSchema } from "../schemas/barberService.schema";
 
@@ -57,6 +57,25 @@ export async function editService(req: AuthRequest, res: Response) {
     } catch (error : unknown) {
         const message = error instanceof Error ? error.message : "Error"
         const status = message === 'Service not found' ? 404 : 500
+        res.status(status).json({ message })
+    }
+}
+
+export async function removeService(req: AuthRequest, res: Response) {
+     const shopId = req.admin?.shopId
+    if (!shopId) {
+        res.status(401).json({ message: "Unauthorised" })
+        return;
+    }
+
+    const { id } = req.params;
+
+    try {
+        await deleteService(id);
+        res.status(200).json({ message: "Service deleted successfully"});
+    } catch (error) {
+        const message = error instanceof Error ? error.message : "Error";
+        const status = message === "Service could not be found" ? 404 : 500
         res.status(status).json({ message })
     }
 }
