@@ -31,6 +31,7 @@ beforeEach(async () => {
             ]}
         }
     })
+
     // Reset shifts for all staff
     const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
     for (const staffId of ['staff_001', 'staff_002', 'staff_003']) {
@@ -51,6 +52,11 @@ beforeEach(async () => {
     }
 
     // Reset bookings
+    await prisma.service.update({
+        where: { id: 'service_003' },
+        data: { name: 'Skin Fade', durationMinutes: 45, active: true }
+    })
+
     await prisma.booking.update({
         where: { id: 'booking_001' },
         data: { 
@@ -59,16 +65,53 @@ beforeEach(async () => {
             customerFirstName: 'James',
             customerLastName: 'Wilson',
             customerPhone: '07712345678',
-            endTime: new Date('2026-06-02T09:15:00.000Z')
+            startTime: new Date('2026-06-02T09:00:00.000Z'),
+            endTime: new Date('2026-06-02T09:15:00.000Z'),
+            status: 'BOOKED',
+            cancelledAt: null,
+            cancelReason: null
+        }
+    })
+    await prisma.booking.update({
+        where: { id: 'booking_002' },
+        data: {
+            staffId: 'staff_001',
+            serviceId: 'service_002',
+            startTime: new Date('2026-06-02T09:30:00.000Z'),
+            endTime: new Date('2026-06-02T10:00:00.000Z'),
+            status: 'BOOKED',
+            cancelledAt: null,
+            cancelReason: null
+        }
+    })
+    await prisma.booking.update({
+        where: { id: 'booking_003' },
+        data: {
+            staffId: 'staff_002',
+            startTime: new Date('2026-06-02T09:00:00.000Z'),
+            endTime: new Date('2026-06-02T09:15:00.000Z'),
+            status: 'BOOKED',
+            cancelledAt: null,
+            cancelReason: null
         }
     })
     await prisma.booking.update({
         where: { id: 'booking_018' },
-        data: { staffId: 'staff_001' }
+        data: { 
+            staffId: 'staff_001',
+            status: 'BOOKED',
+            cancelledAt: null,
+            cancelReason: null
+        }
     })
     await prisma.booking.update({
         where: { id: 'booking_030' },
-        data: { staffId: 'staff_001' }
+        data: { 
+            staffId: 'staff_001',
+            status: 'BOOKED',
+            cancelledAt: null,
+            cancelReason: null
+        }
     })
 })
 
@@ -91,7 +134,7 @@ describe('POST /api/admin/bookings', () => {
                 customerPhone: '07712345678',
                 serviceId: 'service_001',
                 staffId: 'staff_001',
-                startTime: '2026-09-06T10:00:00.000Z' // Sunday, staff_001 doesnt work Sundays
+                startTime: '2026-09-06T10:00:00.000Z'
             })
         
         expect(res.status).toBe(409)
@@ -108,7 +151,7 @@ describe('POST /api/admin/bookings', () => {
                 customerPhone: '07712345678',
                 serviceId: 'service_001',
                 staffId: 'staff_001',
-                startTime: '2026-06-02T09:00:00.000Z' // booking_001 already here
+                startTime: '2026-06-02T09:00:00.000Z'
             })
 
         expect(res.status).toBe(409)
@@ -125,9 +168,9 @@ describe('POST /api/admin/bookings', () => {
                 customerPhone: '07712345678',
                 serviceId: 'service_001',
                 staffId: 'staff_001',
-                startTime: '2026-06-30T11:00:00.000Z' // staff_001 free here
+                startTime: '2026-06-30T11:00:00.000Z'
             })
-        console.log(res.body)
+
         expect(res.status).toBe(201)
     })
 })
@@ -136,11 +179,21 @@ describe('PATCH /api/admin/bookings/:id/reassign', () => {
     beforeEach(async () => {
         await prisma.booking.update({
             where: { id: 'booking_001' },
-            data: { staffId: 'staff_001' }
+            data: { 
+                staffId: 'staff_001',
+                status: 'BOOKED',
+                cancelledAt: null,
+                cancelReason: null
+            }
         })
         await prisma.booking.update({
             where: { id: 'booking_030' },
-            data: { staffId: 'staff_001' }
+            data: { 
+                staffId: 'staff_001',
+                status: 'BOOKED',
+                cancelledAt: null,
+                cancelReason: null
+            }
         })
     })
 
@@ -153,8 +206,6 @@ describe('PATCH /api/admin/bookings/:id/reassign', () => {
     })
 
     it('should return 409 if new staff already has a booking at that time', async () => {
-        // booking_001 staff_001 at 09:00 June 2
-        // booking_003 staff_002 at 09:00 June 2 — conflict
         const res = await request(app)
             .patch('/api/admin/bookings/booking_001/reassign')
             .set('Authorization', `Bearer ${validToken}`)
@@ -165,7 +216,6 @@ describe('PATCH /api/admin/bookings/:id/reassign', () => {
     })
 
     it('should return 409 if new staff has no shift on that day', async () => {
-        // booking_016 is Saturday June 7 — staff_001 doesnt work Saturdays
         const res = await request(app)
             .patch('/api/admin/bookings/booking_016/reassign')
             .set('Authorization', `Bearer ${validToken}`)
@@ -176,7 +226,6 @@ describe('PATCH /api/admin/bookings/:id/reassign', () => {
     })
 
     it('should return 200 if reassignment is valid', async () => {
-        // booking_030 staff_001 at 09:00 June 30 — staff_002 is free here
         const res = await request(app)
             .patch('/api/admin/bookings/booking_030/reassign')
             .set('Authorization', `Bearer ${validToken}`)
@@ -196,7 +245,23 @@ describe('PATCH /api/admin/bookings/:id', () => {
                 customerFirstName: 'James',
                 customerLastName: 'Wilson',
                 customerPhone: '07712345678',
-                endTime: new Date('2026-06-02T09:15:00.000Z')
+                startTime: new Date('2026-06-02T09:00:00.000Z'),
+                endTime: new Date('2026-06-02T09:15:00.000Z'),
+                status: 'BOOKED',
+                cancelledAt: null,
+                cancelReason: null
+            }
+        })
+        await prisma.booking.update({
+            where: { id: 'booking_002' },
+            data: {
+                staffId: 'staff_001',
+                serviceId: 'service_002',
+                startTime: new Date('2026-06-02T09:30:00.000Z'),
+                endTime: new Date('2026-06-02T10:00:00.000Z'),
+                status: 'BOOKED',
+                cancelledAt: null,
+                cancelReason: null
             }
         })
     })
@@ -221,8 +286,6 @@ describe('PATCH /api/admin/bookings/:id', () => {
     })
 
     it('should return 200 and update service with no overlap', async () => {
-        // booking_001 at 09:00, booking_002 at 09:30
-        // changing to service_002 (30 mins) -> ends at 09:30 exactly, no overlap
         const res = await request(app)
             .patch('/api/admin/bookings/booking_001')
             .set('Authorization', `Bearer ${validToken}`)
@@ -233,13 +296,17 @@ describe('PATCH /api/admin/bookings/:id', () => {
     })
 
     it('should return 409 if service change causes overlap', async () => {
-        // booking_001 at 09:00, booking_002 at 09:30
-        // changing to service_003 (45 mins) -> ends at 09:45, overlaps booking_002
+        const b1 = await prisma.booking.findUnique({ where: { id: 'booking_001' }})
+        const b2 = await prisma.booking.findUnique({ where: { id: 'booking_002' }})
+        console.log('b1:', b1?.serviceId, b1?.startTime, b1?.endTime)
+        console.log('b2:', b2?.serviceId, b2?.startTime, b2?.endTime)
+        
         const res = await request(app)
             .patch('/api/admin/bookings/booking_001')
             .set('Authorization', `Bearer ${validToken}`)
             .send({ serviceId: 'service_003' })
         
+        console.log('res:', res.body)
         expect(res.status).toBe(409)
         expect(res.body.error).toBe('SLOT_TAKEN')
     })
