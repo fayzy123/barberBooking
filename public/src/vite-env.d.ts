@@ -1,6 +1,11 @@
 /// <reference types="vite/client" />
 
-declare module '*.module.css' {
-  const classes: Record<string, string>
-  export default classes
+// Allow importing GLB/GLTF as URL strings via ?url suffix
+declare module '*.glb' {
+  const src: string
+  export default src
+}
+declare module '*.gltf' {
+  const src: string
+  export default src
 }
