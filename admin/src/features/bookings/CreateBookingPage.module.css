@@ -90,6 +90,20 @@
     flex: 1;
     max-height: 400px;
     overflow-y: auto;
+    padding-right: 8px;
+}
+
+.rightCol::-webkit-scrollbar {
+    width: 8px;
+}
+
+.rightCol::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.rightCol::-webkit-scrollbar-thumb {
+    background: var(--b3);
+    border-radius: 4px;
 }
 
 /* ── Lists ──────────────────────────────────────── */

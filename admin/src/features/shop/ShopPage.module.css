@@ -186,3 +186,37 @@
     flex-shrink: 0;
 }
 
+.deleteBtn {
+    border-radius: 20px;
+    font-size: 0.7rem;
+    padding: 3px 9px;
+}
+
+.deleteErrorWrapper {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--red-bg);
+    border: 1px solid var(--red-bd);
+    border-radius: var(--rad);
+    margin-bottom: 8px;
+}
+
+.deleteError {
+    font-size: 0.75rem;
+    color: var(--red);
+}
+
+.deleteErrorDismiss {
+    background: none;
+    border: none;
+    color: var(--red);
+    font-size: 0.8rem;
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 0;
+    line-height: 1;
+    margin-top: 2px;
+}

@@ -41,3 +41,30 @@ export async function updateService (id: string, input: UpdateService) {
         }
     })
 }
+
+export async function deleteService(id: string) {
+    const service = await prisma.service.findUnique({
+        where: { id }
+    })
+
+    if (!service) throw new Error ("Service could not be found");
+
+    const existingBookings = await prisma.booking.findFirst({
+        where: { 
+            serviceId: id,
+            status: 'BOOKED'
+        }
+    })
+
+    if (existingBookings) {
+        throw new Error("Cannot delete service with existing bookings, you need to cancel all of the bookings that use this service first.")
+    }
+
+    await prisma.booking.deleteMany({
+        where: { serviceId: id, status: 'CANCELLED'}
+    })
+
+    await prisma.service.delete({
+        where: { id }
+    })
+}

@@ -10,3 +10,8 @@ export async function updateService(id: string, data: UpdateService) {
     const response = await api.patch(`/services/${id}`, data)
     return response.data
 }
+
+export async function deleteService(id: string) {
+    const response = await api.delete(`/services/${id}`)
+    return response.data
+}

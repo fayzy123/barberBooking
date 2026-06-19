@@ -12,6 +12,7 @@ import { EditShop, editShopSettingSchema } from "./shop.schema";
 import { updateShop } from "./shop.service";
 import { useShopContext } from "./ShopContext";
 import styles from "./ShopPage.module.css";
+import { deleteService } from "../services/barberService.service";
 
 const ShopPage = () => {
   const { shop, loading, error, refetch: refetchShop } = useShop();
@@ -23,6 +24,7 @@ const ShopPage = () => {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [showServiceModal, setShowServiceModal] = useState(false);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
   const [formData, setFormData] = useState<EditShop>({
     name: "",
     openTime: "",
@@ -77,6 +79,20 @@ const ShopPage = () => {
       const message =
         err instanceof Error ? err.message : "Failed to save settings";
       setSaveError(message);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    setDeleteError(null);
+    try {
+      await deleteService(id);
+      refetchServices();
+    } catch (err: any) {
+      const message = err?.response?.data?.message;
+      setDeleteError(
+        message ??
+          "Failed to delete service, please ensure all of the bookings that use this service are cancelled and try again",
+      );
     }
   };
 
@@ -275,6 +291,20 @@ const ShopPage = () => {
                 + Add Service
               </button>
             </div>
+
+            {deleteError && (
+              <div className={styles.deleteErrorWrapper}>
+                <p className={styles.deleteError}>{deleteError}</p>
+                <button
+                  className={styles.deleteErrorDismiss}
+                  onClick={() => setDeleteError(null)}
+                  type="button"
+                >
+                  ✕
+                </button>
+              </div>
+            )}
+
             <ul className={styles.serviceList}>
               {service.map((s) => (
                 <li
@@ -303,6 +333,16 @@ const ShopPage = () => {
                       {s.active ? "Active" : "Inactive"}
                     </span>
                   </div>
+                  <button
+                    className={`${btnStyles.btnRed} ${styles.deleteBtn}`}
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete(s.id);
+                    }}
+                  >
+                    Delete
+                  </button>
                 </li>
               ))}
             </ul>
