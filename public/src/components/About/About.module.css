@@ -6,13 +6,16 @@
   z-index: 2;
 }
 
-/* Darkening + blur overlay — sits between fixed canvas and text content */
+/* Darkening + blur overlay — covers only the left text column, feathers out before the chair */
 .overlay {
   position: absolute;
   inset: 0;
-  background: rgba(8, 8, 8, 0.55);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: linear-gradient(
+    90deg,
+    rgba(8, 8, 8, 0.75) 0%,
+    rgba(8, 8, 8, 0.5) 30%,
+    rgba(8, 8, 8, 0) 52%
+  );
   pointer-events: none;
 }
 
@@ -140,4 +143,19 @@
   color: var(--color-t3);
   letter-spacing: 1.5px;
   text-transform: uppercase;
+}
+
+@media (max-width: 767px) {
+  .about {
+    min-height: 110svh;
+    align-items: flex-start;
+  }
+
+  .inner {
+    padding: 140px 24px 200px;
+  }
+
+  .overlay {
+    background: rgba(8, 8, 8, 0.6);
+  }
 }

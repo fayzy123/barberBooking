@@ -15,7 +15,11 @@ export default function About() {
   const statsRef = useRef<HTMLDivElement>(null!);
 
   // Count-up display values
-  const [counts, setCounts] = useState({ cuts: "0", rating: "0.0", barbers: "0" });
+  const [counts, setCounts] = useState({
+    cuts: "0",
+    rating: "0.0",
+    barbers: "0",
+  });
 
   // Plain objects GSAP can tween
   const cutsObj = useRef({ val: 0 });
@@ -55,6 +59,25 @@ export default function About() {
     });
   }, []);
 
+  useEffect(() => {
+    const bg = document.querySelector('[data-bg="main"]') as HTMLElement | null;
+    if (!bg) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        bg.style.filter = entry.isIntersecting
+          ? "brightness(0.75)" // darken when About is visible — tune this
+          : "brightness(1)"; // restore when scrolled away
+      },
+      { threshold: 0.2 },
+    );
+
+    const section = document.getElementById("about");
+    if (section) observer.observe(section);
+
+    return () => observer.disconnect();
+  }, []);
+
   // Trigger count-up when stat chips scroll into view
   useEffect(() => {
     const el = statsRef.current;
@@ -66,7 +89,7 @@ export default function About() {
           observer.disconnect();
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.3 },
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -79,18 +102,16 @@ export default function About() {
   };
 
   return (
-    <section className={styles.about}>
-      {/* Dark blur overlay over the fixed background */}
+    <section id="about" className={styles.about}>
       <div className={styles.overlay} />
-
       <div className={styles.inner}>
-        {/* ── Text block slides in FROM LEFT as a unit ─────────────── */}
+        {/* ── Text block slides in FROM LEFT simultaneously ─── */}
         <motion.div
           className={styles.textBlock}
-          initial={{ opacity: 0, x: -60 }}
+          initial={{ opacity: 0, x: -80 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.7, ease: EASE }}
+          transition={{ duration: 0.9, ease: EASE }}
         >
           <p className={styles.eyebrow}>Our Story</p>
 
@@ -100,9 +121,9 @@ export default function About() {
           </h2>
 
           <p className={styles.body}>
-            Since 2019 we&apos;ve been the destination for those who understand
-            that a great haircut is an investment. Our barbers don&apos;t just cut
-            hair — they craft confidence, one appointment at a time.
+            Since 1999 we&apos;ve been the destination for those who understand
+            that a great haircut is an investment. Our barbers don&apos;t just
+            cut hair — they craft confidence, one appointment at a time.
           </p>
 
           <blockquote className={styles.quote}>
@@ -114,20 +135,19 @@ export default function About() {
           </blockquote>
         </motion.div>
 
-        {/* ── Stat chips pop up FROM BOTTOM ───────────────── */}
+        {/* ── Stat chips rise FROM BOTTOM simultaneously ───── */}
         <div ref={statsRef} className={styles.stats}>
           {stats.map(({ key, label, delay }) => (
             <motion.div
               key={label}
               className={styles.chip}
-              initial={{ opacity: 0, y: 40, scale: 0.9 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true }}
+              initial={{ opacity: 0, y: 60 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
               transition={{
-                type: "spring",
-                stiffness: 280,
-                damping: 22,
-                delay: 0.3 + delay,
+                duration: 0.9,
+                ease: EASE,
+                delay: delay, // 0, 0.12, 0.24 — tiny stagger between chips only
               }}
             >
               <span className={styles.chipNum}>{displayNums[key]}</span>

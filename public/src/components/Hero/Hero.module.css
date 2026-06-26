@@ -9,6 +9,7 @@
 
 /* Hero gradient — darkens the persistent fixed background */
 .overlay {
+   display: none;   /* TEMP — testing */
   position: absolute;
   inset: 0;
   background: linear-gradient(

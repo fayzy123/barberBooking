@@ -8,7 +8,7 @@ import LoadingScreen from "../../components/LoadingScreen/LoadingScreen";
 import Navbar from "../../components/Navbar/Navbar";
 import Hero from "../../components/Hero/Hero";
 import About from "../../components/About/About";
-import BarberChair from "../../components/Hero/BarberChair";
+import BarberChair from "../../components/BarberChair/BarberChair";
 import Particles from "../../components/Hero/Particles";
 import barbershopBg from "../../assets/barbershop-interior.png";
 
@@ -66,11 +66,13 @@ export default function LandingPage() {
       {/* ── Persistent fixed background ───────────────────────── */}
       {/* z-index 0 — always behind everything */}
       <div
+        data-bg="main"
         style={{
           position: "fixed",
           inset: 0,
           zIndex: 0,
           overflow: "hidden",
+          transition: "filter 0.6s ease",
         }}
       >
         <img
@@ -85,8 +87,21 @@ export default function LandingPage() {
           }}
           draggable={false}
         />
+        {/* darkening lives here now — below the canvas (z:1), so the chair stays lit */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: `linear-gradient(180deg,
+      rgba(8,8,8,0.2) 0%,
+      rgba(8,8,8,0.45) 35%,
+      rgba(8,8,8,0.82) 60%,
+      rgba(8,8,8,0.88) 100%)`,
+            pointerEvents: "none",
+          }}
+        />
       </div>
-
       {/* ── Persistent 3D canvas ──────────────────────────────── */}
       {/* z-index 1 — above bg, below content sections (z-index 2) */}
       {/* pointer-events: none so sections below can scroll normally */}
@@ -120,7 +135,7 @@ export default function LandingPage() {
 
           {/* Chair + environment load together */}
           <Suspense fallback={null}>
-            <Environment preset="night" background={false} />
+            <Environment preset="warehouse" background={false} />
             <BarberChair
               scrollProgressRef={scrollProgressRef}
               yRotRef={yRotRef}
@@ -147,9 +162,7 @@ export default function LandingPage() {
       <About />
 
       {/* Loading screen sits above everything until complete */}
-      {showLoader && (
-        <LoadingScreen onComplete={() => setShowLoader(false)} />
-      )}
+      {showLoader && <LoadingScreen onComplete={() => setShowLoader(false)} />}
     </>
   );
 }
