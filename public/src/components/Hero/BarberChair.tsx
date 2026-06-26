@@ -74,11 +74,11 @@ export default function BarberChair({
     // Base scale: 1.8 desktop / 1.2 mobile
     const baseScale = window.innerWidth < 768 ? 1.6 : 2.4;
 
-    // Scroll-driven exit: lerp position and scale
-    const posX = THREE.MathUtils.lerp(0, 4, progress);
-    const posY = THREE.MathUtils.lerp(-0.6, -4, progress);
-    const targetScale = THREE.MathUtils.lerp(baseScale, 0.25, progress);
-    const opacity = Math.max(1 - progress * 0.4, 0);
+    // Scroll-driven exit: chair slides to bottom-right corner, stays visible
+    const posX = THREE.MathUtils.lerp(0, 2.2, progress);
+    const posY = THREE.MathUtils.lerp(-1.2, -1.8, progress);
+    const targetScale = THREE.MathUtils.lerp(baseScale, 0.35, progress);
+    const opacity = Math.max(1 - progress * 0.4, 0.5);
 
     groupRef.current.position.set(posX, posY, 0);
     // eased = mount animation (0→1 over 1.5s), multiplied by scroll-driven scale

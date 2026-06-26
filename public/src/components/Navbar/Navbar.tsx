@@ -1,29 +1,55 @@
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
 import styles from "./Navbar.module.css";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const navRef = useRef<HTMLElement>(null!);
   const [scrolled, setScrolled] = useState(false);
-  const [pastHero, setPastHero] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY;
-      setScrolled(y > 50);
-      setPastHero(y > window.innerHeight);
-    };
+    // Background tint: runs on every scroll tick (fine for a boolean state)
+    const onScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+
+    // Hide/show: GSAP ScrollTrigger reliably syncs with Lenis
+    const st = ScrollTrigger.create({
+      trigger: "#hero",
+      start: "bottom top", // when hero's bottom edge hits viewport top
+      onEnter: () => {
+        gsap.to(navRef.current, {
+          opacity: 0,
+          duration: 0.4,
+          ease: "power2.out",
+          onComplete: () => {
+            if (navRef.current) navRef.current.style.pointerEvents = "none";
+          },
+        });
+      },
+      onLeaveBack: () => {
+        if (navRef.current) navRef.current.style.pointerEvents = "all";
+        gsap.to(navRef.current, {
+          opacity: 1,
+          duration: 0.4,
+          ease: "power2.out",
+        });
+      },
+    });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      st.kill();
+    };
   }, []);
 
   return (
-    <motion.nav
+    <nav
+      ref={navRef}
       className={`${styles.navbar} ${scrolled ? styles.scrolled : ""}`}
-      animate={{ opacity: pastHero ? 0 : 1 }}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
-      style={{ pointerEvents: pastHero ? "none" : "all" }}
     >
       <button className={styles.brand} onClick={() => navigate("/")}>
         <svg
@@ -58,6 +84,6 @@ export default function Navbar() {
           Manage
         </button>
       </div>
-    </motion.nav>
+    </nav>
   );
 }
