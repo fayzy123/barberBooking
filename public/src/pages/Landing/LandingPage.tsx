@@ -1,26 +1,38 @@
 import { useState } from "react";
 import LoadingScreen from "../../components/LoadingScreen/LoadingScreen";
+import Navbar from "../../components/Navbar/Navbar";
+import Hero from "../../components/Hero/Hero";
 
 export default function LandingPage() {
   const [showLoader, setShowLoader] = useState(true);
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        width: "100%",
-        background: "#0c0c0c",
-        position: "relative",
-      }}
-    >
+    <>
+      <Navbar />
+      <Hero />
       <div
         style={{
-          minHeight: "100vh",
-          width: "100%",
+          height: "100vh",
           background: "#0c0c0c",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
-      />
-      {showLoader && <LoadingScreen onComplete={() => setShowLoader(false)} />}
-    </div>
+      >
+        <p
+          style={{
+            fontFamily: "Playfair Display, serif",
+            color: "var(--color-gold)",
+            fontSize: "24px",
+            opacity: 0.3,
+          }}
+        >
+          — About Us scene coming next —
+        </p>
+      </div>
+      {showLoader && (
+        <LoadingScreen onComplete={() => setShowLoader(false)} />
+      )}
+    </>
   );
 }
